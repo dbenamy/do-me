@@ -1,9 +1,15 @@
+body {
+  font-family: arial;
+}
+
 #sidebar {
   width: 20%;
   float:left;
 }
 
-#task-list {
+
+
+#main {
   width:80%;
   float: left;
 }

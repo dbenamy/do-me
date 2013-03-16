@@ -22,32 +22,34 @@
     </ul>
   </div>
 
-  <form ng-submit="addTask()">
-    Add task:
-    <input type="text" ng-model="newTask">
-    <input type="submit" value="Add">
-  </form>
+  <div id="main">
+    <form ng-submit="addTask()">
+      Add task:
+      <input type="text" ng-model="newTask">
+      <input type="submit" value="Add">
+    </form>
 
-  Remaining tasks:
-  <div class="task-list">
-    <ul>
-      <li ng-repeat="task in remaining()">
-        <input type="checkbox" ng-model="task.done">
-        <span class="tag" ng-repeat="tag in task.tags">{{tag}} </span>
-        <span>{{task.text}}</span>
-      </li>
-    </ul>
-  </div>
+    <h2>Remaining tasks</h2>
+    <div class="task-list">
+      <ul>
+        <li ng-repeat="task in remaining()">
+          <input type="checkbox" ng-model="task.done">
+          <span class="tag" ng-repeat="tag in task.tags">{{tag}} </span>
+          <span>{{task.text}}</span>
+        </li>
+      </ul>
+    </div>
 
-  All tasks:
-  <div class="task-list">
-    <ul>
-      <li ng-repeat="task in tasks">
-        <input type="checkbox" ng-model="task.done">
-        <span class="tag" ng-repeat="tag in task.tags">{{tag}} </span>
-        <span>{{task.text}}</span>
-      </li>
-    </ul>
+    <h2>All tasks:</h2>
+    <div class="task-list">
+      <ul>
+        <li ng-repeat="task in tasks">
+          <input type="checkbox" ng-model="task.done">
+          <span class="tag" ng-repeat="tag in task.tags">{{tag}} </span>
+          <span>{{task.text}}</span>
+        </li>
+      </ul>
+    </div>
   </div>
 
 </body>

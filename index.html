@@ -28,7 +28,19 @@
     <input type="submit" value="Add">
   </form>
 
-  <div id="task-list">
+  Remaining tasks:
+  <div class="task-list">
+    <ul>
+      <li ng-repeat="task in remaining()">
+        <input type="checkbox" ng-model="task.done">
+        <span class="tag" ng-repeat="tag in task.tags">{{tag}} </span>
+        <span>{{task.text}}</span>
+      </li>
+    </ul>
+  </div>
+
+  All tasks:
+  <div class="task-list">
     <ul>
       <li ng-repeat="task in tasks">
         <input type="checkbox" ng-model="task.done">
@@ -37,6 +49,7 @@
       </li>
     </ul>
   </div>
+
 </body>
 
 </html>

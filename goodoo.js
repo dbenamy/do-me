@@ -12,7 +12,8 @@ function GooDooCtrl($scope) {
 	loadTasks = function() {
 		var gooDooData = JSON.parse(localStorage.goodoo);
 		if (gooDooData.tasks) {
-			console.log("reading tasks from local storage");
+			console.log("Reading tasks from local storage:");
+			console.log(gooDooData.tasks);
 			return gooDooData.tasks;
 		} else {
 			console.log("loading default dummy tasks");
@@ -31,7 +32,10 @@ function GooDooCtrl($scope) {
 		}
 	};
 
-	$scope.tasks = loadTasks();
+	$scope.tasks = loadTasks(); // all tasks, done and remaining
+
+	$scope.$watch('tasks', saveTasks, true);
+
 
 	$scope.addTask = function() {
 		var tagRegex = /#[^ ]+ +/g;
@@ -46,9 +50,27 @@ function GooDooCtrl($scope) {
 			text: text,
 			done: false
 		});
-		console.log("should writo to local storage: " + JSON.stringify($scope.tasks));
-		saveTasks($scope.tasks);
 
 		$scope.newTask = '';
 	};
+
+
+	$scope.remaining = function() {
+		var arrayOfRemainingTasks = [];
+		angular.forEach($scope.tasks, function(todo) {
+			if (todo.done === false) {
+				arrayOfRemainingTasks.push(todo);
+			}
+		});
+		return arrayOfRemainingTasks;
+	};
+
 }
+
+
+
+
+
+
+
+

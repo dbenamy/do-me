@@ -1,6 +1,8 @@
 <html ng-app>
 
 <head>
+  <title>GooDoo</title>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans|Raleway' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="main.css">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
   <script src="jquery-1.9.1.min.js"></script>
@@ -8,12 +10,9 @@
 </head>
 
 <body ng-controller="GooDooCtrl">
-  <header>
-    Goo Doo
-  </header>
 
   <div id="sidebar">
-    <div>search goes right here</div>
+    <div>search goes here</div>
 
     <h4>Labels:</h4>
     <ul id="label-list">
@@ -24,13 +23,12 @@
 
   <div id="main">
     <form ng-submit="addTask()">
-      Add task:
-      <input type="text" ng-model="newTask">
-      <input type="submit" value="Add">
+      <input type="text" class="new-task" value="HELLOOOOO" ng-model="newTask">
+      <input type="submit" class="add-task" value="Add">
     </form>
 
     <h2>Remaining tasks</h2>
-    <div class="task-list">
+    <div class="task-list todo">
       <ul>
         <li ng-repeat="task in remaining()">
           <input type="checkbox" ng-model="task.done">
@@ -40,10 +38,9 @@
       </ul>
     </div>
 
-    <h2>All tasks:</h2>
-    <div class="task-list">
+    <div class="task-list all">
       <ul>
-        <li ng-repeat="task in tasks">
+        <li ng-repeat="task in done()">
           <input type="checkbox" ng-model="task.done">
           <span class="tag" ng-repeat="tag in task.tags">{{tag}} </span>
           <span>{{task.text}}</span>

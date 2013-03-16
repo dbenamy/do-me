@@ -64,6 +64,16 @@ function GooDooCtrl($scope) {
 		});
 		return arrayOfRemainingTasks;
 	};
+	
+	$scope.done = function() {
+		var arrayOfDoneTasks = [];
+		angular.forEach($scope.tasks, function(todo) {
+			if (todo.done === true) {
+				arrayOfDoneTasks.push(todo);
+			}
+		});
+		return arrayOfDoneTasks;
+	};
 
 }
 

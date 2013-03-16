@@ -1,30 +1,40 @@
-<html>
+<html ng-app>
 
 <head>
   <link rel="stylesheet" type="text/css" href="main.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
+  <script src="jquery-1.9.1.min.js"></script>
+  <script src="goodoo.js"></script>
 </head>
 
-<body>
+<body ng-controller="GooDooCtrl">
   <header>
     Goo Doo
   </header>
 
   <div id="sidebar">
     <div>search goes here</div>
+
+    <h4>Labels:</h4>
     <ul id="label-list">
       <li>@Computer</li>
       <li>Goo-Doo</li>
     </ul>
   </div>
 
-  <div id="new-task">Add task: <input></div>
-  
+  <form ng-submit="addTask()">
+    Add task:
+    <input type="text" ng-model="newTask">
+    <input type="submit" value="Add">
+  </form>
+
   <div id="task-list">
     <ul>
-      <li>
-        <span class="tag">#@Computer</span> <span class="tag">#Goo-Doo</span> A task with 2 tags
+      <li ng-repeat="task in tasks">
+        <input type="checkbox" ng-model="task.done">
+        <span class="tag" ng-repeat="tag in task.tags">{{tag}} </span>
+        <span>{{task.text}}</span>
       </li>
-      <li>A task with no tags</li>
     </ul>
   </div>
 </body>

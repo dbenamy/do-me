@@ -45,14 +45,29 @@ function GooDooCtrl($scope) {
 		});
 		var text = $scope.newTask.replace(tagRegex, '');
 
-		$scope.tasks.push({
-			tags: tags,
-			text: text,
-			done: false
-		});
+		if (text != "") {
+				$scope.tasks.push({
+				tags: tags,
+				text: text,
+				done: false
+				});
+		} else {
+				console.log("woops, can't add empty field");
+		}
+
 
 		$scope.newTask = '';
 	};
+	
+	$scope.killTasks = function() {
+		console.log("kill it");
+		angular.forEach($scope.tasks, function(todo, i) {
+				if (todo.done === true) {
+								console.log("hello");
+								$scope.tasks[i]= "";
+						}
+				});
+		};
 
 
 	$scope.remaining = function() {
@@ -76,8 +91,6 @@ function GooDooCtrl($scope) {
 	};
 
 }
-
-
 
 
 

@@ -7,6 +7,8 @@ input {
 body {
 		margin: 20px auto;
 		width: 800px;
+		font-size: 80%;
+		color: #666;
 }
 
 
@@ -21,7 +23,7 @@ h4 {
 input.new-task {
 		padding: 5px 10px;
 		font-size: 120%;
-		width: 80%;
+		width: 81%;
 }
 
 input.add-task {
@@ -29,7 +31,8 @@ input.add-task {
 		color: #fff;
 		border: none;
 		cursor: pointer;
-		padding: 15px 20px 9px 20px;
+		padding: 7px 20px 7px 20px;
+		font-size: 120%;
 }
 
 input.add-task:hover {
@@ -43,7 +46,14 @@ input.add-task:hover {
 		margin-top: 70px;
 }
 
+a {
+		color: #10C9E6;
+		text-decoration: none;
+}
 
+a:hover {
+		text-decoration: underline;
+}
 
 #main {
   width:66%;
@@ -66,8 +76,8 @@ ul {
 }
 
 .all ul {
-		color: #999;
-		margin: 20px 0 0 0;
+		color: #ccc;
+		margin: 20px 0 10px 0;
 }
 
 .all ul .tag {

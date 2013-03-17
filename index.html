@@ -12,9 +12,9 @@
   
   <body ng-controller="GooDooCtrl">
   
-    <div id="sidebar">
-      <div>search goes here</div>
-  
+    <div id="sidebar">  
+      <h1>Goo Doo</h1>
+
       <h4>Labels:</h4>
       <ul id="label-list">
         <li>@Computer</li>
@@ -23,14 +23,13 @@
     </div>
   
     <div id="main">
-      <form ng-submit="addTask()">
-        <input type="text" class="new-task" placeholder="Add new task" ng-model="newTask">
-          
-  
-        <input type="submit" class="add-task" value="Add">
+      <form ng-submit="search()">
+        <input type="text" class="search" placeholder="Search for tag" ng-model="searchString">
+        <input type="submit" class="button" value="Search">
       </form>
   
-      <h2>To do</h2>
+      <p></p>
+
       <div class="task-list todo">
         <ul>
           <li ng-repeat="task in remaining()">
@@ -40,6 +39,11 @@
           </li>
         </ul>
       </div>
+
+      <form ng-submit="addTask()">
+        <input type="text" class="new-task" placeholder="Add new task" ng-model="newTask">
+        <input type="submit" class="button" value="Add">
+      </form>
   
       <div class="task-list all">
         <ul>

@@ -55,17 +55,9 @@ function GooDooCtrl($scope) {
 				console.log("woops, can't add empty field");
 		}
 
-
 		$scope.newTask = '';
 	};
-	
-	$scope.killTasks = function() {
-		angular.forEach($scope.tasks, function(todo, i) {
-				if (todo.done === true) {
-								$scope.tasks[i]= "";
-						}
-				});
-		};
+
 
 	$scope.remaining = function() {
 		var arrayOfRemainingTasks = [];
@@ -82,10 +74,20 @@ function GooDooCtrl($scope) {
 		angular.forEach($scope.tasks, function(todo) {
 			if (todo.done === true) {
 				arrayOfDoneTasks.push(todo);
+				document.getElementById("kill-task").className = "";
 			}
 		});
 		return arrayOfDoneTasks;
 	};
+	
+	$scope.killTasks = function() {
+		angular.forEach($scope.tasks, function(todo, i) {
+				if (todo.done === true) {
+								$scope.tasks[i]= "";
+								document.getElementById("kill-task").className = "hide";
+						}
+				});
+		};
 
 }
 

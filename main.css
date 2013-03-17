@@ -83,3 +83,7 @@ ul {
 .all ul .tag {
 		color: #B3EAF2;
 }
+
+.hide {
+		display: none;
+}

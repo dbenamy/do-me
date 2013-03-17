@@ -3,6 +3,8 @@ function GooDooCtrl($scope) {
 		localStorage.goodoo = JSON.stringify({});
 	}
 
+	$scope.TAG_REGEX = /#[^ ]+ */g;
+
 	saveTasks = function(tasks) {
 		var gooDooData = JSON.parse(localStorage.goodoo);
 		gooDooData.tasks = tasks;
@@ -33,6 +35,7 @@ function GooDooCtrl($scope) {
 	};
 
 	$scope.tasks = loadTasks(); // all tasks, done and remaining
+	$scope.results = $scope.tasks; // can include done and remaining tasks
 
 	$scope.$watch('tasks', saveTasks, true);
 
@@ -50,18 +53,14 @@ function GooDooCtrl($scope) {
 	$scope.$watch('tasks', $scope.updateKillTaskClass, true);
 
 	$scope.addTask = function() {
-		var tagRegex = /#[^ ]+ +/g;
-		var tags = $scope.newTask.match(tagRegex) || [];
-		tags = $.map(tags, function(tag, i) {
-			return $.trim(tag);
-		});
-		var text = $scope.newTask.replace(tagRegex, '');
+		var tags = $scope.parseTags($scope.newTask);
+		var text = $scope.newTask.replace($scope.TAG_REGEX, '');
 
 		if (text !== "") {
 			$scope.tasks.push({
-			tags: tags,
-			text: text,
-			done: false
+				tags: tags,
+				text: text,
+				done: false
 			});
 		} else {
 			console.log("woops, can't add empty field");
@@ -70,10 +69,51 @@ function GooDooCtrl($scope) {
 		$scope.newTask = '';
 	};
 
+	$scope.parseTags = function(text) {
+		var arrayOfTags = text.match($scope.TAG_REGEX) || [];
+		arrayOfTags = $.map(arrayOfTags, function(tag, i) {
+			return $.trim(tag);
+		});
+		return arrayOfTags;
+	};
+
+	$scope.search = function() {
+		// At app load, it's undefined until we type something in the search box.
+		if (typeof($scope.searchString) === 'undefined') {
+			$scope.searchString = "";
+		}
+
+		var searchTags = $scope.parseTags($scope.searchString);
+		console.log("Searching for tasks with all these tags:");
+		console.log(searchTags);
+		if ($scope.searchString === "") {
+			$scope.results = $scope.tasks;
+		} else {
+			var arrayOfResults = [];
+			angular.forEach($scope.tasks, function(task) {
+				if (task.done === false && $scope.taskHasTags(task, searchTags)) {
+					arrayOfResults.push(task);
+				}
+			});
+			$scope.results = arrayOfResults;
+		}
+	};
+
+	$scope.$watch('tasks', $scope.search, true); // if we change tasks (eg adding one), re-search to update what's shown.
+
+	$scope.taskHasTags = function(task, tags) {
+		var taskHasAllTags = true;
+		angular.forEach(tags, function(tag) {
+			if (task.tags.indexOf(tag) === -1) {
+				taskHasAllTags = false;
+			}
+		});
+		return taskHasAllTags;
+	};
 
 	$scope.remaining = function() {
 		var arrayOfRemainingTasks = [];
-		angular.forEach($scope.tasks, function(todo) {
+		angular.forEach($scope.results, function(todo) {
 			if (todo.done === false) {
 				arrayOfRemainingTasks.push(todo);
 			}
@@ -83,7 +123,7 @@ function GooDooCtrl($scope) {
 	
 	$scope.done = function() {
 		var arrayOfDoneTasks = [];
-		angular.forEach($scope.tasks, function(todo) {
+		angular.forEach($scope.results, function(todo) {
 			if (todo.done === true) {
 				arrayOfDoneTasks.push(todo);
 			}

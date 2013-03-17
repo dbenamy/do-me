@@ -1,14 +1,14 @@
 body,
 input {
-		font-family: 'Open Sans', sans-serif;
-		/*font-family: 'Raleway', sans-serif;*/
+	font-family: 'Open Sans', sans-serif;
+	/*font-family: 'Raleway', sans-serif;*/
 }
 
-body {
-		margin: 20px auto;
-		width: 800px;
-		font-size: 80%;
-		color: #666;
+	body {
+	margin: 20px auto;
+	width: 700px;
+	font-size: 80%;
+	color: #666;
 }
 
 
@@ -16,49 +16,49 @@ h1,
 h2,
 h3,
 h4 {
-		margin: 0;
-		margin-top: 20px;
+	margin: 0;
+	margin-top: 20px;
 }
 
 input.new-task, 
 input.search {
 	padding: 5px 10px;
 	font-size: 120%;
-	width: 81%;
+	width: 60%;
 }
 
 input.button {
-		background: #10C9E6;
-		color: #fff;
-		border: none;
-		cursor: pointer;
-		padding: 7px 20px 7px 20px;
-		font-size: 120%;
+	background: #10C9E6;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+	padding: 7px 20px 7px 20px;
+	font-size: 120%;
 }
 
-input.add-task:hover {
-		background: #0FA6BD;
-}
-
-#sidebar {
-  width: 30%;
-  float:left;
-		margin-right: 30px;
-		margin-top: 70px;
-}
-
-a {
-		color: #10C9E6;
-		text-decoration: none;
-}
-
-a:hover {
-		text-decoration: underline;
+input.button:hover {
+	
 }
 
 #main {
-  width:66%;
+  width:50%;
   float: left;
+}
+
+#sidebar {
+	width: 30%;
+	float:left;
+	margin-right: 30px;
+	margin-top: 70px;
+}
+
+a {
+	color: #10C9E6;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
 }
 
 ul {
@@ -68,8 +68,8 @@ ul {
 }
 
 .todo ul li {
-		border-bottom: 1px solid #eee;
-		padding: 10px 0;
+	border-bottom: 1px solid #eee;
+	padding: 10px 0;
 }
 
 .tag {
@@ -77,14 +77,14 @@ ul {
 }
 
 .all ul {
-		color: #ccc;
-		margin: 20px 0 10px 0;
+	color: #ccc;
+	margin: 20px 0 10px 0;
 }
 
 .all ul .tag {
-		color: #B3EAF2;
+	
 }
 
 .hide {
-		display: none;
+	display: none;
 }

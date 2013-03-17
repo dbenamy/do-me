@@ -29,7 +29,30 @@ key('escape', function() {
 	return false;
 });
 
-function GooDooCtrl($scope) {
+
+window.gd = window.gd || {};
+
+
+gd.utcTs = function() {
+	var now = new Date();
+	return Date.UTC(
+			now.getUTCFullYear(), now.getUTCMonth(),
+			now.getUTCDate(), now.getUTCHours(),
+			now.getUTCMinutes(), now.getUTCSeconds()
+	) / 1000;
+};
+
+
+gd.taskNextId = 0;
+gd.generateTaskId = function() {
+	// The date is to avoid conflicts when using 2 clients, the random
+	// number is to try to avoid conflicts if edits ARE made at the
+	// same time, and the nextId counter is used to prevent conflicts
+	// between tasks created right after each other on one client.
+	return sprintf('%s-%s-%s', Date.now(), gd.taskNextId++, Math.round(Math.random() * 1000)),
+};
+
+gd.GooDooCtrl = function($scope) {
 	if (!('goodoo' in localStorage)) {
 		localStorage.goodoo = JSON.stringify({});
 	}
@@ -52,14 +75,18 @@ function GooDooCtrl($scope) {
 			console.log("loading default dummy tasks");
 			return [
 				{
+					id: gd.generateTaskId(),
 					tags: ['#@Computer', '#Goo-Doo'],
 					text: "A task with 2 tags",
-					done: false
+					done: false,
+					updated_at: gd.utcTs()
 				},
 				{
+					id: gd.generateTaskId(),
 					tags: [],
 					text: "A task with no tags",
-					done: false
+					done: false,
+					updated_at: gd.utcTs()
 				}
 			];
 		}
@@ -89,9 +116,11 @@ function GooDooCtrl($scope) {
 
 		if (text !== "") {
 			$scope.tasks.push({
-				tags: tags,
+				id: gd.generateTaskId(),
 				text: text,
-				done: false
+				tags: tags,
+				done: false,
+				updated_at: gd.utcTs()
 			});
 		} else {
 			console.log("woops, can't add empty field");
@@ -132,10 +161,10 @@ function GooDooCtrl($scope) {
 
 	$scope.$watch('tasks', $scope.search, true); // if we change tasks (eg adding one), re-search to update what's shown.
 
-	$scope.taskHasTags = function(task, tags) {
+	$scope.taskHasTags = function(task, searchTags) {
 		var taskHasAllTags = true;
-		angular.forEach(tags, function(tag) {
-			if (task.tags.indexOf(tag) === -1) {
+		angular.forEach(searchTags, function(searchTag) {
+			if (task.tags.indexOf(searchTag) === -1) {
 				taskHasAllTags = false;
 			}
 		});
@@ -166,10 +195,4 @@ function GooDooCtrl($scope) {
 		$scope.tasks = $scope.remaining();
 	};
 
-}
-
-
-
-
-
-
+};

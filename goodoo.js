@@ -1,3 +1,34 @@
+// Keyboard Shortcuts
+
+// Allow keymaster to process escape while in inputs
+key.filter = function(event) {
+	var tagName = (event.target || event.srcElement).tagName;
+	if (tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA') {
+		if (event.which == 27) { // esc
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		return true;
+	}
+};
+
+key('/', function() {
+	$('input.search').focus();
+	return false;
+});
+
+key('a, c, n', function() {
+	$('input.new-task').focus();
+	return false;
+});
+
+key('escape', function() {
+	$('input').blur();
+	return false;
+});
+
 function GooDooCtrl($scope) {
 	if (!('goodoo' in localStorage)) {
 		localStorage.goodoo = JSON.stringify({});

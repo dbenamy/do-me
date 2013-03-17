@@ -36,6 +36,18 @@ function GooDooCtrl($scope) {
 
 	$scope.$watch('tasks', saveTasks, true);
 
+	$scope.updateKillTaskClass = function() {
+		console.log('update kill task class');
+		if ($scope.done().length > 0) {
+			console.log('there are done tasks');
+			document.getElementById("kill-task").className = "";
+		} else {
+			console.log('there are no done tasks');
+			document.getElementById("kill-task").className = "hide";
+		}
+	};
+
+	$scope.$watch('tasks', $scope.updateKillTaskClass, true);
 
 	$scope.addTask = function() {
 		var tagRegex = /#[^ ]+ +/g;
@@ -45,14 +57,14 @@ function GooDooCtrl($scope) {
 		});
 		var text = $scope.newTask.replace(tagRegex, '');
 
-		if (text != "") {
-				$scope.tasks.push({
-				tags: tags,
-				text: text,
-				done: false
-				});
+		if (text !== "") {
+			$scope.tasks.push({
+			tags: tags,
+			text: text,
+			done: false
+			});
 		} else {
-				console.log("woops, can't add empty field");
+			console.log("woops, can't add empty field");
 		}
 
 		$scope.newTask = '';
@@ -74,20 +86,14 @@ function GooDooCtrl($scope) {
 		angular.forEach($scope.tasks, function(todo) {
 			if (todo.done === true) {
 				arrayOfDoneTasks.push(todo);
-				document.getElementById("kill-task").className = "";
 			}
 		});
 		return arrayOfDoneTasks;
 	};
 	
 	$scope.killTasks = function() {
-		angular.forEach($scope.tasks, function(todo, i) {
-				if (todo.done === true) {
-								$scope.tasks[i]= "";
-								document.getElementById("kill-task").className = "hide";
-						}
-				});
-		};
+		$scope.tasks = $scope.remaining();
+	};
 
 }
 

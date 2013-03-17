@@ -60,15 +60,12 @@ function GooDooCtrl($scope) {
 	};
 	
 	$scope.killTasks = function() {
-		console.log("kill it");
 		angular.forEach($scope.tasks, function(todo, i) {
 				if (todo.done === true) {
-								console.log("hello");
 								$scope.tasks[i]= "";
 						}
 				});
 		};
-
 
 	$scope.remaining = function() {
 		var arrayOfRemainingTasks = [];

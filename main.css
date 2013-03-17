@@ -1,16 +1,62 @@
+body,
+input {
+		font-family: 'Open Sans', sans-serif;
+		/*font-family: 'Raleway', sans-serif;*/
+}
+
 body {
-  font-family: arial;
+		margin: 20px auto;
+		width: 800px;
+		font-size: 80%;
+		color: #666;
+}
+
+
+h1,
+h2,
+h3,
+h4 {
+		margin: 0;
+		margin-top: 20px;
+}
+
+input.new-task {
+		padding: 5px 10px;
+		font-size: 120%;
+		width: 81%;
+}
+
+input.add-task {
+		background: #10C9E6;
+		color: #fff;
+		border: none;
+		cursor: pointer;
+		padding: 7px 20px 7px 20px;
+		font-size: 120%;
+}
+
+input.add-task:hover {
+		background: #0FA6BD;
 }
 
 #sidebar {
-  width: 20%;
+  width: 30%;
   float:left;
+		margin-right: 30px;
+		margin-top: 70px;
 }
 
+a {
+		color: #10C9E6;
+		text-decoration: none;
+}
 
+a:hover {
+		text-decoration: underline;
+}
 
 #main {
-  width:80%;
+  width:66%;
   float: left;
 }
 
@@ -20,6 +66,24 @@ ul {
   padding: 0;
 }
 
+.todo ul li {
+		border-bottom: 1px solid #eee;
+		padding: 10px 0;
+}
+
 .tag {
-  color: #999;
+  color: #10C9E6;
+}
+
+.all ul {
+		color: #ccc;
+		margin: 20px 0 10px 0;
+}
+
+.all ul .tag {
+		color: #B3EAF2;
+}
+
+.hide {
+		display: none;
 }

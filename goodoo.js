@@ -45,11 +45,15 @@ function GooDooCtrl($scope) {
 		});
 		var text = $scope.newTask.replace(tagRegex, '');
 
-		$scope.tasks.push({
-			tags: tags,
-			text: text,
-			done: false
-		});
+		if (text != "") {
+				$scope.tasks.push({
+				tags: tags,
+				text: text,
+				done: false
+				});
+		} else {
+				console.log("woops, can't add empty field");
+		}
 
 		$scope.newTask = '';
 	};
@@ -64,10 +68,28 @@ function GooDooCtrl($scope) {
 		});
 		return arrayOfRemainingTasks;
 	};
+	
+	$scope.done = function() {
+		var arrayOfDoneTasks = [];
+		angular.forEach($scope.tasks, function(todo) {
+			if (todo.done === true) {
+				arrayOfDoneTasks.push(todo);
+				document.getElementById("kill-task").className = "";
+			}
+		});
+		return arrayOfDoneTasks;
+	};
+	
+	$scope.killTasks = function() {
+		angular.forEach($scope.tasks, function(todo, i) {
+				if (todo.done === true) {
+								$scope.tasks[i]= "";
+								document.getElementById("kill-task").className = "hide";
+						}
+				});
+		};
 
 }
-
-
 
 
 

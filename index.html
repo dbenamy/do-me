@@ -42,9 +42,15 @@
       <div class="task-list todo">
         <ul>
           <li ng-repeat="task in remaining()">
-            <input type="checkbox" ng-model="task.done">
-            <span class="tag" ng-repeat="tag in task.tags">{{tag}} </span>
-            <span>{{task.text}}</span>
+            <div id="show-task-{{task.id}}" class="show-task">
+              <input type="checkbox" ng-model="task.done">
+              <a href="#" class="tag" ng-repeat="tag in task.tags" ng-click="searchForTag($event, tag)">{{tag}} </a>
+              <span ng-click="editTask(task.id)">{{task.text}}</span>
+            </div>
+            <form ng-submit="updateTask(task.id)" id="edit-task-{{task.id}}" class="edit-task hide">
+              <input class="text" ng-model="task.editText">
+              <input type="submit" class="button" value="Save">
+            </form>
           </li>
         </ul>
       </div>

@@ -63,25 +63,15 @@ gd.GooDooCtrl = function($scope) {
 	$scope.tasks = loadTasks(); // all tasks, done and remaining
 	$scope.results = $scope.tasks; // can include done and remaining tasks
 	$scope.cursor = 0; // index of cursor position with 0 being the top task in the results
+	$scope.editing = false; // true if the task pointed to by the cursor is being edited
+	$scope.editTaskText = {}; // key: cursor position, val: what's in the edit box. shit doesn't work right using the same variable for all edit inputs
 
 	$scope.$watch('tasks', saveTasks, true);
 
-	$scope.updateKillTaskClass = function() {
-		console.log('update kill task class');
-		if ($scope.done().length > 0) {
-			console.log('there are done tasks');
-			document.getElementById("kill-task").className = "";
-		} else {
-			console.log('there are no done tasks');
-			document.getElementById("kill-task").className = "hide";
-		}
-	};
-
-	$scope.$watch('tasks', $scope.updateKillTaskClass, true);
-
 	$scope.addTask = function() {
 		var tags = $scope.parseTags($scope.newTask);
-		var text = $scope.newTask.replace($scope.TAG_REGEX, '');
+		var text = $.trim($scope.newTask.replace($scope.TAG_REGEX, ''));
+		console.log("New text is: " + text);
 
 		if (text !== "") {
 			$scope.tasks.push({
@@ -98,26 +88,30 @@ gd.GooDooCtrl = function($scope) {
 		$scope.newTask = '';
 	};
 
-	$scope.updateTask = function(taskId) {
-		var task = $.grep($scope.tasks, function(t) { return t.id === taskId; })[0];
-		console.log('edit task text: ' + task.editText);
-		var newTags = $scope.parseTags(task.editText);
-		var newText = task.editText.replace($scope.TAG_REGEX, '');
+	$scope.editTask = function(index) {
+		$scope.cursor = index; // have to overwrite cursor because a click can trigger this
+		$scope.editing = true;
+		var task = $scope.getCurrentTask();
+		$scope.editTaskText[$scope.cursor] = task.tags.concat([task.text]).join(' ');
+	};
+
+	$scope.updateTask = function() {
+		updatedTaskDesc = $scope.editTaskText[$scope.cursor];
+		console.log("Updating task using: " + updatedTaskDesc);
+		var task = $scope.getCurrentTask();
+		var newTags = $scope.parseTags(updatedTaskDesc);
+		var newText = $.trim(updatedTaskDesc.replace($scope.TAG_REGEX, ''));
 
 		if (newText !== "") {
 			console.log(newText);
 			task.tags = newTags;
 			task.text = newText;
 			task.updated_at = gd.utcTs();
-			$('#show-task-'+taskId).removeClass("hide");
-			$('#edit-task-'+taskId).addClass("hide");
-			console.log(task);
+			$scope.editing = false;
 			console.log($scope.tasks);
 		} else {
 			console.log("Whoops, can't update empty field");
 		}
-
-
 	};
 
 	$scope.parseTags = function(text) {
@@ -188,16 +182,6 @@ gd.GooDooCtrl = function($scope) {
 		$scope.tasks = $scope.remaining();
 	};
 
-	$scope.editTask = function(taskId) {
-		var task = $.grep($scope.tasks, function(t) { return t.id === taskId; })[0];
-		// $scope.editTaskText = task.tags.join(' ') + " " + task.text;
-		task.editText = task.tags.join(' ') + " " + task.text;
-		$('.show-task').removeClass("hide");
-		$('.edit-task').addClass("hide");
-		$('#show-task-'+taskId).addClass("hide");
-		$('#edit-task-'+taskId).removeClass("hide");
-	};
-
 	$scope.searchForTag = function(event, tag) {
 		$scope.searchString = tag;
 		$scope.search();
@@ -256,6 +240,13 @@ gd.GooDooCtrl = function($scope) {
 		});
 	});
 
+	key('o, enter', function() {
+		$scope.$apply(function() {
+			$scope.editTask($scope.cursor);
+			$('input.edit').focus();
+		});
+	});
+
 	$scope.makeCursorOk = function() {
 		if ($scope.cursor < 0) {
 			$scope.cursor = 0;
@@ -265,4 +256,9 @@ gd.GooDooCtrl = function($scope) {
 	};
 	$scope.$watch('results', $scope.makeCursorOk, true);
 	$scope.$watch('cursor', $scope.makeCursorOk);
+
+	// Returns task that cursor points to
+	$scope.getCurrentTask = function() {
+		return $scope.remaining()[$scope.cursor];
+	};
 };

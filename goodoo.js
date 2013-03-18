@@ -49,7 +49,7 @@ gd.generateTaskId = function() {
 	// number is to try to avoid conflicts if edits ARE made at the
 	// same time, and the nextId counter is used to prevent conflicts
 	// between tasks created right after each other on one client.
-	return sprintf('%s-%s-%s', Date.now(), gd.taskNextId++, Math.round(Math.random() * 1000)),
+	return sprintf('%s-%s-%s', Date.now(), gd.taskNextId++, Math.round(Math.random() * 1000));
 };
 
 gd.GooDooCtrl = function($scope) {
@@ -129,6 +129,28 @@ gd.GooDooCtrl = function($scope) {
 		$scope.newTask = '';
 	};
 
+	$scope.updateTask = function(taskId) {
+		var task = $.grep($scope.tasks, function(t) { return t.id === taskId; })[0];
+		console.log('edit task text: ' + task.editText);
+		var newTags = $scope.parseTags(task.editText);
+		var newText = task.editText.replace($scope.TAG_REGEX, '');
+
+		if (newText !== "") {
+			console.log(newText);
+			task.tags = newTags;
+			task.text = newText;
+			task.updated_at = gd.utcTs();
+			$('#show-task-'+taskId).removeClass("hide");
+			$('#edit-task-'+taskId).addClass("hide");
+			console.log(task);
+			console.log($scope.tasks);
+		} else {
+			console.log("Whoops, can't update empty field");
+		}
+
+
+	};
+
 	$scope.parseTags = function(text) {
 		var arrayOfTags = text.match($scope.TAG_REGEX) || [];
 		arrayOfTags = $.map(arrayOfTags, function(tag, i) {
@@ -195,4 +217,19 @@ gd.GooDooCtrl = function($scope) {
 		$scope.tasks = $scope.remaining();
 	};
 
+	$scope.editTask = function(taskId) {
+		var task = $.grep($scope.tasks, function(t) { return t.id === taskId; })[0];
+		// $scope.editTaskText = task.tags.join(' ') + " " + task.text;
+		task.editText = task.tags.join(' ') + " " + task.text;
+		$('.show-task').removeClass("hide");
+		$('.edit-task').addClass("hide");
+		$('#show-task-'+taskId).addClass("hide");
+		$('#edit-task-'+taskId).removeClass("hide");
+	};
+
+	$scope.searchForTag = function(event, tag) {
+		$scope.searchString = tag;
+		$scope.search();
+		event.preventDefault(); // so "#" doesn't wind up in the url
+	};
 };

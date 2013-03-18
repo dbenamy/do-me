@@ -15,12 +15,12 @@ key.filter = function(event) {
 };
 
 key('/', function() {
-	$('input.search').focus();
+	$('input.search').focus().select();
 	return false;
 });
 
 key('a, c, n', function() {
-	$('input.new-task').focus();
+	$('input.new-task').focus().select();
 	return false;
 });
 
@@ -179,6 +179,8 @@ gd.GooDooCtrl = function($scope) {
 			});
 			$scope.results = arrayOfResults;
 		}
+
+		$('input').blur();
 	};
 
 	$scope.$watch('tasks', $scope.search, true); // if we change tasks (eg adding one), re-search to update what's shown.

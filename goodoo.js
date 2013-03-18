@@ -1,35 +1,3 @@
-// Keyboard Shortcuts
-
-// Allow keymaster to process escape while in inputs
-key.filter = function(event) {
-	var tagName = (event.target || event.srcElement).tagName;
-	if (tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA') {
-		if (event.which == 27) { // esc
-			return true;
-		} else {
-			return false;
-		}
-	} else {
-		return true;
-	}
-};
-
-key('/', function() {
-	$('input.search').focus().select();
-	return false;
-});
-
-key('a, c, n', function() {
-	$('input.new-task').focus().select();
-	return false;
-});
-
-key('escape', function() {
-	$('input').blur();
-	return false;
-});
-
-
 window.gd = window.gd || {};
 
 
@@ -94,6 +62,7 @@ gd.GooDooCtrl = function($scope) {
 
 	$scope.tasks = loadTasks(); // all tasks, done and remaining
 	$scope.results = $scope.tasks; // can include done and remaining tasks
+	$scope.cursor = 0; // index of cursor position with 0 being the top task in the results
 
 	$scope.$watch('tasks', saveTasks, true);
 
@@ -234,4 +203,60 @@ gd.GooDooCtrl = function($scope) {
 		$scope.search();
 		event.preventDefault(); // so "#" doesn't wind up in the url
 	};
+
+	// Keyboard Shortcuts
+	//
+	// In theory these shouldn't be in the controller, but it's so much easier to deal with moving the cursor with them
+	// here that what the hell.
+
+	// Allow keymaster to process escape while in inputs
+	key.filter = function(event) {
+		var tagName = (event.target || event.srcElement).tagName;
+		if (tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA') {
+			if (event.which == 27) { // esc
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	};
+
+	key('/', function() {
+		$('input.search').focus().select();
+		return false;
+	});
+
+	key('a, c, n', function() {
+		$('input.new-task').focus().select();
+		return false;
+	});
+
+	key('escape', function() {
+		$('input').blur();
+		return false;
+	});
+
+	key('j', function() {
+		$scope.$apply(function() {
+			$scope.cursor += 1;
+		});
+	});
+
+	key('k', function() {
+		$scope.$apply(function() {
+			$scope.cursor -= 1;
+		});
+	});
+
+	$scope.makeCursorOk = function() {
+		if ($scope.cursor < 0) {
+			$scope.cursor = 0;
+		} else if ($scope.cursor >= $scope.remaining().length && $scope.cursor > 0) {
+			$scope.cursor = $scope.remaining().length - 1;
+		}
+	};
+	$scope.$watch('results', $scope.makeCursorOk, true);
+	$scope.$watch('cursor', $scope.makeCursorOk);
 };

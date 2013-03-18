@@ -27,6 +27,7 @@
       <table>
         <tr><td>/</td><td>Search</td></tr>
         <tr><td>c, n, or a</td><td>Add new task</td></tr>
+        <tr><td>j, k</td><td>down, up</td></tr>
         <tr><td>TODO f</td><td>Finish task</td></tr>
       </table>
     </div>
@@ -43,6 +44,7 @@
         <ul>
           <li ng-repeat="task in remaining()">
             <div id="show-task-{{task.id}}" class="show-task">
+              <span ng-show="$index == cursor">&gt;</span>
               <input type="checkbox" ng-model="task.done">
               <a href="#" class="tag" ng-repeat="tag in task.tags" ng-click="searchForTag($event, tag)">{{tag}} </a>
               <span ng-click="editTask(task.id)">{{task.text}}</span>
@@ -60,7 +62,10 @@
         <input type="submit" class="button" value="Add">
       </form>
   
+      <hr>
+
       <div class="task-list all">
+        <h4>Completed Tasks</h4>
         <ul>
           <li ng-repeat="task in done()">
             <input type="checkbox" ng-model="task.done">

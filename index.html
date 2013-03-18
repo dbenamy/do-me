@@ -26,9 +26,9 @@
       <h4>Keyboard Shortcuts</h4>
       <table>
         <tr><td>/</td><td>Search</td></tr>
-        <tr><td>c, n, or a</td><td>Add new task</td></tr>
-        <tr><td>j, k</td><td>down, up</td></tr>
-        <tr><td>TODO f</td><td>Finish task</td></tr>
+        <tr><td>a, n, t</td><td>Add new task</td></tr>
+        <tr><td>j, k</td><td>Down, Up</td></tr>
+        <tr><td>c, f</td><td>Finish task</td></tr>
       </table>
     </div>
   
@@ -41,6 +41,7 @@
       <p></p>
 
       <div class="task-list todo">
+        <span ng-show="remaining().length == 0">This list is all done!</span>
         <ul>
           <li ng-repeat="task in remaining()">
             <div id="show-task-{{task.id}}" class="show-task">

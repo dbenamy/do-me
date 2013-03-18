@@ -228,7 +228,7 @@ gd.GooDooCtrl = function($scope) {
 		return false;
 	});
 
-	key('a, c, n', function() {
+	key('a, n, t', function() {
 		$('input.new-task').focus().select();
 		return false;
 	});
@@ -247,6 +247,12 @@ gd.GooDooCtrl = function($scope) {
 	key('k', function() {
 		$scope.$apply(function() {
 			$scope.cursor -= 1;
+		});
+	});
+
+	key('c, f', function() {
+		$scope.$apply(function() {
+			$scope.remaining()[$scope.cursor].done = true;
 		});
 	});
 

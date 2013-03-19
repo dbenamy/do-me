@@ -13,72 +13,77 @@
   </head>
   
   <body ng-controller="gd.GooDooCtrl">
-  
-    <div id="sidebar">  
-      <h1>Goo Doo</h1>
+    
+    <header>
+      <div id="hdr">
+        <h1 id="logo">Goo Doo</h1>
+        <form id="search" ng-submit="search()">
+          <input type="text" class="search" placeholder="Search for tag" ng-model="searchString">
+          <input type="submit" class="button" value="Search">
+        </form>
+      </div>
+    </header>
 
-      <h4>Labels:</h4>
-      <ul id="label-list">
-        <li>@Computer</li>
-        <li>Goo-Doo</li>
-      </ul>
-
-      <h4>Keyboard Shortcuts</h4>
-      <table>
-        <tr><td>/</td><td>Search</td></tr>
-        <tr><td>j, k</td><td>Down, Up</td></tr>
-        <tr><td>o, enter</td><td>Edit task</td></tr>
-        <tr><td>c, f</td><td>Finish task</td></tr>
-        <tr><td>a, n, t</td><td>Add new task</td></tr>
-      </table>
-    </div>
+    <div id="container">
+      <div id="sidebar">
+        
+        <h4>Labels:</h4>
+        <ul id="label-list">
+          <li>@Computer</li>
+          <li>Goo-Doo</li>
+        </ul>
   
-    <div id="main">
-      <form ng-submit="search()">
-        <input type="text" class="search" placeholder="Search for tag" ng-model="searchString">
-        <input type="submit" class="button" value="Search">
-      </form>
+        <h4>Keyboard Shortcuts</h4>
+        <table>
+          <tr><td>/</td><td>Search</td></tr>
+          <tr><td>j, k</td><td>Down, Up</td></tr>
+          <tr><td>o, enter</td><td>Edit task</td></tr>
+          <tr><td>c, f</td><td>Finish task</td></tr>
+          <tr><td>a, n, t</td><td>Add new task</td></tr>
+        </table>
+      </div>
+    
+      <div id="main">
+        <div class="task-list todo">
+          <span ng-show="remaining().length == 0">This list is all done!</span>
+          <ul>
+            <li ng-repeat="task in remaining()">
+              <div ng-hide="editing && $index == cursor">
+                <span ng-show="$index == cursor">&gt;</span>
+                <input type="checkbox" ng-model="task.done">
+                <a href="#" class="tag" ng-repeat="tag in task.tags" ng-click="searchForTag($event, tag)">{{tag}} </a>
+                <span ng-click="editTask($index)">{{task.text}}</span>
+              </div>
   
-      <p></p>
-
-      <div class="task-list todo">
-        <span ng-show="remaining().length == 0">This list is all done!</span>
-        <ul>
-          <li ng-repeat="task in remaining()">
-            <div ng-hide="editing && $index == cursor">
-              <span ng-show="$index == cursor">&gt;</span>
+              <form ng-submit="updateTask()" ng-show="editing && $index == cursor">
+                <input class="text" ng-model="editTaskText[cursor]">
+                <input type="submit" class="button" value="Save">
+              </form>
+            </li>
+          </ul>
+        </div>
+  
+        <form ng-submit="addTask()">
+          <input type="text" class="new-task" placeholder="Add new task" ng-model="newTask">
+          <input type="submit" class="button" value="Add">
+        </form>
+    
+  
+        <div class="task-list all" ng-show="done().length > 0">
+          <hr>
+          <h4>Completed Tasks</h4>
+          <ul>
+            <li ng-repeat="task in done()">
               <input type="checkbox" ng-model="task.done">
-              <a href="#" class="tag" ng-repeat="tag in task.tags" ng-click="searchForTag($event, tag)">{{tag}} </a>
-              <span ng-click="editTask($index)">{{task.text}}</span>
-            </div>
-
-            <form ng-submit="updateTask()" ng-show="editing && $index == cursor">
-              <input class="text" ng-model="editTaskText[cursor]">
-              <input type="submit" class="button" value="Save">
-            </form>
-          </li>
-        </ul>
+              <span class="tag" ng-repeat="tag in task.tags">{{tag}} </span>
+              <span>{{task.text}}</span>
+            </li>
+          </ul>
+          <a ng-click="killTasks()" id="kill-task" href="#">Delete completed tasks</a>
+        </div>
       </div>
-
-      <form ng-submit="addTask()">
-        <input type="text" class="new-task" placeholder="Add new task" ng-model="newTask">
-        <input type="submit" class="button" value="Add">
-      </form>
-  
-
-      <div class="task-list all" ng-show="done().length > 0">
-        <hr>
-        <h4>Completed Tasks</h4>
-        <ul>
-          <li ng-repeat="task in done()">
-            <input type="checkbox" ng-model="task.done">
-            <span class="tag" ng-repeat="tag in task.tags">{{tag}} </span>
-            <span>{{task.text}}</span>
-          </li>
-        </ul>
-        <a ng-click="killTasks()" id="kill-task" href="#">Delete completed tasks</a>
-      </div>
-    </div>
+    
+    </div> <!-- end of container -->
   
   </body>
 

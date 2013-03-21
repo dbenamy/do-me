@@ -1,72 +1,48 @@
-window.gd = window.gd || {};
-
-
-gd.utcTs = function() {
-	var now = new Date();
-	return Date.UTC(
-			now.getUTCFullYear(), now.getUTCMonth(),
-			now.getUTCDate(), now.getUTCHours(),
-			now.getUTCMinutes(), now.getUTCSeconds()
-	) / 1000;
-};
-
-
-gd.taskNextId = 0;
-gd.generateTaskId = function() {
-	// The date is to avoid conflicts when using 2 clients, the random
-	// number is to try to avoid conflicts if edits ARE made at the
-	// same time, and the nextId counter is used to prevent conflicts
-	// between tasks created right after each other on one client.
-	return sprintf('%s-%s-%s', Date.now(), gd.taskNextId++, Math.round(Math.random() * 1000));
-};
-
-gd.GooDooCtrl = function($scope) {
-	if (!('goodoo' in localStorage)) {
-		localStorage.goodoo = JSON.stringify({});
-	}
+// angular.module('goodoo', ['$scope']).controller('GooDooCtrl', function($scope) {
+GooDooCtrl = function($scope, storage) {
+	$scope.utcTs = function() {
+		var now = new Date();
+		return Date.UTC(
+				now.getUTCFullYear(), now.getUTCMonth(),
+				now.getUTCDate(), now.getUTCHours(),
+				now.getUTCMinutes(), now.getUTCSeconds()
+		) / 1000;
+	};
 
 	$scope.TAG_REGEX = /#[^ ]+ */g;
-
-	saveTasks = function(tasks) {
-		var gooDooData = JSON.parse(localStorage.goodoo);
-		gooDooData.tasks = tasks;
-		localStorage.goodoo = JSON.stringify(gooDooData);
-	};
-
-	loadTasks = function() {
-		var gooDooData = JSON.parse(localStorage.goodoo);
-		if (gooDooData.tasks) {
-			console.log("Reading tasks from local storage:");
-			console.log(gooDooData.tasks);
-			return gooDooData.tasks;
-		} else {
-			console.log("loading default dummy tasks");
-			return [
-				{
-					id: gd.generateTaskId(),
-					tags: ['#@Computer', '#Goo-Doo'],
-					text: "A task with 2 tags",
-					done: false,
-					updated_at: gd.utcTs()
-				},
-				{
-					id: gd.generateTaskId(),
-					tags: [],
-					text: "A task with no tags",
-					done: false,
-					updated_at: gd.utcTs()
-				}
-			];
+	$scope.SAMPLE_TASKS = [
+		{
+			id: 'sample-1',
+			tags: ['#@Computer', '#GooDoo'],
+			text: "A task with 2 tags",
+			done: false,
+			updated_at: $scope.utcTs()
+		},
+		{
+			id: 'sample-2',
+			tags: [],
+			text: "A task with no tags",
+			done: false,
+			updated_at: $scope.utcTs()
 		}
-	};
+	];
 
-	$scope.tasks = loadTasks(); // all tasks, done and remaining
-	$scope.results = $scope.tasks; // can include done and remaining tasks
+	// Data / models that have to do with this controller
+	$scope.tasks = storage.loadTasks(); // all tasks, done and remaining
+	$scope.results = $scope.tasks; // results of search. includes done and remaining tasks.
+	$scope.taskNextId = 0;
 	$scope.cursor = 0; // index of cursor position with 0 being the top task in the results
 	$scope.editing = false; // true if the task pointed to by the cursor is being edited
 	$scope.editTaskText = {}; // key: cursor position, val: what's in the edit box. shit doesn't work right using the same variable for all edit inputs
 
-	$scope.$watch('tasks', saveTasks, true);
+	$scope.generateTaskId = function() {
+		// The timestamp is the basis of the unique id. The nextId counter is in case the clock shifts for daylight
+		// savings, a time correction, etc. The random number is added just in case somehow tasks are created at the
+		// same time, with the same nextId, on two different clients.
+		return sprintf('%s-%s-%s', Date.now(), $scope.taskNextId++, Math.round(Math.random() * 1000));
+	};
+
+	$scope.$watch('tasks', storage.saveTasks, true);
 
 	$scope.addTask = function() {
 		var tags = $scope.parseTags($scope.newTask);
@@ -75,11 +51,11 @@ gd.GooDooCtrl = function($scope) {
 
 		if (text !== "") {
 			$scope.tasks.push({
-				id: gd.generateTaskId(),
+				id: $scope.generateTaskId(),
 				text: text,
 				tags: tags,
 				done: false,
-				updated_at: gd.utcTs()
+				updated_at: $scope.utcTs()
 			});
 		} else {
 			console.log("woops, can't add empty field");
@@ -106,7 +82,7 @@ gd.GooDooCtrl = function($scope) {
 			console.log(newText);
 			task.tags = newTags;
 			task.text = newText;
-			task.updated_at = gd.utcTs();
+			task.updated_at = $scope.utcTs();
 			$scope.editing = false;
 			console.log($scope.tasks);
 		} else {
@@ -261,4 +237,7 @@ gd.GooDooCtrl = function($scope) {
 	$scope.getCurrentTask = function() {
 		return $scope.remaining()[$scope.cursor];
 	};
+// });
 };
+
+app = angular.module('app', ['storage']);

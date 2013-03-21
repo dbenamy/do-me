@@ -58,7 +58,7 @@ GooDooCtrl = function($scope, storage) {
 				updated_at: $scope.utcTs()
 			});
 		} else {
-			console.log("woops, can't add empty field");
+			alert("Whoops, can't add an empty task.");
 		}
 
 		$scope.newTask = '';

@@ -30,11 +30,22 @@ h1, h2, h3, h4 {
 	margin: 0;
 }
 
+/* Input Fields & Buttons */
+
 input.new-task, 
 input.search {
 		padding: 5px 10px;
 		width: 68%;
 		border: 1px solid #ddd;
+		font-size: 100%;
+}
+
+input.text {
+		padding: 5px 10px;
+		width: 68%;
+		background: #eee;
+		border: none;
+		font-size: 100%;
 }
 
 input.button,
@@ -44,6 +55,7 @@ button {
 		border: none;
 		cursor: pointer;
 		padding: 7px 20px 7px 20px;
+		font-size: 100%;
 }
 
 input.button:hover,
@@ -51,12 +63,29 @@ button:hover {
 		background: #0FA6BD;
 }
 
-input.text {
-		padding: 5px 10px;
-		width: 68%;
-		background: yellow;
-		border: none;
+/*input[type='checkbox'] {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+}*/
+
+input[type=checkbox]:checked ~ div {
+		background: red;
 }
+
+.icon-check-empty {
+		font-size: 200%;
+		color: #bbb;
+}
+
+.checkbox {
+		cursor: pointer;
+}
+
+.checkbox:hover {
+		color: #0FA6BD;
+}
+
 
 header {
 		width: 100%;
@@ -97,7 +126,7 @@ header {
 		position: relative;
 		top: 80px;
 		border: 1px solid #ddd;
-		margin-bottom: 150px;
+		margin-bottom: 110px;
 				 -moz-box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
 		-webkit-box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
 		        box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
@@ -148,11 +177,11 @@ ul {
 
 .all ul {
 		color: #ccc;
-		margin: 20px 0 10px 0;
+		margin: 20px;
 }
 
 
-/* overlay box */
+/* Overlay Keyboard Shortcuts */
 button.close {
 		right: 0;
 		top: 0;
@@ -188,6 +217,18 @@ td.keys {
 		padding: 20px;
 }
 
+/* Icons */
+
+.cursor {
+		font-size: 120%;
+		position: absolute;
+		left: -9px;
+		margin-top: 3px;
+		color: #999;
+}
+
+
 .addClass {
 		margin: 20px 0 0 0;
 }
+

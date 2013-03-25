@@ -3,7 +3,8 @@
 
   <head>
     <title>Goo Doo</title>
-    <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link type="text/css" rel="stylesheet" href="css/font-awesome.min.css" />
     <script src="libs/angular.min.js"></script>
     <script src="libs/jquery-1.9.1.min.js"></script>
     <script src="libs/keymaster.min.js"></script>
@@ -19,12 +20,28 @@
         <h1 id="logo">Goo Doo</h1>
         <form id="search" ng-submit="search()">
           <input type="text" class="search" placeholder="Search for tag" ng-model="searchString">
-          <input type="submit" class="button" value="Search">
+          <!--<input type="submit" class="button" value="Search">-->
+          <button type="submit" class="button icon-search"></button>
         </form>
       </div>
     </header>
+    
+    <div id="overlay"></div>
+    <div id="shortcuts">
+      <button onmousedown="showShortcuts()" class="close">Close</button>
+      <h3>Keyboard Shortcuts</h3>
+      <br>
+      <table>
+        <tr><td class="keys">/</td><td>Search</td></tr>
+        <tr><td class="keys">j, k</td><td>Down, Up</td></tr>
+        <tr><td class="keys">o, enter</td><td>Edit task</td></tr>
+        <tr><td class="keys">c, f</td><td>Finish task</td></tr>
+        <tr><td class="keys">a, n, t</td><td>Add new task</td></tr>
+      </table>
+    </div>
 
     <div id="container">
+        
       <div id="sidebar">
         
         <h4>Labels:</h4>
@@ -32,18 +49,10 @@
           <li>@Computer</li>
           <li>Goo-Doo</li>
         </ul>
-  
-        <h4>Keyboard Shortcuts</h4>
-        <table>
-          <tr><td>/</td><td>Search</td></tr>
-          <tr><td>j, k</td><td>Down, Up</td></tr>
-          <tr><td>o, enter</td><td>Edit task</td></tr>
-          <tr><td>c, f</td><td>Finish task</td></tr>
-          <tr><td>a, n, t</td><td>Add new task</td></tr>
-        </table>
       </div>
     
       <div id="main">
+        
         <div class="task-list todo">
           <span ng-show="remaining().length == 0">This list is all done!</span>
           <ul>
@@ -63,7 +72,7 @@
           </ul>
         </div>
   
-        <form ng-submit="addTask()">
+        <form ng-submit="addTask()" class="addClass">
           <input type="text" class="new-task" placeholder="Add new task" ng-model="newTask">
           <input type="submit" class="button" value="Add">
         </form>
@@ -84,6 +93,10 @@
       </div>
     
     </div> <!-- end of container -->
+    
+    <footer>
+      <button onmousedown="showShortcuts()">Keyboard Shortcuts</button>
+    </footer>
   
   </body>
 

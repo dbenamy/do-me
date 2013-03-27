@@ -28,7 +28,7 @@ GooDooCtrl = function($scope, storage) {
 	];
 
 	// Data / models that have to do with this controller
-	$scope.tasks = storage.loadTasks(); // all tasks, done and remaining
+	$scope.tasks = storage.tasks;
 	$scope.results = $scope.tasks; // results of search. includes done and remaining tasks.
 	$scope.taskNextId = 0;
 	$scope.cursor = 0; // index of cursor position with 0 being the top task in the results
@@ -41,8 +41,6 @@ GooDooCtrl = function($scope, storage) {
 		// same time, with the same nextId, on two different clients.
 		return sprintf('%s-%s-%s', Date.now(), $scope.taskNextId++, Math.round(Math.random() * 1000));
 	};
-
-	$scope.$watch('tasks', storage.saveTasks, true);
 
 	$scope.addTask = function() {
 		var tags = $scope.parseTags($scope.newTask);

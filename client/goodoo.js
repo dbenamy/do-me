@@ -1,5 +1,5 @@
 // angular.module('goodoo', ['$scope']).controller('GooDooCtrl', function($scope) {
-GooDooCtrl = function($scope, storage) {
+GooDooCtrl = function($scope, storage, sync) {
 	$scope.utcTs = function() {
 		var now = new Date();
 		return Date.UTC(
@@ -34,6 +34,11 @@ GooDooCtrl = function($scope, storage) {
 	$scope.cursor = 0; // index of cursor position with 0 being the top task in the results
 	$scope.editing = false; // true if the task pointed to by the cursor is being edited
 	$scope.editTaskText = {}; // key: cursor position, val: what's in the edit box. shit doesn't work right using the same variable for all edit inputs
+
+	// TODO move to new controller
+	$scope.sync = sync.sync; // sync function
+	$scope.syncStatus = sync.status;
+	$scope.downloadAsFile = sync.downloadAsFile;
 
 	$scope.generateTaskId = function() {
 		// The timestamp is the basis of the unique id. The nextId counter is in case the clock shifts for daylight
@@ -235,7 +240,8 @@ GooDooCtrl = function($scope, storage) {
 	$scope.getCurrentTask = function() {
 		return $scope.remaining()[$scope.cursor];
 	};
+
 // });
 };
 
-app = angular.module('app', ['storage']);
+app = angular.module('app', ['storage', 'sync']);

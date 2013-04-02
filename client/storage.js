@@ -3,7 +3,7 @@ angular.module('storage', []).service('storage', function ($rootScope) {
 		localStorage.goodoo = JSON.stringify({});
 	}
 
-	saveTasks = function() {
+	var saveTasks = function() {
 		console.log("Saving tasks:");
 		console.log($rootScope.tasks);
 		var gooDooData = JSON.parse(localStorage.goodoo);
@@ -11,7 +11,7 @@ angular.module('storage', []).service('storage', function ($rootScope) {
 		localStorage.goodoo = JSON.stringify(gooDooData);
 	};
 
-	loadTasks = function() {
+	var loadTasks = function() {
 		var gooDooData = JSON.parse(localStorage.goodoo);
 		if (gooDooData.tasks) {
 			console.log("Reading tasks from local storage:");

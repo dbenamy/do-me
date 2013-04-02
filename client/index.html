@@ -10,6 +10,8 @@
     <script src="libs/sprintf-0.5.js"></script>
     <script src="goodoo.js"></script>
     <script src="storage.js"></script>
+    <script src="sync.js"></script>
+    <script src="net.js"></script>
   </head>
   
   <body ng-controller="GooDooCtrl">
@@ -68,7 +70,12 @@
           <input type="submit" class="button" value="Add">
         </form>
     
-  
+        <div id="sync">
+          <a href="#" ng-click="sync()" ng-hide="syncStatus.syncing">Sync now</a><br /> <!-- TODO prevent default on click -->
+          {{syncStatus.text}}<br />
+          <a href="#" ng-click="downloadAsFile()">Export your data as a file</a> <!-- TODO prevent default on click -->
+        </div>
+
         <div class="task-list all" ng-show="done().length > 0">
           <hr>
           <h4>Completed Tasks</h4>

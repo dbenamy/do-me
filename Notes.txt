@@ -1,0 +1,5 @@
+﻿dev_appserver.py .
+ 
+appcfg.py update --oauth2 .
+
+backup/backup.py

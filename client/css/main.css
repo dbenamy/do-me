@@ -1,0 +1,234 @@
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), url('http://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3aCWcynf_cDxXwCLxiixG1c.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Raleway'), url('http://themes.googleusercontent.com/static/fonts/raleway/v6/bIcY3_3JNqUVRAQQRNVteQ.ttf') format('truetype');
+}
+
+body,
+input {
+		font-family: 'Open Sans', sans-serif;
+		/*font-family: 'Raleway', sans-serif;*/
+}
+
+body {
+		margin: 0 auto;
+		color: #666;
+		background: #fafafa;
+		width: 850px;
+		max-width: 90%;
+}
+
+h1, h2, h3, h4 {
+	margin: 0;
+}
+
+/* Input Fields & Buttons */
+
+input.new-task, 
+input.search {
+		padding: 5px 10px;
+		width: 68%;
+		border: 1px solid #ddd;
+		font-size: 100%;
+}
+
+input.text {
+		padding: 5px 10px;
+		width: 68%;
+		background: #eee;
+		border: none;
+		font-size: 100%;
+}
+
+input.button,
+button {
+		background: #10C9E6;
+		color: #fff;
+		border: none;
+		cursor: pointer;
+		padding: 7px 20px 7px 20px;
+		font-size: 100%;
+}
+
+input.button:hover,
+button:hover {
+		background: #0FA6BD;
+}
+
+/*input[type='checkbox'] {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+}*/
+
+input[type=checkbox]:checked ~ div {
+		background: red;
+}
+
+.icon-check-empty {
+		font-size: 200%;
+		color: #bbb;
+}
+
+.checkbox {
+		cursor: pointer;
+}
+
+.checkbox:hover {
+		color: #0FA6BD;
+}
+
+
+header {
+		width: 100%;
+		left: 0;
+		position: fixed;
+		z-index: 1;
+		padding: 10px 0;
+		background: #fff;
+				 -moz-box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
+		-webkit-box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
+		        box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+#hdr {
+		margin: 0 auto;
+		width: 75%;
+}
+
+#logo {
+		float: left;
+		width: 150px;
+}
+
+#search {
+		float: left;
+		width: 70%;
+}
+
+#container {
+		margin: 0 auto;
+		width: 700px;
+		max-width: 90%;
+}
+
+#main {
+		background: #fff;
+		padding: 20px;
+		position: relative;
+		top: 80px;
+		border: 1px solid #ddd;
+		margin-bottom: 110px;
+				 -moz-box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
+		-webkit-box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
+		        box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+#sidebar {
+		display: none; /* hidding sidebar until something happens there */
+		width: 40%;
+		float: left;
+		position: fixed;
+		top: 80px;
+}
+
+footer {
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		text-align: center;
+}
+
+a {
+		color: #10C9E6;
+		text-decoration: none;
+}
+
+a:hover {
+		text-decoration: underline;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#label-list {
+		margin-bottom: 20px;
+}
+
+.todo ul li {
+		border-bottom: 1px solid #eee;
+		padding: 10px 0;
+}
+
+.tag {
+  color: #10C9E6;
+}
+
+.all ul {
+		color: #ccc;
+		margin: 20px;
+}
+
+
+/* Overlay Keyboard Shortcuts */
+button.close {
+		right: 0;
+		top: 0;
+		position: absolute;
+}
+
+td.keys {
+		width: 100px;
+}
+
+#overlay {
+		display: none;
+		z-index: 2;
+		background: #000;
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 0px;
+		left: 0px;
+		text-align: center;
+}
+
+#shortcuts {
+		display: none;
+		position: relative;
+		z-index: 3;
+		margin: 150px auto 0px auto;
+		width: 500px; 
+		height: 300px;
+		background: #FFF;
+		-moz-border-radius: 2px;
+		border-radius: 2px;
+		padding: 20px;
+}
+
+/* Icons */
+
+.cursor {
+		font-size: 120%;
+		position: absolute;
+		left: -9px;
+		margin-top: 3px;
+		color: #999;
+}
+
+
+.addClass {
+		margin: 20px 0 0 0;
+}
+

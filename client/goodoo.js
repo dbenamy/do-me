@@ -245,3 +245,17 @@ GooDooCtrl = function($scope, storage, sync) {
 };
 
 app = angular.module('app', ['storage', 'sync']);
+
+// TODO move to controller
+function showShortcuts() {
+	var overlay = document.getElementById('overlay');
+	var shortcuts = document.getElementById('shortcuts');
+	overlay.style.opacity = .8;
+	if(overlay.style.display == "block"){
+		overlay.style.display = "none";
+		shortcuts.style.display = "none";
+	} else {
+		overlay.style.display = "block";
+		shortcuts.style.display = "block";
+	}
+}

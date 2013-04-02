@@ -1,5 +1,5 @@
 // angular.module('goodoo', ['$scope']).controller('GooDooCtrl', function($scope) {
-GooDooCtrl = function($scope, storage) {
+GooDooCtrl = function($scope, storage, sync) {
 	$scope.utcTs = function() {
 		var now = new Date();
 		return Date.UTC(
@@ -28,12 +28,17 @@ GooDooCtrl = function($scope, storage) {
 	];
 
 	// Data / models that have to do with this controller
-	$scope.tasks = storage.loadTasks(); // all tasks, done and remaining
+	$scope.tasks = storage.tasks;
 	$scope.results = $scope.tasks; // results of search. includes done and remaining tasks.
 	$scope.taskNextId = 0;
 	$scope.cursor = 0; // index of cursor position with 0 being the top task in the results
 	$scope.editing = false; // true if the task pointed to by the cursor is being edited
 	$scope.editTaskText = {}; // key: cursor position, val: what's in the edit box. shit doesn't work right using the same variable for all edit inputs
+
+	// TODO move to new controller
+	$scope.sync = sync.sync; // sync function
+	$scope.syncStatus = sync.status;
+	$scope.downloadAsFile = sync.downloadAsFile;
 
 	$scope.generateTaskId = function() {
 		// The timestamp is the basis of the unique id. The nextId counter is in case the clock shifts for daylight
@@ -41,8 +46,6 @@ GooDooCtrl = function($scope, storage) {
 		// same time, with the same nextId, on two different clients.
 		return sprintf('%s-%s-%s', Date.now(), $scope.taskNextId++, Math.round(Math.random() * 1000));
 	};
-
-	$scope.$watch('tasks', storage.saveTasks, true);
 
 	$scope.addTask = function() {
 		var tags = $scope.parseTags($scope.newTask);
@@ -237,12 +240,14 @@ GooDooCtrl = function($scope, storage) {
 	$scope.getCurrentTask = function() {
 		return $scope.remaining()[$scope.cursor];
 	};
+
 // });
 };
 
-app = angular.module('app', ['storage']);
+app = angular.module('app', ['storage', 'sync']);
 
-function showShortcuts(){
+// TODO move to controller
+function showShortcuts() {
 	var overlay = document.getElementById('overlay');
 	var shortcuts = document.getElementById('shortcuts');
 	overlay.style.opacity = .8;

@@ -1,7 +1,4 @@
-app = angular.module('goodoo', []); // define the goodoo module
-
-angular.module('goodoo').controller('GooDooCtrl', function($scope, storage) {
-// GooDooCtrl = function($scope, storage) {
+angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 	$scope.utcTs = function() {
 		var now = new Date();
 		return Date.UTC(
@@ -238,7 +235,6 @@ angular.module('goodoo').controller('GooDooCtrl', function($scope, storage) {
 		return $scope.remaining()[$scope.cursor];
 	};
 });
-// };
 
 // TODO move to controller
 function showShortcuts() {

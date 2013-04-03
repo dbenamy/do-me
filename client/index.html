@@ -9,14 +9,17 @@
     <script src="libs/jquery-1.9.1.min.js"></script>
     <script src="libs/keymaster.min.js"></script>
     <script src="libs/sprintf-0.5.js"></script>
-    <script src="goodoo.js"></script>
+    <script type="text/javascript">
+      angular.module('goodoo', []); // define the goodoo module
+    </script>
+    <script src="tasks_ctrl.js"></script>
     <script src="sync_ctrl.js"></script>
     <script src="storage.js"></script>
     <script src="sync.js"></script>
     <script src="net.js"></script>
   </head>
   
-  <body ng-controller="GooDooCtrl">
+  <body ng-controller="TasksCtrl">
     
     <header>
       <div id="hdr">

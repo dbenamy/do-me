@@ -1,4 +1,4 @@
-angular.module('net', []).service('net', function() {
+angular.module('goodoo').service('net', function() {
 	var lastSavedVersion = null;
 
 	downloadData = function(success) {

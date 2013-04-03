@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="app">
+<html ng-app="goodoo">
 
   <head>
     <title>Goo Doo</title>
@@ -10,6 +10,7 @@
     <script src="libs/keymaster.min.js"></script>
     <script src="libs/sprintf-0.5.js"></script>
     <script src="goodoo.js"></script>
+    <script src="sync_ctrl.js"></script>
     <script src="storage.js"></script>
     <script src="sync.js"></script>
     <script src="net.js"></script>
@@ -79,7 +80,7 @@
           <input type="submit" class="button" value="Add">
         </form>
     
-        <div id="sync">
+        <div id="sync" ng-controller="SyncCtrl">
           <a href="#" ng-click="sync()" ng-hide="syncStatus.syncing">Sync now</a><br /> <!-- TODO prevent default on click -->
           {{syncStatus.text}}<br />
           <a href="#" ng-click="downloadAsFile()">Export your data as a file</a> <!-- TODO prevent default on click -->

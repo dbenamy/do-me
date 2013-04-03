@@ -1,4 +1,4 @@
-angular.module('storage', []).service('storage', function ($rootScope) {
+angular.module('goodoo').service('storage', function($rootScope) {
 	if (!('goodoo' in localStorage)) {
 		localStorage.goodoo = JSON.stringify({});
 	}

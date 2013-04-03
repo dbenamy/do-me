@@ -1,4 +1,4 @@
-angular.module('sync', ['storage', 'net']).service('sync', function ($rootScope, $timeout, storage, net) {
+angular.module('goodoo').service('sync', function ($rootScope, $timeout, storage, net) {
 
 	var status = {
 		syncing: false,

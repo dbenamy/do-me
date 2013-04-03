@@ -1,5 +1,7 @@
-// angular.module('goodoo', ['$scope']).controller('GooDooCtrl', function($scope) {
-GooDooCtrl = function($scope, storage, sync) {
+app = angular.module('goodoo', []); // define the goodoo module
+
+angular.module('goodoo').controller('GooDooCtrl', function($scope, storage) {
+// GooDooCtrl = function($scope, storage) {
 	$scope.utcTs = function() {
 		var now = new Date();
 		return Date.UTC(
@@ -34,11 +36,6 @@ GooDooCtrl = function($scope, storage, sync) {
 	$scope.cursor = 0; // index of cursor position with 0 being the top task in the results
 	$scope.editing = false; // true if the task pointed to by the cursor is being edited
 	$scope.editTaskText = {}; // key: cursor position, val: what's in the edit box. shit doesn't work right using the same variable for all edit inputs
-
-	// TODO move to new controller
-	$scope.sync = sync.sync; // sync function
-	$scope.syncStatus = sync.status;
-	$scope.downloadAsFile = sync.downloadAsFile;
 
 	$scope.generateTaskId = function() {
 		// The timestamp is the basis of the unique id. The nextId counter is in case the clock shifts for daylight
@@ -240,17 +237,14 @@ GooDooCtrl = function($scope, storage, sync) {
 	$scope.getCurrentTask = function() {
 		return $scope.remaining()[$scope.cursor];
 	};
-
-// });
-};
-
-app = angular.module('app', ['storage', 'sync']);
+});
+// };
 
 // TODO move to controller
 function showShortcuts() {
 	var overlay = document.getElementById('overlay');
 	var shortcuts = document.getElementById('shortcuts');
-	overlay.style.opacity = .8;
+	overlay.style.opacity = 0.8;
 	if(overlay.style.display == "block"){
 		overlay.style.display = "none";
 		shortcuts.style.display = "none";

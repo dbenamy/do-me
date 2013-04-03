@@ -81,7 +81,7 @@
         </form>
     
         <div id="sync" ng-controller="SyncCtrl">
-          <a href="#" ng-click="sync()" ng-hide="syncStatus.syncing">Sync now</a><br /> <!-- TODO prevent default on click -->
+          <a href="#" ng-click="sync()" ng-hide="status.syncing">Sync now</a><br /> <!-- TODO prevent default on click -->
           {{syncStatus.text}}<br />
           <a href="#" ng-click="downloadAsFile()">Export your data as a file</a> <!-- TODO prevent default on click -->
         </div>      

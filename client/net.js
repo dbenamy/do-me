@@ -12,14 +12,14 @@ angular.module('goodoo').service('net', function() {
 				return;
 			}
 			console.log("Downloaded: " + JSON.stringify(result));
-			lastSavedVersion = result.lastSavedVersion;
-			success(result.value);
+			lastSavedVersion = result.version;
+			success(result.text);
 		});
 	};
 
 	uploadData = function(str, success) {
 		var args = {
-			value: str,
+			text: str,
 			lastSavedVersion: lastSavedVersion
 		};
 		console.log('Uploading: ' + JSON.stringify(args));

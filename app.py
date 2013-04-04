@@ -5,7 +5,7 @@ from google.appengine.ext import db
 import webapp2
 from webapp2_extras import json
 
-from models import Value
+from models import VersionedText
 import settings
 
 
@@ -18,13 +18,6 @@ def require_auth(func):
             self.response.out.write(json.encode({
                 'status': 'NEED_LOGIN',
                 'url': users.create_login_url("/"),
-            }))
-        elif user.user_id() not in settings.AUTHORIZED_USER_IDS:
-            logging.warn("User %s tried to access the server and isn't authorized." % user.user_id())
-            self.response.headers.add_header('content-type', 'application/json', charset='utf-8')
-            self.response.out.write(json.encode({
-                'status': 'NOT_AUTHORIZED',
-                'userId': user.user_id(),
             }))
         else:
             func(self)
@@ -39,7 +32,7 @@ class MainPage(webapp2.RequestHandler):
 class StorageApi(webapp2.RequestHandler):
     @require_auth
     def get(self):
-        task_storage = self.get_storage()
+        versioned_text = self._get_versioned_text()
         if self.request.get('forceDownload') == 'true':
             content_type = 'application/octet-stream'
         else:
@@ -47,8 +40,8 @@ class StorageApi(webapp2.RequestHandler):
         self.response.headers.add_header('content-type', content_type, charset='utf-8')
         self.response.out.write(json.encode({
             'status': 'OK',
-            'value': task_storage.value,
-            'lastSavedVersion': task_storage.last_saved_version,
+            'text': versioned_text.text,
+            'version': versioned_text.version,
         }))
 
     @require_auth
@@ -58,29 +51,29 @@ class StorageApi(webapp2.RequestHandler):
         self.response.headers.add_header('content-type', 'application/json', charset='utf-8')
         self.response.out.write(json.encode(resp))
 
-    def get_storage(self):
+    def _get_versioned_text(self):
         user_id = users.get_current_user().user_id()
-        task_storage = db.get(db.Key.from_path('Value', str(user_id)))
-        if task_storage is None:
-            task_storage = Value(key_name=str(user_id), value='', last_saved_version=0)
-        return task_storage
+        versioned_text = db.get(db.Key.from_path('VersionedText', str(user_id)))
+        if versioned_text is None:
+            versioned_text = VersionedText(key_name=str(user_id), text='', version=0)
+        return versioned_text
 
     @db.transactional
     def save_value(self):
-        value = self.request.get('value')
+        text = self.request.get('text')
         last_saved_version = self.request.get('lastSavedVersion')
-        if value == '' or last_saved_version == '':
+        if text == '' or last_saved_version == '':
             return {'status': 'MISSING_ARG'}
-        task_storage = self.get_storage()
-        if str(task_storage.last_saved_version) != last_saved_version:
+        versioned_text = self._get_versioned_text()
+        if str(versioned_text.version) != last_saved_version:
             return {'status': 'DATA_CHANGED'}
-        if task_storage.value != value:
-            task_storage.value = value
-            task_storage.last_saved_version += 1
-            task_storage.put()
+        if versioned_text.text != text:
+            versioned_text.text = text
+            versioned_text.version += 1
+            versioned_text.put()
         return {
             'status': 'OK',
-            'lastSavedVersion': task_storage.last_saved_version,
+            'lastSavedVersion': versioned_text.version,
         }
 
 

@@ -1,4 +1,4 @@
-angular.module('goodoo').service('storage', function($rootScope) {
+angular.module('goodoo').service('storage', function($rootScope, $timeout) {
 	if (!('goodoo' in localStorage)) {
 		localStorage.goodoo = JSON.stringify({});
 	}
@@ -26,6 +26,14 @@ angular.module('goodoo').service('storage', function($rootScope) {
 	$rootScope.tasks = loadTasks(); // all tasks, done and remaining
 
 	$rootScope.$watch('tasks', saveTasks, true);
+
+	var backup = function() {
+		console.log("Backing up Goo Doo data.");
+		localStorage['goodoo-backup-' + (new Date())] = localStorage.goodoo;
+		$timeout(backup, 1000 * 60 * 10); // 10 mins
+		console.log("Back up done.");
+	};
+	backup();
 
 	// Stuff exposed by the service:
 	return {

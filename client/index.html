@@ -28,6 +28,11 @@
       <div id="hdr">
         <h1 id="logo">Goo Doo</h1>
       </div>
+      
+      <form id="search" ng-submit="search()">
+        <input type="text" class="search" placeholder="Search for tag" ng-model="searchString" style="padding: 21px 2%;">
+        <button type="submit" class="button icon-search" value="Search"></button>
+      </form>
     </header>
 
     <div id="container">
@@ -40,11 +45,6 @@
           <li>Goo-Doo</li>
         </ul>
       </div>
-    
-      <form id="search" ng-submit="search()">
-        <input type="text" class="search" placeholder="Search for tag" ng-model="searchString" style="padding: 21px 2%;">
-        <button type="submit" class="button icon-search" value="Search"></button>
-      </form>
 
       <div id="main">
         <div class="task-list todo">
@@ -72,7 +72,7 @@
         </form>
     
         <div id="sync" ng-controller="SyncCtrl">
-          <a href="#" ng-click="sync()" ng-hide="status.syncing">Sync now</a><br /> <!-- TODO prevent default on click -->
+          <i class="icon-refresh"></i> <a href="#" class="syncit" ng-click="sync()" ng-hide="status.syncing">Sync now</a><br /> <!-- TODO prevent default on click -->
           {{status.text}}<br />
           <a href="#" ng-click="downloadAsFile()">Export your data as a file</a> <!-- TODO prevent default on click -->
           <div>

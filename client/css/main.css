@@ -69,6 +69,11 @@ button.icon-search {
 		font-size: 150%;
 }
 
+button.icon-plus {
+		padding: 12px 3% 12px 3%;
+}
+
+
 input.button:hover,
 button:hover {
 		background: #0FA6BD;
@@ -124,7 +129,7 @@ header {
 		background: #fafafa;
 		padding: 20px 0%;
 		position: relative;
-		top: 88px;
+		top: 20px;
 		width: 100%;
 		text-align: center;
 }
@@ -139,7 +144,8 @@ header {
 		padding: 0 5%;
 		position: relative;
 		top: 90px;
-		margin-bottom: 140px;
+		margin-bottom: 300px;
+		top: 220px;
 }
 
 #sidebar {
@@ -188,29 +194,20 @@ ul {
 		margin: 20px;
 }
 
-
-/* Overlay Keyboard Shortcuts */
-button.close {
-		right: 0;
-		top: 0;
-		position: absolute;
+#sync {
+		font-size: 70%;
+		color: #999;
+		line-height: 15px;
 }
 
-td.keys {
-		width: 100px;
+.syncit {
+		margin-bottom: 10px;
+		display: inline-block;
+		padding-left: 5px;
+		font-size: 150%;
 }
 
-#overlay {
-		display: none;
-		z-index: 2;
-		background: #000;
-		position: fixed;
-		width: 100%;
-		height: 100%;
-		top: 0px;
-		left: 0px;
-		text-align: center;
-}
+/* Keyboard Shortcuts */
 
 #shortcuts {
 		position: relative;
@@ -227,30 +224,40 @@ td.keys {
 		color: #10C9E6;
 }
 
-
 .addClass {
-		margin: 20px 0 0 0;
+		margin: 20px 0;
 }
 
+.icon-refresh {
+		color: #10C9E6;
+		font-size: 150%;
+}
 
 
 @media (min-width:500px) {
 
-		input.new-task, 
 		input.search {
 				width: 400px;
 		}
+		
+		input.new-task {
+				width: 445px;
+		}
 
-		button.icon-search,
-		button.icon-plus {
+		button.icon-search{
 				padding: 20px 25px 23px 25px;
 		}
+		
+		button.icon-plus {
+		padding: 12px 3% 12px 3%;
+		}
+
 		
 		#main {
 				max-width: 100%;
 				margin: 0 auto;
 				width: 520px;
-				margin-bottom: 140px;
+				margin-bottom: 300px;
 		}
 		
 }

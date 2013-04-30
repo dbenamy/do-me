@@ -1,11 +1,15 @@
 angular.module('goodoo').service('sync', function ($rootScope, $timeout, storage, net) {
 
+	// TODO move sync UI stuff to a new controller
+
 	var status = {
 		syncing: false,
+		lastSync: null,
 		text: ''
 	};
 
 	var syncTimer = null;
+	var updateTextTimer = null;
 
 	// TODO handle errors uploading and downloading
 	var sync = function() {
@@ -130,8 +134,29 @@ angular.module('goodoo').service('sync', function ($rootScope, $timeout, storage
 
 	var syncDone = function() {
 		status.syncing = false;
-		status.text = "Last synced at " + (new Date()); // TODO make this prettier
+		status.lastSync = new Date();
+		updateLastSyncedText();
+
 		syncTimer = $timeout(sync, 30000);
+	};
+
+	var updateLastSyncedText = function() {
+		if (status.lastSync !== null) {
+			status.text = "Last synced: " + humanized_time_span(status.lastSync, new Date(), _timeFormats);
+		}
+		$timeout.cancel(updateTextTimer);
+		updateTextTimer = $timeout(updateLastSyncedText, 1000);
+	};
+
+	var _timeFormats = {
+		past: [
+			{ ceiling: 10, text: "just now" },
+			{ ceiling: 60, text: "less than a minute ago" },
+			{ ceiling: null, text: "$hours hours, $minutes minutes ago" }
+		],
+		future: [
+			{ ceiling: null, text: "ERROR: $hours:$minutes:$seconds" }
+		]
 	};
 
 	return {

@@ -218,10 +218,7 @@ ul {
 /* Icons */
 
 .cursor {
-		font-size: 120%;
-		position: absolute;
-		left: 20px;
-		color: #10C9E6;
+		display: none !important;
 }
 
 .addClass {
@@ -258,7 +255,17 @@ ul {
 				margin: 0 auto;
 				width: 520px;
 				margin-bottom: 300px;
+		}
+		
+		.todo {
 				font-size: 150%;
+		}
+
+		.cursor {
+				font-size: 120%;
+				position: absolute;
+				left: 20px;
+				color: #10C9E6;
 		}
 		
 }

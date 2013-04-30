@@ -4,7 +4,7 @@
   <head>
     <title>Goo Doo</title>
     <link type="text/css" rel="stylesheet" href="css/font-awesome.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link type="text/css" rel="stylesheet" href="css/main.css">
     <script src="libs/angular.min.js"></script>
     <script src="libs/jquery-1.9.1.min.js"></script>
     <script src="libs/keymaster.min.js"></script>
@@ -64,7 +64,7 @@
             <li ng-repeat="task in remaining()">
               <div ng-hide="editing && $index == cursor">
                 <span ng-show="$index == cursor" class="icon-caret-right cursor"></span>
-                <input type="checkbox"  id="toggle" ng-model="task.done"><!--<label for="toggle" class="icon-check-empty checkbox"></label>-->
+                <input type="checkbox" id="toggle" ng-model="task.done" ng-change="updatedTask(task)" ><!--<label for="toggle" class="icon-check-empty checkbox"></label>-->
                 <a href="#" class="tag" ng-repeat="tag in task.tags" ng-click="searchForTag($event, tag)">{{tag}} </a>
                 <span ng-click="editTask($index)">{{task.text}}</span>
               </div>
@@ -92,12 +92,16 @@
       <div class="task-list all" ng-show="done().length > 0">
         <ul>
           <li ng-repeat="task in done()">
-            <input type="checkbox" ng-model="task.done" id="toggle-1" class="icon-check"><!--<label for="toggle-1" class="icon-check checkbox"></label>-->
+            <input type="checkbox" ng-model="task.done" ng-change="updatedTask(task)" id="toggle-1" class="icon-check"><!--<label for="toggle-1" class="icon-check checkbox"></label>-->
             <span class="tag" ng-repeat="tag in task.tags">{{tag}} </span>
             <span>{{task.text}}</span>
           </li>
         </ul>
         <a ng-click="killTasks()" id="kill-task" href="#">Delete completed tasks</a>
+
+        <div>
+          <a ng-click="logTasks()" href="#">Log tasks for debugging</a>
+        </div>
       </div>
     
     </div> <!-- end of container -->

@@ -1,41 +1,67 @@
-angular.module('goodoo').service('net', function() {
+angular.module('goodoo').service('net', function($http) {
 	var lastSavedVersion = null;
 
-	downloadData = function(success) {
-		console.log("Downloading.");
-		$.getJSON('/api/storage', function(result) {
-			if (result.status === 'NEED_LOGIN') {
-				window.location = result.url;
+	// This doesn't belong here but I don't know how to put it in index.html and make it run.
+	// var old_console_log = console.log;
+	console.log = function(data) {
+		// old_console_log(data);
+		if (typeof data === 'string') {
+			$http.post('/api/log', data);
+		} else {
+			$http.post('/api/log', angular.toJson(data, true));
+		}
+	};
+
+	downloadData = function(downloadSuccess) {
+		// console.log("Downloading.");
+		var req = $http.get('/api/storage');
+		req.success(function(data, status, headers, config) {
+			if (data.status === 'NEED_LOGIN') {
+				window.location = data.url;
 				return;
-			} else if (result.status !== 'OK') {
-				alert('Error loading from server: ' + result.status);
+			} else if (data.status !== 'OK') {
+				alert('Error loading from server: ' + data.status);
 				return;
 			}
-			console.log("Downloaded: " + JSON.stringify(result));
-			lastSavedVersion = result.version;
-			success(result.text);
+			// console.log("Downloaded: " + angular.toJson(data));
+			// console.log("Downloaded status: " + data.status);
+			// console.log("Downloaded version: " + data.version);
+			// console.log("Downloaded text: " + angular.toJson(angular.fromJson(data.text), true));
+			lastSavedVersion = data.version;
+			downloadSuccess(data.text);
+		});
+		req.error(function(data, status, headers, config) {
+			alert("Shit.");
+			// TODO something more useful
 		});
 	};
 
-	uploadData = function(str, success) {
+	uploadData = function(str, uploadSuccess) {
+		// console.log('Uploading text: ' + angular.toJson(angular.fromJson(str), true));
+		// console.log('Uploading lastSavedVersion: ' + lastSavedVersion);
 		var args = {
 			text: str,
 			lastSavedVersion: lastSavedVersion
 		};
-		console.log('Uploading: ' + JSON.stringify(args));
-		$.post('/api/storage', args, function(result) {
-			console.log('Response: ' + result);
-			result = JSON.parse(result);
-			if (result.status === 'NEED_LOGIN') {
-				window.location = result.url;
+		// console.log('Uploading: ' + angular.toJson(args));
+		var req = $http.post('/api/storage', angular.toJson(args));
+		req.success(function(data, status, headers, config) {
+			// console.log('Response:');
+			// console.log(data);
+			if (data.status === 'NEED_LOGIN') {
+				window.location = data.url;
 				return;
-			} else if (result.status !== 'OK') {
-				alert('Error saving to server: ' + result.status);
+			} else if (data.status !== 'OK') {
+				alert('Error saving to server: ' + data.status);
 				return;
 			}
-			lastSavedVersion = result.lastSavedVersion;
+			lastSavedVersion = data.lastSavedVersion;
 			console.log('Saved.');
-			success();
+			uploadSuccess();
+		});
+		req.error(function(data, status, headers, config) {
+			alert("Shit.");
+			// TODO something more useful
 		});
 	};
 

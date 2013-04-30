@@ -28,9 +28,13 @@ angular.module('goodoo').service('sync', function ($rootScope, $timeout, storage
 	$rootScope.$watch(storage.tasks, sync, true);
 
 	var _mergeServerData = function(str) {
-		var json = {tasks: []}; //, tags: []};
-		if (str !== '') {
+		var json = {version: 1, tasks: []}; //, tags: []};
+		if (str !== '') { // First download before anything's been uploaded.
 			json = JSON.parse(str);
+		}
+		var version = json.version || 1;
+		if (version !== 1) {
+			alert("Goo Doo has been updated and can't sync ");
 		}
 		_mergeTasks(storage.tasks, json.tasks);
 		// _mergeTags(data.tags, json.tags);
@@ -42,26 +46,24 @@ angular.module('goodoo').service('sync', function ($rootScope, $timeout, storage
 	 * serverTasks should be the array of tasks downloaded from the server.
 	 */
 	var _mergeTasks = function(clientTasks, serverTasks) {
-		console.log('Merging tasks:');
-		console.log(clientTasks);
-		console.log(serverTasks);
+		// console.log('Merging tasks:');
+		// console.log(clientTasks);
+		// console.log(serverTasks);
 		var serverTasksById = _tasksById(serverTasks);
 		$.each(clientTasks, function(i, task) {
-			console.log('Looking at client task ' + i);
-			console.log(task);
 			if (task.id in serverTasksById) {
 				var serverTask = serverTasksById[task.id];
 				delete serverTasksById[task.id];
 				// Skip fancy merging for now and just use all data from most recently updated.
 				// $.each(['text', 'done'], function(id, field) {
-				// 	if (serverTask[field].lastUpdated > task[field].lastUpdated) {
+				// 	if (serverTask[field].updated_at > task[field].updated_at) {
 				// 		task[field] = serverTask[field];
 				// 	}
 				// });
 				// var tags = task.get('tags');
 				// $.each(tags, function(tag, info) {
 				// 	if (tag in serverTask.tags) {
-				// 		if (serverTask.tags[tag].lastUpdated > info.lastUpdated) {
+				// 		if (serverTask.tags[tag].updated_at > info.updated_at) {
 				// 			tags[tag] = serverTask.tags[tag];
 				// 		}
 				// 		delete serverTask.tags[tag];
@@ -73,11 +75,11 @@ angular.module('goodoo').service('sync', function ($rootScope, $timeout, storage
 				// 	tags[tag] = info;
 				// });
 				// task.set({tags: tags});
-				if (serverTask.lastUpdated > task.lastUpdated) {
+				if (serverTask.updated_at >= task.updated_at) {
 					task.text = serverTask.text;
 					task.tags = serverTask.tags;
 					task.done = serverTask.done;
-					task.lastUpdated = serverTask.lastUpdated;
+					task.updated_at = serverTask.updated_at;
 				}
 			}
 		});
@@ -86,8 +88,8 @@ angular.module('goodoo').service('sync', function ($rootScope, $timeout, storage
 		$.each(serverTasksById, function(id, serverTask) {
 			clientTasks.push(serverTask);
 		});
-		console.log('Merged. New tasks:');
-		console.log(clientTasks);
+		// console.log('Merged. New tasks:');
+		// console.log(clientTasks);
 	};
 
 	var _tasksById = function(tasks) {
@@ -113,7 +115,7 @@ angular.module('goodoo').service('sync', function ($rootScope, $timeout, storage
 	// 		if (tag.get('name') in serverTagsByName) {
 	// 			var serverTag = serverTagsByName[tag.get('name')];
 	// 			delete serverTagsByName[tag.get('name')];
-	// 			if (serverTag.lastUpdated > tag.get('lastUpdated')) {
+	// 			if (serverTag.updated_at > tag.get('updated_at')) {
 	// 				tag.set(serverTag);
 	// 			}
 	// 		}
@@ -127,11 +129,9 @@ angular.module('goodoo').service('sync', function ($rootScope, $timeout, storage
 	// };
 
 	var syncDone = function() {
-		$rootScope.$apply(function() {
-			status.syncing = false;
-			status.text = "Last synced at " + (new Date()); // TODO make this prettier
-			syncTimer = $timeout(sync, 30000);
-		});
+		status.syncing = false;
+		status.text = "Last synced at " + (new Date()); // TODO make this prettier
+		syncTimer = $timeout(sync, 30000);
 	};
 
 	return {

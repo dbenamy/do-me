@@ -95,6 +95,10 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 		return arrayOfTags;
 	};
 
+	$scope.updatedTask = function(task) {
+		task.updated_at = $scope.utcTs();
+	};
+
 	$scope.search = function() {
 		// At app load, it's undefined until we type something in the search box.
 		if (typeof($scope.searchString) === 'undefined') {
@@ -233,6 +237,11 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 	// Returns task that cursor points to
 	$scope.getCurrentTask = function() {
 		return $scope.remaining()[$scope.cursor];
+	};
+
+	$scope.logTasks = function() {
+		console.log('$scope tasks:');
+		console.log($scope.tasks);
 	};
 });
 

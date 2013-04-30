@@ -60,12 +60,14 @@ class StorageApi(webapp2.RequestHandler):
 
     @db.transactional
     def save_value(self):
-        text = self.request.get('text')
-        last_saved_version = self.request.get('lastSavedVersion')
-        if text == '' or last_saved_version == '':
+        try:
+            data = json.decode(self.request.body)
+            text = data['text']
+            last_saved_version = data['lastSavedVersion']
+        except KeyError:
             return {'status': 'MISSING_ARG'}
         versioned_text = self._get_versioned_text()
-        if str(versioned_text.version) != last_saved_version:
+        if str(versioned_text.version) != str(last_saved_version):
             return {'status': 'DATA_CHANGED'}
         if versioned_text.text != text:
             versioned_text.text = text
@@ -77,7 +79,15 @@ class StorageApi(webapp2.RequestHandler):
         }
 
 
+class LoggingApi(webapp2.RequestHandler):
+    @require_auth
+    def post(self):
+        logging.info(self.request.body)
+        self.response.out.write("OK")
+
+
 app = webapp2.WSGIApplication([
     ('/api/storage', StorageApi),
+    ('/api/log', LoggingApi),
     ('/', MainPage),
 ], debug=settings.DEBUG)

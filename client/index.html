@@ -86,24 +86,25 @@
           <a href="#" ng-click="sync()" ng-hide="status.syncing">Sync now</a><br /> <!-- TODO prevent default on click -->
           {{status.text}}<br />
           <a href="#" ng-click="downloadAsFile()">Export your data as a file</a> <!-- TODO prevent default on click -->
+          <div>
+            <a ng-click="logTasks()" href="#">Debugging: Log tasks</a>
+          </div>
         </div>      
       </div> <!-- end of main -->
 
+<!--
       <div class="task-list all" ng-show="done().length > 0">
         <ul>
           <li ng-repeat="task in done()">
-            <input type="checkbox" ng-model="task.done" ng-change="updatedTask(task)" id="toggle-1" class="icon-check"><!--<label for="toggle-1" class="icon-check checkbox"></label>-->
+            <input type="checkbox" ng-model="task.done" ng-change="updatedTask(task)" id="toggle-1" class="icon-check">
             <span class="tag" ng-repeat="tag in task.tags">{{tag}} </span>
             <span>{{task.text}}</span>
           </li>
         </ul>
         <a ng-click="killTasks()" id="kill-task" href="#">Delete completed tasks</a>
-
-        <div>
-          <a ng-click="logTasks()" href="#">Log tasks for debugging</a>
-        </div>
       </div>
-    
+ -->    
+
     </div> <!-- end of container -->
     
     <footer>

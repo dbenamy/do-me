@@ -1,4 +1,4 @@
-﻿dev_appserver.py .
+dev_appserver.py --host 0.0.0.0 .
  
 appcfg.py update --oauth2 .
 

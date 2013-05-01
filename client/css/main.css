@@ -217,8 +217,8 @@ ul {
 
 /* Icons */
 
-.cursor {
-		display: none !important;
+li .icon-caret-right {
+		display: none;
 }
 
 .addClass {
@@ -246,7 +246,7 @@ ul {
 		}
 		
 		button.icon-plus {
-		padding: 12px 3% 12px 3%;
+				padding: 12px 3% 12px 3%;
 		}
 
 		
@@ -261,10 +261,12 @@ ul {
 				font-size: 150%;
 		}
 
-		.cursor {
+		li .icon-caret-right{
+				display: inline-block;
 				font-size: 120%;
 				position: absolute;
-				left: 20px;
+				left: -5px;
+				top: 22px;
 				color: #10C9E6;
 		}
 		

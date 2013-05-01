@@ -213,7 +213,9 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 
 	key('c, f', function() {
 		$scope.$apply(function() {
-			$scope.remaining()[$scope.cursor].done = true;
+			var task = $scope.getCurrentTask();
+			task.done = true;
+			$scope.updatedTask(task);
 		});
 	});
 

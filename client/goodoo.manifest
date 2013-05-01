@@ -1,0 +1,24 @@
+CACHE MANIFEST
+
+# Change the version to make browsers check for new versions of all the files listed here:
+# version 4
+
+CACHE:
+index.html
+css/font-awesome.min.css
+css/main.css
+https://themes.googleusercontent.com/static/fonts/oleoscriptswashcaps/v1/vdWhGqsBUAP-FF3NOYTe4pakf2VKGDa1aHLWGf__tlnr7w4p9aSvGirXi6XmeXNA.woff
+libs/angular.min.js
+libs/jquery-1.9.1.min.js
+libs/keymaster.min.js
+libs/sprintf-0.5.js
+libs/humanized_time_span.js
+tasks_ctrl.js
+sync_ctrl.js
+storage.js
+sync.js
+net.js
+
+NETWORK:
+/api/log
+/api/storage

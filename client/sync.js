@@ -1,37 +1,6 @@
-angular.module('goodoo').service('sync', function ($rootScope, $timeout, storage, net) {
+angular.module('goodoo').service('sync', function (storage) {
 
-	// TODO move sync UI stuff to a new controller
-
-	var status = {
-		syncing: false,
-		lastSync: null,
-		text: ''
-	};
-
-	var syncTimer = null;
-	var updateTextTimer = null;
-
-	// TODO handle errors uploading and downloading
-	var sync = function() {
-		if (status.syncing) {
-			return;
-		}
-		$timeout.cancel(syncTimer);
-		status.syncing = true;
-		status.text = "Syncing...";
-		net.downloadData(function(str) {
-			_mergeServerData(str);
-			var upload = {
-				tasks: storage.tasks
-				// tags: data.tags
-			};
-			net.uploadData(JSON.stringify(upload), syncDone);
-		});
-	};
-
-	$rootScope.$watch(storage.tasks, sync, true);
-
-	var _mergeServerData = function(str) {
+	var mergeServerData = function(str) {
 		var json = {version: 1, tasks: []}; //, tags: []};
 		if (str !== '') { // First download before anything's been uploaded.
 			json = JSON.parse(str);
@@ -132,36 +101,7 @@ angular.module('goodoo').service('sync', function ($rootScope, $timeout, storage
 	// 	console.log(clientTags);
 	// };
 
-	var syncDone = function() {
-		status.syncing = false;
-		status.lastSync = new Date();
-		updateLastSyncedText();
-
-		syncTimer = $timeout(sync, 30000);
-	};
-
-	var updateLastSyncedText = function() {
-		if (status.lastSync !== null) {
-			status.text = "Last synced: " + humanized_time_span(status.lastSync, new Date(), _timeFormats);
-		}
-		$timeout.cancel(updateTextTimer);
-		updateTextTimer = $timeout(updateLastSyncedText, 1000);
-	};
-
-	var _timeFormats = {
-		past: [
-			{ ceiling: 10, text: "just now" },
-			{ ceiling: 60, text: "less than a minute ago" },
-			{ ceiling: null, text: "$hours hours, $minutes minutes ago" }
-		],
-		future: [
-			{ ceiling: null, text: "ERROR: $hours:$minutes:$seconds" }
-		]
-	};
-
 	return {
-		sync: sync,
-		status: status,
-		downloadAsFile: net.downloadAsFile
+		mergeServerData: mergeServerData
 	};
 });

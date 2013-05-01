@@ -90,13 +90,18 @@
         </form>
     
         <div id="sync" ng-controller="SyncCtrl">
-          <i class="icon-refresh"></i> <a href="#" class="syncit" ng-click="sync()" ng-hide="status.syncing">Sync now</a><br /> <!-- TODO prevent default on click -->
-          {{status.text}}<br />
+          <a href="#" class="syncit" ng-click="sync()" ng-hide="syncStatus == 'syncing'">
+            <i class="icon-refresh"></i> Sync now
+          </a> <!-- TODO prevent default on click -->
+          <span class="syncit" ng-show="syncStatus == 'syncing'">Syncing...</span>
+          <br />
+          {{prettyLastSynced}}<br />
           <a href="#" ng-click="downloadAsFile()">Export your data as a file</a> <!-- TODO prevent default on click -->
-          <div>
-            <a ng-click="logTasks()" href="#">Debugging: Log tasks</a>
-          </div>
         </div>      
+
+        <div>
+          <a ng-click="logTasks()" href="#">Debugging: Log tasks</a>
+        </div>
       </div> <!-- end of main -->
 
 <!--

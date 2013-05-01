@@ -27,8 +27,8 @@ input.search {
 		padding: 21px 2%;
 		width: 70%;
 		border: 1px solid #ddd;
-		padding: 0;
-		font-size: 130%;
+		padding: 10px;
+		font-size: 100%;
 		color: #333;
 }
 
@@ -171,7 +171,7 @@ ul {
 
 .todo ul li {
 		border-bottom: 1px solid #eee;
-		padding: 20px 0;
+		padding: 8px 0;
 }
 
 .tag {
@@ -242,14 +242,10 @@ li .icon-caret-right {
 		#main {
 				max-width: 100%;
 				margin: 0 auto;
-				width: 520px;
-				margin-bottom: 300px;
+				width: 600px;
+				margin-bottom: 280px;
 		}
 		
-		.todo {
-				font-size: 150%;
-		}
-
 		li .icon-caret-right{
 				font-size: 120%;
 				left: -47px;

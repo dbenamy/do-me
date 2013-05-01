@@ -1,20 +1,20 @@
 angular.module('goodoo').service('net', function($http) {
+	var HTTP_TIMEOUT_MS	= 5 * 1000;
+
 	var lastSavedVersion = null;
 
 	// This doesn't belong here but I don't know how to put it in index.html and make it run.
-	// var old_console_log = console.log;
-	console.log = function(data) {
-		// old_console_log(data);
-		if (typeof data === 'string') {
-			$http.post('/api/log', data);
-		} else {
-			$http.post('/api/log', angular.toJson(data, true));
-		}
-	};
+	// console.log = function(data) {
+	// 	if (typeof data === 'string') {
+	// 		$http.post('/api/log', data);
+	// 	} else {
+	// 		$http.post('/api/log', angular.toJson(data, true));
+	// 	}
+	// };
 
-	downloadData = function(downloadSuccess) {
+	downloadData = function(success, error, offline) {
 		// console.log("Downloading.");
-		var req = $http.get('/api/storage');
+		var req = $http.get('/api/storage', {timeout: HTTP_TIMEOUT_MS});
 		req.success(function(data, status, headers, config) {
 			if (data.status === 'NEED_LOGIN') {
 				window.location = data.url;
@@ -28,15 +28,23 @@ angular.module('goodoo').service('net', function($http) {
 			// console.log("Downloaded version: " + data.version);
 			// console.log("Downloaded text: " + angular.toJson(angular.fromJson(data.text), true));
 			lastSavedVersion = data.version;
-			downloadSuccess(data.text);
+			success(data.text);
 		});
 		req.error(function(data, status, headers, config) {
-			alert("Shit.");
-			// TODO something more useful
+			console.log("Error downloading data from server. We might be offline. Details:");
+			console.log(data);
+			console.log(status);
+			console.log(headers);
+			console.log(config);
+			if (status === 0) {
+				offline();
+			} else {
+				error();
+			}
 		});
 	};
 
-	uploadData = function(str, uploadSuccess) {
+	uploadData = function(str, success, error, offline) {
 		// console.log('Uploading text: ' + angular.toJson(angular.fromJson(str), true));
 		// console.log('Uploading lastSavedVersion: ' + lastSavedVersion);
 		var args = {
@@ -44,7 +52,7 @@ angular.module('goodoo').service('net', function($http) {
 			lastSavedVersion: lastSavedVersion
 		};
 		// console.log('Uploading: ' + angular.toJson(args));
-		var req = $http.post('/api/storage', angular.toJson(args));
+		var req = $http.post('/api/storage', angular.toJson(args), {timeout: HTTP_TIMEOUT_MS});
 		req.success(function(data, status, headers, config) {
 			// console.log('Response:');
 			// console.log(data);
@@ -57,11 +65,19 @@ angular.module('goodoo').service('net', function($http) {
 			}
 			lastSavedVersion = data.lastSavedVersion;
 			console.log('Saved.');
-			uploadSuccess();
+			success();
 		});
 		req.error(function(data, status, headers, config) {
-			alert("Shit.");
-			// TODO something more useful
+			console.log("Error uploading data to server. We might be offline. Details:");
+			console.log(data);
+			console.log(status);
+			console.log(headers);
+			console.log(config);
+			if (status === 0) {
+				offline();
+			} else {
+				error();
+			}
 		});
 	};
 

@@ -1,22 +1,13 @@
 @font-face {
-  font-family: 'Open Sans';
+  font-family: 'Oleo Script Swash Caps';
   font-style: normal;
   font-weight: 400;
-  src: local('Open Sans'), url('http://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3aCWcynf_cDxXwCLxiixG1c.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Raleway';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Raleway'), url('http://themes.googleusercontent.com/static/fonts/raleway/v6/bIcY3_3JNqUVRAQQRNVteQ.ttf') format('truetype');
+  src: local('Oleo Script Swash Caps'), local('OleoScriptSwashCaps-Regular'), url(http://themes.googleusercontent.com/static/fonts/oleoscriptswashcaps/v1/vdWhGqsBUAP-FF3NOYTe4pakf2VKGDa1aHLWGf__tlnr7w4p9aSvGirXi6XmeXNA.woff) format('woff');
 }
 
 body,
 input {
 		font-family: arial, sans-serif;
-		/*font-family: 'Open Sans', sans-serif;*/
-		/*font-family: 'Raleway', sans-serif;*/
 }
 
 body {
@@ -121,8 +112,6 @@ header {
 		font-family: 'Oleo Script Swash Caps', cursive;
 		font-weight: 100;
 		font-size: 50px;
-/*		font-family: 'Oldenburg', cursive;
-		font-family: 'Cherry Swash', cursive;*/
 }
 
 #search {
@@ -262,12 +251,13 @@ li .icon-caret-right {
 		}
 
 		li .icon-caret-right{
-				display: inline-block;
 				font-size: 120%;
-				position: absolute;
-				left: -5px;
-				top: 22px;
+				left: -47px;
 				color: #10C9E6;
+				position: relative;
+				display: block;
+				height: 0px;
+				top: 2px;
 		}
 		
 }

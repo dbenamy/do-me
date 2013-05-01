@@ -8,6 +8,11 @@ builtins:
 - remote_api: on
 
 handlers:
+- url: /client/goodoo.manifest
+  static_files: client/goodoo.manifest
+  mime_type: text/cache-manifest
+  upload: client/goodoo.manifest
+
 - url: /client
   static_dir: client
 

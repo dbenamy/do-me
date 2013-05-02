@@ -27,7 +27,7 @@ input.search {
 		padding: 21px 2%;
 		width: 70%;
 		border: 1px solid #ddd;
-		padding: 10px;
+		padding: 14px 5px 10px 15px;
 		font-size: 100%;
 		color: #333;
 }
@@ -37,12 +37,12 @@ input.new-task {
 }
 
 input.text {
-		padding: 5px 10px;
-		width: 68%;
-		background: #eee;
+		padding: 2px 5px;
+		background: #fafafa;
 		border: none;
-		font-size: 130%;
+		font-size: 100%;
 		color: #666;
+		width: 91.4%;
 }
 
 input.button,
@@ -56,12 +56,16 @@ button {
 }
 
 button.icon-search {
-		padding: 20px 5% 22px 5%;
+		padding: 8px 2.5% 11px 2.5%;
 		font-size: 150%;
 }
 
 button.icon-plus {
 		padding: 12px 3% 12px 3%;
+}
+
+button.icon-ok {
+		padding: 1px 4.2% 2px 2%;
 }
 
 
@@ -92,7 +96,6 @@ input[type=checkbox]:checked ~ div {
 .checkbox:hover {
 		color: #0FA6BD;
 }
-
 
 header {
 		width: 100%;
@@ -148,6 +151,7 @@ header {
 footer {
 		width: 100%;
 		text-align: center;
+		line-height: 20px;
 }
 
 a {
@@ -184,7 +188,7 @@ ul {
 }
 
 #sync {
-		font-size: 70%;
+		font-size: 60%;
 		color: #999;
 		line-height: 15px;
 }
@@ -192,8 +196,13 @@ ul {
 .syncit {
 		margin-bottom: 10px;
 		display: inline-block;
-		padding-left: 5px;
 		font-size: 150%;
+}
+
+.syncit:hover .icon-refresh,
+.syncit:hover {
+		text-decoration: none;
+		color: #0FA6BD;
 }
 
 /* Keyboard Shortcuts */
@@ -216,28 +225,18 @@ li .icon-caret-right {
 
 .icon-refresh {
 		color: #10C9E6;
-		font-size: 150%;
+}
+		
+.task {
+		padding: 2px 5px;
+}
+
+.task:hover {
+		background: yellow;
 }
 
 
-@media (min-width:500px) {
-
-		input.search {
-				width: 400px;
-		}
-		
-		input.new-task {
-				width: 445px;
-		}
-
-		button.icon-search{
-				padding: 20px 25px 23px 25px;
-		}
-		
-		button.icon-plus {
-				padding: 12px 3% 12px 3%;
-		}
-
+@media (min-width:600px) {
 		
 		#main {
 				max-width: 100%;
@@ -245,9 +244,25 @@ li .icon-caret-right {
 				width: 600px;
 				margin-bottom: 280px;
 		}
+
+		input.search {
+				width: 400px;
+		}
 		
+		input.new-task {
+				width: 517px;
+		}
+
+		button.icon-search{
+				padding: 8px 11px 11px 11px;
+		}
+		
+		button.icon-plus {
+				padding: 12px 3% 12px 3%;
+		}
+
 		li .icon-caret-right{
-				font-size: 120%;
+				font-size: 100%;
 				left: -47px;
 				color: #10C9E6;
 				position: relative;
@@ -255,5 +270,6 @@ li .icon-caret-right {
 				height: 0px;
 				top: 2px;
 		}
+
 		
 }

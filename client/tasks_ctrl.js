@@ -66,6 +66,7 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 		$scope.editing = true;
 		var task = $scope.getCurrentTask();
 		$scope.editTaskText[$scope.cursor] = task.tags.concat([task.text]).join(' ');
+		$('input.edit' + $scope.cursor).focus();
 	};
 
 	$scope.updateTask = function() {
@@ -222,7 +223,6 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 	key('o, enter', function() {
 		$scope.$apply(function() {
 			$scope.editTask($scope.cursor);
-			$('input.edit').focus();
 		});
 	});
 

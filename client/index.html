@@ -76,7 +76,7 @@
               </div>
   
               <form ng-submit="updateTask()" ng-show="editing && $index == cursor">
-                <input class="text" ng-model="editTaskText[cursor]">
+                <input class="edit{{$index}} text" ng-model="editTaskText[cursor]">
                 <button type="submit" class="button icon-ok" value="Save"></button>
               </form>
             </li>

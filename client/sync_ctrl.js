@@ -1,8 +1,10 @@
 angular.module('goodoo').controller('SyncCtrl', function($scope, $timeout, storage, sync, net) {
+	$scope.tasks = storage.tasks; // watching storage.tasks directly doesn't work
+
 	$scope.downloadAsFile = net.downloadAsFile;
 
 	$scope.syncStatus = null;  // can be 'idle', 'syncing', 'error', or 'offline'
-	$scope.syncLastSuccess = null;
+	$scope.syncLastSuccess = null; // a Date
 	$scope.prettyLastSynced = '';
 	
 	var syncTimer = null;
@@ -38,7 +40,7 @@ angular.module('goodoo').controller('SyncCtrl', function($scope, $timeout, stora
 		}, errorSyncing, offline);
 	};
 
-	$scope.$watch(storage.tasks, $scope.sync, true);
+	$scope.$watch('tasks', $scope.sync, true);
 
 	var updatePrettyLastSynced = function() {
 		if ($scope.syncStatus === 'error') {

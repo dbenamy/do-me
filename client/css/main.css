@@ -1,10 +1,3 @@
-@font-face {
-  font-family: 'Oleo Script Swash Caps';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Oleo Script Swash Caps'), local('OleoScriptSwashCaps-Regular'), url(http://themes.googleusercontent.com/static/fonts/oleoscriptswashcaps/v1/vdWhGqsBUAP-FF3NOYTe4pakf2VKGDa1aHLWGf__tlnr7w4p9aSvGirXi6XmeXNA.woff) format('woff');
-}
-
 body,
 input {
 		font-family: arial, sans-serif;

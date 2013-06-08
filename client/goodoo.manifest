@@ -1,7 +1,7 @@
 CACHE MANIFEST
 
 # Change the version to make browsers check for new versions of all the files listed here:
-# version 23
+# version 24
 # TODO Make the version dynamically calculated & filled in.
 # TODO When I do that, I can also add the code version to the api responses and
 # make the app offer to reload if a sync reports a new version available. Can
@@ -19,8 +19,11 @@ libs/jquery-1.9.1.min.js
 libs/keymaster.min.js
 libs/sprintf-0.5.js
 libs/humanized_time_span.js
+libs/message/themes/message_default.css
+libs/message/message.js
 tasks_ctrl.js
 sync_ctrl.js
+message_ctrl.js
 storage.js
 sync.js
 net.js

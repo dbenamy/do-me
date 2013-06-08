@@ -7,6 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
     <!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.css"/>-->
     <script src="libs/angular.min.js"></script>
     <script src="libs/jquery-1.9.1.min.js"></script>
@@ -27,8 +28,6 @@
             } else {
               alert("Things may not work properly until you reload the page.");
             }
-          } else {
-            // Manifest didn't changed. Nothing new to server.
           }
         }, false);
       }, false);
@@ -74,7 +73,6 @@
               <div ng-hide="editing && $index == cursor">
                 <span ng-show="$index == cursor" class="icon-caret-right cursor"></span>
                 <input type="checkbox" id="toggle" ng-model="task.done" ng-change="updatedTask(task)" >
-                <!--<supercheckbox value="task.done"></supercheckbox>-->
                 <a href="#" class="tag" ng-repeat="tag in task.tags" ng-click="searchForTag($event, tag)">{{tag}} </a>
                 <span ng-click="editTask($index)" class="task">{{task.text}}</span>
               </div>

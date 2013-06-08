@@ -97,9 +97,9 @@ header {
 		z-index: 1;
 		padding: 10px 0;
 		background: #10C9E6;
-				 -moz-box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
+		-moz-box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
 		-webkit-box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
-		        box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
+		box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
 }
 
 #logo {

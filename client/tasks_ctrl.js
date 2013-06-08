@@ -185,45 +185,48 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 		}
 	};
 
-	key('/', function() {
+	var shortcut = function(keys, func) {
+		key(keys, function() {
+			var ret;
+			$scope.$apply(function() {
+				if (!$scope.editing) {
+					ret = func();
+				}
+			});
+			return ret;
+		});
+	};
+
+	shortcut('/', function() {
 		$('input.search').focus().select();
-		return false;
+		return false; // stop the event so the character doesn't go into text box
 	});
 
-	key('a, n, t', function() {
+	shortcut('a, n, t', function() {
 		$('input.new-task').focus().select();
-		return false;
+		return false; // stop the event so the character doesn't go into text box
 	});
 
-	key('escape', function() {
+	shortcut('escape', function() {
 		$('input').blur();
-		return false;
 	});
 
-	key('j', function() {
-		$scope.$apply(function() {
-			$scope.cursor += 1;
-		});
+	shortcut('j', function() {
+		$scope.cursor += 1;
 	});
 
-	key('k', function() {
-		$scope.$apply(function() {
-			$scope.cursor -= 1;
-		});
+	shortcut('k', function() {
+		$scope.cursor -= 1;
 	});
 
-	key('c, f', function() {
-		$scope.$apply(function() {
-			var task = $scope.getCurrentTask();
-			task.done = true;
-			$scope.updatedTask(task);
-		});
+	shortcut('c, f', function() {
+		var task = $scope.getCurrentTask();
+		task.done = true;
+		$scope.updatedTask(task);
 	});
 
-	key('o, enter', function() {
-		$scope.$apply(function() {
-			$scope.editTask($scope.cursor);
-		});
+	shortcut('o, enter', function() {
+		$scope.editTask($scope.cursor);
 	});
 
 	$scope.makeCursorOk = function() {

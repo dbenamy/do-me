@@ -8,7 +8,7 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 		) / 1000;
 	};
 
-	$scope.TAG_REGEX = /#[^ ]+ */g;
+	$scope.TAG_REGEX = /(^|\s)#[^ ]+ */g;
 	$scope.SAMPLE_TASKS = [
 		{
 			id: 'sample-1',

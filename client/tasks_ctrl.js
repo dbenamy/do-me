@@ -166,6 +166,24 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 		event.preventDefault(); // so "#" doesn't wind up in the url
 	};
 
+	$scope.linkify = function(text) {
+		var STOP_CLICK_PROPAGATION = 'onclick="var event = arguments[0] || window.event; event.stopPropagation();"';
+
+		var URL_REGEX = /(?:(http|https|ftp):\/\/)?(?:((?:[^\W\s]|\.|-|[:]{1})+)@{1})?((?:www.)?(?:[^\W\s]|\.|-)+[\.][^\W\s]{2,4}|localhost(?=\/)|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::(\d*))?([\/]?[^\s\?]*[\/]{1})*(?:\/?([^\s\n\?\[\]\{\}\#]*(?:(?=\.)){1}|[^\s\n\?\[\]\{\}\.\#]*)?([\.]{1}[^\s\?\#]*)?)?(?:\?{1}([^\s\n\#\[\]]*))?([\#][^\s\n]*)?/gi;
+		var urlLinked = text.replace(URL_REGEX, function(url, protocol, host, port, path, filename, ext, query, fragment) {
+			var urlWithProtocol = url;
+			if (typeof(protocol) === 'undefined') {
+				urlWithProtocol = 'http://' + url;
+			}
+			return '<a href="' + urlWithProtocol + '" ' + STOP_CLICK_PROPAGATION + '>' + url + '</a>';
+		});
+
+		var PHONE_REGEX = /(1[ -.])?\(?[0-9]{3}\)?[ -.]?[0-9]{3}[ -.]?[0-9]{4}/gi;
+		return urlLinked.replace(PHONE_REGEX, function(number) {
+			return '<a href="tel:' + number + '" ' + STOP_CLICK_PROPAGATION + '>' + number + '</a>';
+		});
+	};
+
 	// Keyboard Shortcuts
 	//
 	// In theory these shouldn't be in the controller, but it's so much easier to deal with moving the cursor with them

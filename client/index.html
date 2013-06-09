@@ -79,7 +79,7 @@
                 <span ng-show="$index == cursor" class="icon-caret-right cursor"></span>
                 <input type="checkbox" id="toggle" ng-model="task.done" ng-change="updatedTask(task)" >
                 <a href="#" class="tag" ng-repeat="tag in task.tags" ng-click="searchForTag($event, tag)">{{tag}} </a>
-                <span ng-click="editTask($index)" class="task">{{task.text}}</span>
+                <span ng-click="editTask($index)" class="task" ng-bind-html-unsafe="linkify(task.text)"></span>
               </div>
   
               <form ng-submit="updateTask()" ng-show="editing && $index == cursor">

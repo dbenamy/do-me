@@ -3,3 +3,11 @@ dev_appserver.py --address 0.0.0.0 .
 appcfg.py update --oauth2 .
 
 backup/backup.py
+
+
+Bugs that I don't care that much about
+--------------------------------------
+* Remote task completions trigger notifications.
+* Add jsonp and csrf protection- http://docs.angularjs.org/api/ng.$http
+* Build alternate html page that uses jquery mobile.
+* Awesome smashing animation when completing a task.

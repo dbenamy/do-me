@@ -50,14 +50,14 @@
     <header>
       <div id="hdr">
         <h1 id="logo">Goo Doo</h1>
+
+        <div ng-controller="MessageCtrl"></div> <!-- Just a place holder to load controller. Nothing shown here. -->
+
+        <form id="search" ng-submit="search()">
+          <input type="text" class="search" placeholder="Search for tag" ng-model="searchString">
+          <button type="submit" class="button icon-search" value="Search"></button>
+        </form>
       </div>
-
-      <div ng-controller="MessageCtrl"></div> <!-- Just a place holder to load controller. Nothing shown here. -->
-
-      <form id="search" ng-submit="search()">
-        <input type="text" class="search" placeholder="Search for tag" ng-model="searchString">
-        <button type="submit" class="button icon-search" value="Search"></button>
-      </form>
     </header>
 
     <div id="container">

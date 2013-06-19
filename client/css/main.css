@@ -1,12 +1,13 @@
 body,
 input {
-		font-family: arial, sans-serif;
+	font-family: 'Open Sans', sans-serif;
 }
 
 body {
-		margin: 0 auto;
-		color: #666;
-		background: #fff;
+	margin: 0 auto;
+	color: #666;
+	background: #fafafa;
+	font-size: 80%;
 }
 
 h1, h2, h3, h4 {
@@ -17,12 +18,11 @@ h1, h2, h3, h4 {
 
 input.new-task, 
 input.search {
-		padding: 21px 2%;
-		width: 70%;
-		border: 1px solid #ddd;
-		padding: 14px 5px 10px 15px;
-		font-size: 100%;
-		color: #333;
+	width: 70%;
+	border: 1px solid #ddd;
+	padding: 5px 10px;
+	font-size: 100%;
+	color: #333;
 }
 
 input.new-task {
@@ -31,7 +31,6 @@ input.new-task {
 
 input.text {
 		padding: 2px 5px;
-		background: #fafafa;
 		border: none;
 		font-size: 100%;
 		color: #666;
@@ -67,12 +66,6 @@ button:hover {
 		background: #0FA6BD;
 }
 
-/*input[type='checkbox'] {
-		position: absolute;
-		top: -9999px;
-		left: -9999px;
-}*/
-
 input[type=checkbox]:checked ~ div {
 		background: red;
 }
@@ -96,49 +89,49 @@ header {
 		position: fixed;
 		z-index: 1;
 		padding: 10px 0;
-		background: #10C9E6;
+		background: #fafafa;
 		-moz-box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
 		-webkit-box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
 		box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
 }
 
+#hdr, #container {
+	margin: 0 auto;
+	width: 75%;
+}
+
 #logo {
-		text-align: center;
-		color: #fff;
-		font-family: 'Oleo Script Swash Caps', cursive;
-		font-weight: 100;
-		font-size: 50px;
+	float: left;
+	width: 30%;
+	color: #10C9E6;
+	font-weight: bold;
+	font-size: 30px;
 }
 
 #search {
-		background: #fafafa;
-		padding: 20px 0%;
-		position: relative;
-		top: 20px;
-		width: 100%;
-		text-align: center;
-}
-
-#container {
-		margin: 0 auto;
-		/*width: 700px;*/
-		/*max-width: 100%;*/ /*90%*/
-}
-
-#main {
-		padding: 0 5%;
-		position: relative;
-		top: 90px;
-		margin-bottom: 300px;
-		top: 220px;
+		float: left;
+		width: 70%;
+		padding: 20px 0;
+		/*background: #fafafa;*/
+		/*position: relative;*/
+		/*top: 20px;*/
+		/*width: 100%;*/
+		/*text-align: center;*/
 }
 
 #sidebar {
-		display: none; /* hidding sidebar until something happens there */
-		width: 40%;
-		float: left;
-		position: fixed;
-		top: 80px;
+	width: 30%;
+	float: left;
+	position: fixed;
+	top: 150px;
+}
+
+#main {
+	width: 70%;
+	left: 30%;
+	position: relative;
+	top: 150px;
+	margin-bottom: 300px;
 }
 
 footer {
@@ -181,7 +174,7 @@ ul {
 }
 
 #sync {
-		font-size: 60%;
+		font-size: 70%;
 		color: #999;
 		line-height: 15px;
 }
@@ -239,11 +232,11 @@ li .icon-caret-right {
 		}
 
 		input.search {
-				width: 400px;
+				width: 100%;
 		}
 		
 		input.new-task {
-				width: 517px;
+				width: 100%;
 		}
 
 		button.icon-search{

@@ -28,6 +28,8 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 
 	// Data / models that have to do with this controller
 	$scope.tasks = storage.tasks;
+	$scope.searchStr = storage.searchStr;
+	$scope.searchTemp = ''; // working space which backs search text box.
 	$scope.results = $scope.tasks; // results of search. includes done and remaining tasks.
 	$scope.taskNextId = 0;
 	$scope.cursor = 0; // index of cursor position with 0 being the top task in the results
@@ -101,15 +103,10 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 	};
 
 	$scope.search = function() {
-		// At app load, it's undefined until we type something in the search box.
-		if (typeof($scope.searchString) === 'undefined') {
-			$scope.searchString = "";
-		}
-
-		var searchTags = $scope.parseTags($scope.searchString);
+		var searchTags = $scope.parseTags($scope.searchStr.text);
 		console.log("Searching for tasks with all these tags:");
 		console.log(searchTags);
-		if ($scope.searchString === "") {
+		if ($scope.searchStr.text === "") {
 			$scope.results = $scope.tasks;
 		} else {
 			var arrayOfResults = [];
@@ -125,6 +122,8 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 	};
 
 	$scope.$watch('tasks', $scope.search, true); // if we change tasks (eg adding one), re-search to update what's shown.
+	$scope.$watch('searchStr', $scope.search, true);
+	$scope.$watch('searchStr', function() { $scope.searchTemp = $scope.searchStr.text; }, true);
 
 	$scope.taskHasTags = function(task, searchTags) {
 		var taskHasAllTags = true;
@@ -161,8 +160,7 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 	};
 
 	$scope.searchForTag = function(event, tag) {
-		$scope.searchString = tag;
-		$scope.search();
+		$scope.searchStr.text = tag;
 		event.preventDefault(); // so "#" doesn't wind up in the url
 	};
 

@@ -1,4 +1,8 @@
 angular.module('goodoo').service('storage', function($rootScope, $timeout) {
+	// Variables:
+	$rootScope.tasks = [];
+	$rootScope.searchStr = {text: ''};
+
 	if (!('goodoo' in localStorage)) {
 		localStorage.goodoo = JSON.stringify({});
 	}
@@ -27,6 +31,10 @@ angular.module('goodoo').service('storage', function($rootScope, $timeout) {
 
 	$rootScope.$watch('tasks', saveTasks, true);
 
+	$rootScope.$watch('searchStr', function() {
+		console.log($rootScope.searchStr);
+	});
+
 	var backup = function() {
 		console.log("Backing up Goo Doo data.");
 		localStorage['goodoo-backup-' + (new Date())] = localStorage.goodoo;
@@ -37,6 +45,7 @@ angular.module('goodoo').service('storage', function($rootScope, $timeout) {
 
 	// Stuff exposed by the service:
 	return {
-		tasks: $rootScope.tasks
+		tasks: $rootScope.tasks,
+		searchStr: $rootScope.searchStr
 	};
 });

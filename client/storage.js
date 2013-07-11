@@ -1,39 +1,64 @@
 angular.module('goodoo').service('storage', function($rootScope, $timeout) {
 	// Variables:
-	$rootScope.tasks = [];
+	// $rootScope.tasks = []; // this gets created by load()
+	// $rootScope.tags = []; // this gets created by load()
 	$rootScope.searchStr = {text: ''};
 
-	if (!('goodoo' in localStorage)) {
-		localStorage.goodoo = JSON.stringify({});
-	}
-
-	var saveTasks = function() {
-		console.log("Saving tasks:");
-		console.log($rootScope.tasks);
-		var gooDooData = JSON.parse(localStorage.goodoo);
+	var save = function() {
+		var gooDooData = JSON.parse(localStorage.goodoo || '{}');
 		gooDooData.tasks = $rootScope.tasks;
+		gooDooData.tags = $rootScope.tags;
+		console.log("Saving:");
+		console.log(gooDooData);
 		localStorage.goodoo = JSON.stringify(gooDooData);
 	};
 
-	var loadTasks = function() {
-		var gooDooData = JSON.parse(localStorage.goodoo);
-		if (gooDooData.tasks) {
-			console.log("Reading tasks from local storage:");
-			console.log(gooDooData.tasks);
-			return gooDooData.tasks;
-		} else {
-			return [];
-		}
+	$rootScope.$watch('tasks', save, true);
+	$rootScope.$watch('tags', save, true);
+
+	var utcTs = function() {
+		var now = new Date();
+		return Date.UTC(
+				now.getUTCFullYear(), now.getUTCMonth(),
+				now.getUTCDate(), now.getUTCHours(),
+				now.getUTCMinutes(), now.getUTCSeconds()
+		) / 1000;
 	};
 
-	// Tasks variable is in this service and not the GooDoo controller so the sync module can also access it.
-	$rootScope.tasks = loadTasks(); // all tasks, done and remaining
+	var load = function() {
+		var gooDooData = JSON.parse(localStorage.goodoo || '{}');
+		if (!gooDooData.tasks) {
+			gooDooData.tasks = [
+				{
+					id: 'sample-1',
+					tags: ['#@Computer', '#GooDoo'],
+					text: "A task with 2 tags",
+					done: false,
+					updated_at: utcTs()
+				},
+				{
+					id: 'sample-2',
+					tags: [],
+					text: "A task with no tags",
+					done: false,
+					updated_at: utcTs()
+				}
+			];
+		}
+		if (!gooDooData.tags) {
+			gooDooData.tags = [
+				{text: '@Phone'},
+				{text: 'GooDoo'},
+				{text: '@Computer'}
+			];
+		}
+		console.log("Loaded:");
+		console.log(gooDooData);
+		$rootScope.tasks = gooDooData.tasks; // all tasks, done and remaining
+		$rootScope.tags = gooDooData.tags;
+	};
 
-	$rootScope.$watch('tasks', saveTasks, true);
-
-	$rootScope.$watch('searchStr', function() {
-		console.log($rootScope.searchStr);
-	});
+	load();
 
 	var backup = function() {
 		console.log("Backing up Goo Doo data.");
@@ -46,6 +71,7 @@ angular.module('goodoo').service('storage', function($rootScope, $timeout) {
 	// Stuff exposed by the service:
 	return {
 		tasks: $rootScope.tasks,
+		tags: $rootScope.tags,
 		searchStr: $rootScope.searchStr
 	};
 });

@@ -1,30 +1,5 @@
 angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
-	$scope.utcTs = function() {
-		var now = new Date();
-		return Date.UTC(
-				now.getUTCFullYear(), now.getUTCMonth(),
-				now.getUTCDate(), now.getUTCHours(),
-				now.getUTCMinutes(), now.getUTCSeconds()
-		) / 1000;
-	};
-
 	$scope.TAG_REGEX = /(^|\s)#[^ ]+ */g;
-	$scope.SAMPLE_TASKS = [
-		{
-			id: 'sample-1',
-			tags: ['#@Computer', '#GooDoo'],
-			text: "A task with 2 tags",
-			done: false,
-			updated_at: $scope.utcTs()
-		},
-		{
-			id: 'sample-2',
-			tags: [],
-			text: "A task with no tags",
-			done: false,
-			updated_at: $scope.utcTs()
-		}
-	];
 
 	// Data / models that have to do with this controller
 	$scope.tasks = storage.tasks;

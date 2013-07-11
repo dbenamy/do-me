@@ -65,9 +65,9 @@
         
       <div id="sidebar">
         <div ng-controller="LabelsCtrl">
-          <h4>Labels:</h4>
+          <h4>Tags:</h4>
           <ul id="label-list">
-            <li ng-repeat="tag in labels | orderBy:'text'">
+            <li ng-repeat="tag in tags | orderBy:'text'">
               <strong ng-show="searchStr.text == ('#' + tag.text)">{{tag.text}}</strong>
               <a href="" ng-hide="searchStr.text == ('#' + tag.text)" ng-click="searchFor(tag.text)">{{tag.text}}</a>
             </li>

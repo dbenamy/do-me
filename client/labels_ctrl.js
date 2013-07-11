@@ -1,15 +1,11 @@
 angular.module('goodoo').controller('LabelsCtrl', function($scope, storage) {
 	$scope.tasks = storage.tasks; // watching storage.tasks directly doesn't work
+	$scope.tags = storage.tags;
 	$scope.searchStr = storage.searchStr;
-	$scope.labels = [
-		{text: '@Phone'},
-		{text: 'GooDoo'},
-		{text: '@Computer'}
-	];
 
-	$scope.searchFor = function(label) {
+	$scope.searchFor = function(tag) {
 		// Don't point searchStr at a new string object or references to it will break.
-		$scope.searchStr.text = '#' + label;
+		$scope.searchStr.text = '#' + tag;
 	};
 
 	// var notifyIfTaskFinished = function(newTasks, oldTasks) {

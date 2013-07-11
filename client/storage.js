@@ -2,7 +2,7 @@ angular.module('goodoo').service('storage', function($rootScope, $timeout) {
 	// Variables:
 	// $rootScope.tasks = []; // this gets created by load()
 	// $rootScope.tags = []; // this gets created by load()
-	$rootScope.searchStr = {text: ''};
+	$rootScope.searchStr = {text: ''}; // it's an obj because sharing refs to a string doesn't work
 
 	var save = function() {
 		var gooDooData = JSON.parse(localStorage.goodoo || '{}');

@@ -66,20 +66,26 @@
       <div id="sidebar">
         <div ng-controller="LabelsCtrl">
           <h4>Tags:</h4>
-          <ul id="label-list">
-            <strong ng-show="searchStr.text == ''">All Tasks</strong>
-            <a ng-hide="searchStr.text == ''" href="" ng-click="searchFor('')">All Tasks</a>
+          <strong ng-show="searchStr.text == ''">All Tasks</strong>
+          <a ng-hide="searchStr.text == ''" href="" ng-click="searchFor('')">All Tasks</a>
 
-            <li ng-repeat="tag in presentTags() | orderBy:'text'">
-              <strong ng-show="searchStr.text == ('#' + tag.text)">{{tag.text}}</strong>
-              <a href="" ng-hide="searchStr.text == ('#' + tag.text)" ng-click="searchFor(tag.text)">{{tag.text}}</a>
-              <button ng-click="deleteTag(tag)" class="button icon-minus" value="Delete" />
-            </li>
-            <form ng-submit="addTag()">
-              <input ng-model="newTag" />
-              <button type="submit" class="button icon-plus" value="Add" />
-            </form>
-          </ul>
+          <table class="">
+            <tr ng-repeat="tag in presentTags() | orderBy:'text'">
+              <td>
+                <strong ng-show="searchStr.text == ('#' + tag.text)">{{tag.text}}</strong>
+                <a href="" ng-hide="searchStr.text == ('#' + tag.text)" ng-click="searchFor(tag.text)">{{tag.text}}</a>
+              </td>
+              <td width="100%"><!-- so delete icons are mashed to the right -->
+              </td>
+              <td>
+                <button ng-click="deleteTag(tag)" class="button icon-minus" value="Delete" />
+              </td>
+            </tr>
+          </table>
+          <form ng-submit="addTag()">
+            <input ng-model="newTag" placeholder="Add label" />
+            <button type="submit" class="button icon-plus" value="Add" />
+          </form>
         </div>
       </div>
 

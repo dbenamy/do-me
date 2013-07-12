@@ -10,8 +10,13 @@ body {
 	font-size: 80%;
 }
 
-h1, h2, h3, h4 {
+h1, h2, h3 {
 	margin: 0;
+}
+
+h4 {
+	margin: 0;
+	margin-bottom: 20px
 }
 
 /* Input Fields & Buttons */
@@ -120,7 +125,7 @@ header {
 }
 
 #sidebar {
-	width: 30%;
+	width: 20%;
 	float: left;
 	position: fixed;
 	top: 150px;
@@ -153,10 +158,6 @@ ul {
   list-style: none;
   margin: 0;
   padding: 0;
-}
-
-#label-list {
-		margin-bottom: 20px;
 }
 
 .todo ul li {

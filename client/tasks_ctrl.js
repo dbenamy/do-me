@@ -29,7 +29,7 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 				text: text,
 				tags: tags,
 				done: false,
-				updated_at: $scope.utcTs()
+				updated_at: storage.utcTs()
 			});
 		} else {
 			alert("Whoops, can't add an empty task.");
@@ -57,7 +57,7 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 			console.log(newText);
 			task.tags = newTags;
 			task.text = newText;
-			task.updated_at = $scope.utcTs();
+			task.updated_at = storage.utcTs();
 			$scope.editing = false;
 			console.log($scope.tasks);
 		} else {
@@ -74,7 +74,7 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 	};
 
 	$scope.updatedTask = function(task) {
-		task.updated_at = $scope.utcTs();
+		task.updated_at = storage.utcTs();
 	};
 
 	$scope.search = function() {

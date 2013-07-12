@@ -67,9 +67,13 @@
         <div ng-controller="LabelsCtrl">
           <h4>Tags:</h4>
           <ul id="label-list">
-            <li ng-repeat="tag in tags | orderBy:'text'">
+            <strong ng-show="searchStr.text == ''">All Tasks</strong>
+            <a ng-hide="searchStr.text == ''" href="" ng-click="searchFor('')">All Tasks</a>
+
+            <li ng-repeat="tag in presentTags() | orderBy:'text'">
               <strong ng-show="searchStr.text == ('#' + tag.text)">{{tag.text}}</strong>
               <a href="" ng-hide="searchStr.text == ('#' + tag.text)" ng-click="searchFor(tag.text)">{{tag.text}}</a>
+              <button ng-click="deleteTag(tag)" class="button icon-minus" value="Delete" />
             </li>
             <form ng-submit="addTag()">
               <input ng-model="newTag" />

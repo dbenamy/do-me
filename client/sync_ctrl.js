@@ -29,8 +29,8 @@ angular.module('goodoo').controller('SyncCtrl', function($scope, $timeout, stora
 		net.downloadData(function(str) {
 			sync.mergeServerData(str);
 			var upload = {
-				tasks: storage.tasks
-				// tags: data.tags
+				tasks: storage.tasks,
+				tags: storage.tags
 			};
 			net.uploadData(JSON.stringify(upload), function() {
 				$scope.syncStatus = 'idle';

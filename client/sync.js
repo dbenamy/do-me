@@ -1,16 +1,14 @@
 angular.module('goodoo').service('sync', function (storage) {
 
 	var mergeServerData = function(str) {
-		var json = {version: 1, tasks: []}; //, tags: []};
+		var json = {};
 		if (str !== '') { // First download before anything's been uploaded.
 			json = JSON.parse(str);
 		}
-		var version = json.version || 1;
-		if (version !== 1) {
-			alert("Goo Doo has been updated and can't sync ");
-		}
-		_mergeTasks(storage.tasks, json.tasks);
-		// _mergeTags(data.tags, json.tags);
+		var tasks = json.tasks || [];
+		var tags = json.tags || [];
+		_mergeTasks(storage.tasks, tasks);
+		_mergeTags(storage.tags, tags);
 	};
 
 	/**
@@ -22,7 +20,7 @@ angular.module('goodoo').service('sync', function (storage) {
 		// console.log('Merging tasks:');
 		// console.log(clientTasks);
 		// console.log(serverTasks);
-		var serverTasksById = _tasksById(serverTasks);
+		var serverTasksById = _objsById(serverTasks);
 		$.each(clientTasks, function(i, task) {
 			if (task.id in serverTasksById) {
 				var serverTask = serverTasksById[task.id];
@@ -65,41 +63,39 @@ angular.module('goodoo').service('sync', function (storage) {
 		// console.log(clientTasks);
 	};
 
-	var _tasksById = function(tasks) {
+	var _objsById = function(objs) {
 		var res = {};
-		$.each(tasks, function(i, task) {
-			res[task.id] = task;
+		$.each(objs, function(i, obj) {
+			res[obj.id] = obj;
 		});
 		return res;
 	};
 
-	// /**
-	//  * Merges serverTags into clientTags, modifying clientTags.
-	//  */
-	// _mergeTags = function(clientTags, serverTags) {
-	// 	console.log('Merging tags:');
-	// 	console.log(clientTags);
-	// 	console.log(serverTags);
-	// 	var serverTagsByName = {};
-	// 	$.each(serverTags, function(i, tag) {
-	// 		serverTagsByName[tag.name] = tag;
-	// 	});
-	// 	clientTags.each(function(tag) {
-	// 		if (tag.get('name') in serverTagsByName) {
-	// 			var serverTag = serverTagsByName[tag.get('name')];
-	// 			delete serverTagsByName[tag.get('name')];
-	// 			if (serverTag.updated_at > tag.get('updated_at')) {
-	// 				tag.set(serverTag);
-	// 			}
-	// 		}
-	// 	});
-	// 	$.each(serverTagsByName, function(name, tag) {
-	// 		clientTags.add(tag, {silent: true});
-	// 	});
-	// 	clientTags.trigger('add');
-	// 	console.log('Merged. New tags:');
-	// 	console.log(clientTags);
-	// };
+	/**
+	 * Merges serverTags into clientTags, modifying clientTags.
+	 */
+	_mergeTags = function(clientTags, serverTags) {
+		console.log('Merging tags:');
+		console.log(clientTags);
+		console.log(serverTags);
+		var serverTagsById = _objsById(serverTags);
+		$.each(clientTags, function(i, tag) {
+			if (tag.id in serverTagsById) {
+				var serverTag = serverTagsById[tag.id];
+				delete serverTagsById[tag.id];
+				if (serverTag.lastUpdated >= tag.lastUpdated) {
+					tag.text = serverTag.text;
+					tag.deleted = serverTag.deleted;
+					tag.lastUpdated = serverTag.lastUpdated;
+				}
+			}
+		});
+		$.each(serverTagsById, function(id, tag) {
+			clientTags.push(tag);
+		});
+		console.log('Merged. New tags:');
+		console.log(clientTags);
+	};
 
 	return {
 		mergeServerData: mergeServerData

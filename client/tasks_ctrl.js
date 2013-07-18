@@ -11,13 +11,6 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 	$scope.editing = false; // true if the task pointed to by the cursor is being edited
 	$scope.editTaskText = {}; // key: cursor position, val: what's in the edit box. shit doesn't work right using the same variable for all edit inputs
 
-	var generateTaskId = function() {
-		// The timestamp is the basis of the unique id. The nextId counter is in case the clock shifts for daylight
-		// savings, a time correction, etc. The random number is added just in case somehow tasks are created at the
-		// same time, with the same nextId, on two different clients.
-		return sprintf('%s-%s-%s', Date.now(), $scope.taskNextId++, Math.round(Math.random() * 1000));
-	};
-
 	$scope.addTask = function() {
 		var tags = $scope.parseTags($scope.newTask);
 		var text = $.trim($scope.newTask.replace($scope.TAG_REGEX, ''));
@@ -25,7 +18,7 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 
 		if (text !== "") {
 			$scope.tasks.push({
-				id: generateTaskId(),
+				id: storage.generateId(),
 				text: text,
 				tags: tags,
 				done: false,

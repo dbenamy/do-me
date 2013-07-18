@@ -38,7 +38,7 @@
       angular.module('goodoo', []); // define the goodoo module
     </script>
     <script src="tasks_ctrl.js"></script>
-    <script src="labels_ctrl.js"></script>
+    <script src="tags_ctrl.js"></script>
     <script src="sync_ctrl.js"></script>
     <script src="message_ctrl.js"></script>
     <script src="storage.js"></script>
@@ -64,7 +64,7 @@
     <div id="container">
         
       <div id="sidebar">
-        <div ng-controller="LabelsCtrl">
+        <div ng-controller="TagsCtrl">
           <h4>Tags:</h4>
           <strong ng-show="searchStr.text == ''">All Tasks</strong>
           <a ng-hide="searchStr.text == ''" href="" ng-click="searchFor('')">All Tasks</a>

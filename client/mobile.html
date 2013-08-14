@@ -1,0 +1,203 @@
+<!doctype html>
+<html manifest="goodoo.manifest" ng-app="goodoo">
+
+  <head>
+    <title>Goo Doo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--  <meta name="viewport" content="user-scalable=no, width=device-width,   initial-scale=1.0, maximum-scale=1.0"/> -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <!-- <link rel="apple-touch-startup-image" href="startup.png" /> -->
+    
+    <link rel="stylesheet" href="libs/jquery.mobile/jquery.mobile-1.3.1.min.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="css/main.css"> -->
+    
+    <script src="libs/jquery-1.8.3.min.js"></script>
+    <script src="libs/angular.min.js"></script>
+    <script src="libs/jquery.mobile/jquery.mobile-1.3.1.min.js"></script>
+    <script src="libs/jquery-mobile-angular-adapter.min.js"></script>
+    <script src="libs/keymaster.min.js"></script>
+    <script src="libs/sprintf-0.5.js"></script>
+    <script src="libs/humanized_time_span.js"></script>
+    <link rel="stylesheet" type="text/css" href="libs/message/themes/message_default.css">
+    <script src="libs/message/message.js"></script>
+
+    <script type="text/javascript">
+      // Check if a new cache is available on page load.
+      window.addEventListener('load', function(e) {
+        window.applicationCache.addEventListener('updateready', function(e) {
+          if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+            // Browser downloaded a new app cache.
+            // Swap it in and reload the page to get the new hotness.
+            window.applicationCache.swapCache();
+            if (confirm("A new version of this site is available. Load it?")) {
+              window.location.reload();
+            } else {
+              alert("Things may not work properly until you reload the page.");
+            }
+          }
+        }, false);
+      }, false);
+
+      angular.module('goodoo', []); // define the goodoo module
+    </script>
+    <script src="tasks_ctrl.js"></script>
+    <script src="tags_ctrl.js"></script>
+    <script src="sync_ctrl.js"></script>
+    <script src="message_ctrl.js"></script>
+    <script src="storage.js"></script>
+    <script src="sync.js"></script>
+    <script src="net.js"></script>
+  </head>
+  
+  <body>
+
+    <div ng-controller="MessageCtrl"></div> <!-- Just a place holder to load controller. Nothing shown here. -->
+
+    <div data-role="page" id="tags" ngm-shared-controller="tagsCtrl:TagsCtrl">
+    
+      <div data-role="header">
+        <a href="#help" data-role="button" data-icon="info">Help</a>
+        <h1>Tags (Lists)</h1>
+        <a href="#edit-tags" data-role="button" class="ui-btn-right">
+          Edit Tags
+        </a>      
+      </div><!-- /header -->
+    
+      <div data-role="content">
+        <ul data-role="listview" data-inset="true">
+          <li>
+            <a href="#show-tasks" ng-click="tagsCtrl.searchFor('')">All Tasks</a>
+          </li>
+          <li ng-show="tagsCtrl.remaining().length == 0">
+            You don't have any lists. Click edit lists above to add some.
+          </li>
+          <li ng-repeat="tag in tagsCtrl.presentTags() | orderBy:'text'">
+            <a href="#show-tasks" ng-click="tagsCtrl.searchFor(tag.text)">{{tag.text}}</a>
+          </li>
+          <li data-role="fieldcontain">
+            <!-- <input type="text" placeholder="Search for tags" ng-click="searchFor(tag.text)" /> -->
+            <form ng-submit="tagsCtrl.searchForTag($event, tagsCtrl.searchTemp)"> <!-- TODO dedupe search funcs -->
+              <input type="text" placeholder="Search for tag" ng-model="tagsCtrl.searchTemp">
+            </form>
+          </li>
+        </ul>
+      </div><!-- /content -->
+    
+    </div><!-- /tags page -->
+    
+    <div data-role="page" id="edit-tags" ngm-shared-controller="tagsCtrl:TagsCtrl">
+    
+      <div data-role="header">
+        <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
+        <h1>Edit Tags</h1>
+      </div><!-- /header -->
+    
+      <div data-role="content">
+        <ul data-role="listview" data-inset="true">
+          <li data-role="fieldcontain">
+            <form ng-submit="tagsCtrl.addTag()" data-ajax="false">
+              <input type="text" placeholder="Add saved tag" ng-model="tagsCtrl.newTag">
+            </form>
+          </li>
+        </ul>
+
+        <ul>
+          Deleting a tag will only delete it from the list of tags; it <b>won't delete any tasks</b> even if they use that tag.
+        </ul>
+        
+        <ul data-role="listview" data-inset="true">
+          <li ng-repeat="tag in tagsCtrl.presentTags() | orderBy:'text'" data-icon="delete">
+            <a href="" ng-click="tagsCtrl.deleteTag(tag)">{{tag.text}}</a>
+          </li>
+<!--      TODO save and cancel buttons instead of back
+          <li class="ui-body ui-body-b">
+            <fieldset class="ui-grid-a">
+                <div class="ui-block-a"><button type="submit" data-theme="d">Cancel</button></div>
+                <div class="ui-block-b"><button type="submit" data-theme="a">Save</button></div>
+              </fieldset>
+          </li>
+ -->
+        </ul>
+      </div><!-- /content -->
+    
+    </div><!-- /edit-tags page -->
+        
+    <div data-role="page" id="show-tasks" ngm-shared-controller="tasksCtrl:TasksCtrl">
+    
+      <div data-role="header">
+        <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
+        <h1 ng-show="tasksCtrl.searchStr.text == ''">All Tasks</h1>
+        <h1 ng-show="tasksCtrl.searchStr.text != ''">{{searchStr.text}}</h1>
+      </div><!-- /header -->
+    
+      <div data-role="content">
+        <ul data-role="listview" data-inset="true">
+          <li data-role="fieldcontain">
+            <form ng-submit="tasksCtrl.addTask()" data-ajax="false">
+              <input type="text" placeholder="Add new task. Eg, '#FixApt #@Home Hang shelves'" ng-model="tasksCtrl.newTask">
+            </form>
+          </li>
+        </ul>
+        <ul data-role="listview" data-inset="true" ng-show="tasksCtrl.remaining().length == 0">
+          <li>This list is all done!</li>
+        </ul>
+        <ul data-role="listview" data-inset="true" class="tasks">
+          <li ng-repeat="task in tasksCtrl.remaining()">
+            <!-- <div class="ui-grid-a">
+              <!-- <div class="ui-block-a" style="width: 80%"> -->
+              <a href="#edit-task" ng-click="tasksCtrl.editTask($index)">
+                <h3 ng-bind-html-unsafe="tasksCtrl.linkify(task.text)" style="white-space:normal;"></h3>
+                <p><strong ng-repeat="tag in task.tags">{{tag}} </strong></p>
+              </a>
+              <!-- </div> -->
+              <!-- <div class="ui-block-b" style="width: 20%"> -->
+<!--                 <form action="#edit-task" method="get">
+                  <button type="submit" data-icon="arrow-r">&nbsp;</button>
+                </form>
+ -->
+         <!-- <a href="#edit-task" data-role="button" data-icon="delete" data-theme="b">&nbsp;</a> -->
+              <!-- </div> -->
+            <!-- </div> -->
+          </li>
+        </ul>
+      </div><!-- /content -->
+    
+    </div><!-- /tasks page -->
+    
+    
+    <div data-role="page" id="edit-task" ngm-shared-controller="tasksCtrl:TasksCtrl">
+    
+      <div data-role="header">
+        <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
+        <!-- <a href="#main" data-icon="delete">Cancel</a> -->
+        <h1>Edit Task</h1>
+        <!-- <a href="#main" id="save" data-icon="check" data-theme="b">Save</a> -->
+      </div><!-- /header -->
+    
+      <div data-role="content" >
+        <form ng-submit="tasksCtrl.updateTask()" data-ajax="false">
+          <input placeholder='Eg, "#FixApt #@Home Hang shelves"' ng-model="tasksCtrl.editTaskText[tasksCtrl.cursor]" />
+        </form>
+        <a href="#" ng-click="tasksCtrl.finishTask()" data-role="button" data-icon="check" style="background: green; color: white;">
+          Task Done
+        </a>
+      </div><!-- /content -->
+    
+    </div><!-- /edit page -->
+    
+    
+    <div data-role="page" id="help">
+
+      <div data-role="header">
+        <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
+        <h1>Help</h1>
+      </div><!-- /header -->
+    
+      <p>I love feedback! Please email it to
+      <a href="mailto:daniel@benamy.info">daniel@benamy.info</a>.</p>
+      
+    </div><!-- /help page -->
+
+  </body>
+</html>

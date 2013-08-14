@@ -8,7 +8,7 @@ angular.module('goodoo').service('sync', function (storage) {
 		var tasks = json.tasks || [];
 		var tags = json.tags || [];
 		_mergeTasks(storage.tasks, tasks);
-		_mergeTags(storage.tags, tags);
+		_mergeTags(storage.tags, storage.normalizeTags(tags));
 	};
 
 	/**

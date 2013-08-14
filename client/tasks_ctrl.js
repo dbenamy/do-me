@@ -1,6 +1,18 @@
-angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
-	$scope.TAG_REGEX = /(^|\s)#[^ ]+ */g;
+// angular.module('goodoo').directive('repeatDone', function() {
+// 		return function(scope, element, attrs) {
+// 			if (scope.$last) {
+// 				console.log('trace1');
+// 				$(element).parent().trigger('create');
+// 			}
+// 		};
+// 	});
 
+
+// angular.module('goodoo').config(function($locationProvider) { $locationProvider.html5Mode(false); });
+
+angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
+	var TAG_REGEX = /(^|\s)#[^ ]+/g;
+	
 	// Data / models that have to do with this controller
 	$scope.tasks = storage.tasks;
 	$scope.searchStr = storage.searchStr;
@@ -13,7 +25,7 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 
 	$scope.addTask = function() {
 		var tags = $scope.parseTags($scope.newTask);
-		var text = $.trim($scope.newTask.replace($scope.TAG_REGEX, ''));
+		var text = $.trim($scope.newTask.replace(TAG_REGEX, ''));
 		console.log("New text is: " + text);
 
 		if (text !== "") {
@@ -29,6 +41,12 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 		}
 
 		$scope.newTask = '';
+
+		// if ($.mobile) {
+		// 	console.log('trace 1');
+		// 	// $('ul.tasks').listview('refresh');
+		// 	$('ul.tasks').trigger('create');
+		// }
 	};
 
 	$scope.editTask = function(index) {
@@ -36,6 +54,7 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 		$scope.editing = true;
 		var task = $scope.getCurrentTask();
 		$scope.editTaskText[$scope.cursor] = task.tags.concat([task.text]).join(' ');
+		console.log($scope.editTaskText[$scope.cursor]);
 		$('input.edit' + $scope.cursor).focus();
 	};
 
@@ -44,7 +63,7 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 		console.log("Updating task using: " + updatedTaskDesc);
 		var task = $scope.getCurrentTask();
 		var newTags = $scope.parseTags(updatedTaskDesc);
-		var newText = $.trim(updatedTaskDesc.replace($scope.TAG_REGEX, ''));
+		var newText = $.trim(updatedTaskDesc.replace(TAG_REGEX, ''));
 
 		if (newText !== "") {
 			console.log(newText);
@@ -53,16 +72,30 @@ angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
 			task.updated_at = storage.utcTs();
 			$scope.editing = false;
 			console.log($scope.tasks);
+			if ($.mobile) {
+				history.back();
+			}
 		} else {
 			console.log("Whoops, can't update empty field");
 		}
 	};
 
+	$scope.finishTask = function() {
+		var task = $scope.getCurrentTask();
+		task.done = true;
+		task.updated_at = storage.utcTs();
+		if ($.mobile) {
+			history.back();
+		}
+	};
+
 	$scope.parseTags = function(text) {
-		var arrayOfTags = text.match($scope.TAG_REGEX) || [];
+		var arrayOfTags = text.match(TAG_REGEX) || [];
+		console.log(arrayOfTags);
 		arrayOfTags = $.map(arrayOfTags, function(tag, i) {
 			return $.trim(tag);
 		});
+		console.log(arrayOfTags);
 		return arrayOfTags;
 	};
 

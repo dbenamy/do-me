@@ -98,6 +98,7 @@ angular.module('goodoo').service('storage', function($rootScope, $timeout) {
 		tags: $rootScope.tags,
 		searchStr: $rootScope.searchStr,
 		utcTs: utcTs,
-		generateId: generateId
+		generateId: generateId,
+		normalizeTags: normalizeTags
 	};
 });

@@ -1,7 +1,7 @@
 CACHE MANIFEST
 
 # Change the version to make browsers check for new versions of all the files listed here:
-# version 33
+# version 34
 # TODO Make the version dynamically calculated & filled in.
 # TODO When I do that, I can also add the code version to the api responses and
 # make the app offer to reload if a sync reports a new version available. Can

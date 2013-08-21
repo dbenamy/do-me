@@ -21,6 +21,7 @@ angular.module('goodoo').controller('SyncCtrl', function($scope, $timeout, stora
 	};
 
 	$scope.sync = function() {
+		console.log("sync() called.");
 		if ($scope.syncStatus === 'syncing') {
 			return;
 		}

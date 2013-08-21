@@ -134,17 +134,15 @@
       </div><!-- /header -->
     
       <div data-role="content">
-        <ul data-role="listview" data-inset="true">
+        <ul data-role="listview">
           <li data-role="fieldcontain">
             <form ng-submit="tasksCtrl.addTask()" data-ajax="false">
               <input type="text" placeholder="Add new task. Eg, '#FixApt #@Home Hang shelves'" ng-model="tasksCtrl.newTask">
             </form>
           </li>
-        </ul>
-        <ul data-role="listview" data-inset="true" ng-show="tasksCtrl.remaining().length == 0">
-          <li>This list is all done!</li>
-        </ul>
-        <ul data-role="listview" data-inset="true" class="tasks">
+
+          <li ng-show="tasksCtrl.remaining().length == 0">This list is all done!</li>
+
           <li ng-repeat="task in tasksCtrl.remaining()">
             <!-- <div class="ui-grid-a">
               <!-- <div class="ui-block-a" style="width: 80%"> -->

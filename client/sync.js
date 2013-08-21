@@ -1,14 +1,15 @@
 angular.module('goodoo').service('sync', function (storage) {
 
 	var mergeServerData = function(str) {
-		var json = {};
+		var serverData = {};
 		if (str !== '') { // First download before anything's been uploaded.
-			json = JSON.parse(str);
+			serverData = JSON.parse(str);
 		}
-		var tasks = json.tasks || [];
-		var tags = json.tags || [];
+		var tasks = serverData.tasks || [];
+		var tags = serverData.tags || [];
+		storage.normalizeTags(tags);
 		_mergeTasks(storage.tasks, tasks);
-		_mergeTags(storage.tags, storage.normalizeTags(tags));
+		_mergeTags(storage.tags, tags);
 	};
 
 	/**

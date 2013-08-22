@@ -1,16 +1,16 @@
-angular.module('goodoo').service('storage', function($rootScope, $timeout) {
+angular.module('do-me').service('storage', function($rootScope, $timeout) {
 	// Variables:
 	// $rootScope.tasks = []; // this gets created by load()
 	// $rootScope.tags = []; // this gets created by load()
 	$rootScope.searchStr = {text: ''}; // it's an obj because sharing refs to a string doesn't work
 
 	var save = function() {
-		var gooDooData = JSON.parse(localStorage.goodoo || '{}');
-		gooDooData.tasks = $rootScope.tasks;
-		gooDooData.tags = $rootScope.tags;
+		var appData = JSON.parse(localStorage.goodoo || '{}');
+		appData.tasks = $rootScope.tasks;
+		appData.tags = $rootScope.tags;
 		console.log("Saving:");
-		console.log(gooDooData);
-		localStorage.goodoo = JSON.stringify(gooDooData);
+		console.log(appData);
+		localStorage.goodoo = JSON.stringify(appData);
 	};
 
 	$rootScope.$watch('tasks', save, true);
@@ -34,9 +34,9 @@ angular.module('goodoo').service('storage', function($rootScope, $timeout) {
 	};
 
 	var load = function() {
-		var gooDooData = JSON.parse(localStorage.goodoo || '{}');
-		if (!gooDooData.tasks) {
-			gooDooData.tasks = [
+		var appData = JSON.parse(localStorage.goodoo || '{}');
+		if (!appData.tasks) {
+			appData.tasks = [
 				{
 					id: 'sample-1',
 					tags: ['#@Computer', '#BuyInsurance'],
@@ -53,19 +53,19 @@ angular.module('goodoo').service('storage', function($rootScope, $timeout) {
 				}
 			];
 		}
-		if (!gooDooData.tags) {
-			gooDooData.tags = [ // missing attributes will get added in normalizeTags
+		if (!appData.tags) {
+			appData.tags = [ // missing attributes will get added in normalizeTags
 				{text: '@Phone'},
 				{text: '@Computer'},
 				{text: 'UnpackBoxes'},
 				{text: 'BuyInsurance'}
 			];
 		}
-		normalizeTags(gooDooData.tags);
+		normalizeTags(appData.tags);
 		console.log("Loaded:");
-		console.log(gooDooData);
-		$rootScope.tasks = gooDooData.tasks; // all tasks, done and remaining
-		$rootScope.tags = gooDooData.tags;
+		console.log(appData);
+		$rootScope.tasks = appData.tasks; // all tasks, done and remaining
+		$rootScope.tags = appData.tags;
 	};
 
 	var normalizeTags = function(tags) {

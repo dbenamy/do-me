@@ -1,4 +1,4 @@
-angular.module('goodoo').controller('MessageCtrl', function($scope, storage) {
+angular.module('do-me').controller('MessageCtrl', function($scope, storage) {
 	$scope.tasks = storage.tasks; // watching storage.tasks directly doesn't work
 
 	var notifyIfTaskFinished = function(newTasks, oldTasks) {

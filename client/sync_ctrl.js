@@ -1,4 +1,4 @@
-angular.module('goodoo').controller('SyncCtrl', function($scope, $timeout, storage, sync, net) {
+angular.module('do-me').controller('SyncCtrl', function($scope, $timeout, storage, sync, net) {
 	$scope.tasks = storage.tasks; // watching storage.tasks directly doesn't work
 
 	$scope.downloadAsFile = net.downloadAsFile;

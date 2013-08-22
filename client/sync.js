@@ -1,4 +1,4 @@
-angular.module('goodoo').service('sync', function (storage) {
+angular.module('do-me').service('sync', function (storage) {
 
 	var mergeServerData = function(str) {
 		var serverData = {};

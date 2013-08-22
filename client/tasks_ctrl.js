@@ -1,4 +1,4 @@
-// angular.module('goodoo').directive('repeatDone', function() {
+// angular.module('do-me').directive('repeatDone', function() {
 // 		return function(scope, element, attrs) {
 // 			if (scope.$last) {
 // 				console.log('trace1');
@@ -8,9 +8,9 @@
 // 	});
 
 
-// angular.module('goodoo').config(function($locationProvider) { $locationProvider.html5Mode(false); });
+// angular.module('do-me').config(function($locationProvider) { $locationProvider.html5Mode(false); });
 
-angular.module('goodoo').controller('TasksCtrl', function($scope, storage) {
+angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 	var TAG_REGEX = /(^|\s)#[^ ]+/g;
 	
 	// Data / models that have to do with this controller

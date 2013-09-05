@@ -11,7 +11,7 @@
 // angular.module('do-me').config(function($locationProvider) { $locationProvider.html5Mode(false); });
 
 angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
-	var TAG_REGEX = /(^|\s)#[^ ]+/g;
+	var TAG_REGEX = /(^|\s)[#@][^ ]+/g;
 	
 	// Data / models that have to do with this controller
 	$scope.tasks = storage.tasks;

@@ -4,9 +4,6 @@ angular.module('do-me').controller('TagsCtrl', function($scope, storage) {
 	$scope.searchStr = storage.searchStr;
 
 	$scope.searchFor = function(tagStr) {
-		if (tagStr.length > 0) {
-			tagStr = '#' + tagStr;
-		}
 		$scope.searchStr.text = tagStr;
 	};
 

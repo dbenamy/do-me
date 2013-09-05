@@ -79,6 +79,10 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 			if (!('lastUpdated' in tag)) {
 				tag.lastUpdated = utcTs();
 			}
+			// Convert tags without leading '#' or '@'
+			if (tag.text[0] !== '#' && tag.text[0] !== '@') {
+				tag.text = '#' + tag.text;
+			}
 		});
 	};
 

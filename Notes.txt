@@ -9,5 +9,4 @@ Bugs that I don't care that much about
 --------------------------------------
 * Remote task completions trigger notifications.
 * Add jsonp and csrf protection- http://docs.angularjs.org/api/ng.$http
-* Build alternate html page that uses jquery mobile.
 * Awesome smashing animation when completing a task.

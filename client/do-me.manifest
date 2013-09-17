@@ -1,7 +1,7 @@
 CACHE MANIFEST
 
 # Change the version to make browsers check for new versions of all the files listed here:
-# version 37
+# version 40
 # TODO Make the version dynamically calculated & filled in.
 # TODO When I do that, I can also add the code version to the api responses and
 # make the app offer to reload if a sync reports a new version available. Can
@@ -11,10 +11,6 @@ CACHE:
 index.html
 desktop.html
 mobile.html
-css/font-awesome.min.css
-css/font-awesome-ie7.min.css
-font/fontawesome-webfont.woff
-font/fontawesome-webfont.ttf
 css/main.css
 libs/angular.min.js
 libs/jquery-1.8.3.min.js

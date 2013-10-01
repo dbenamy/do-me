@@ -79,6 +79,9 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 			if (!('lastUpdated' in tag)) {
 				tag.lastUpdated = utcTs();
 			}
+			if (!('text' in tag)) {
+				tag.text = 'Corrupted tag';
+			}
 			// Convert tags without leading '#' or '@'
 			if (tag.text[0] !== '#' && tag.text[0] !== '@') {
 				tag.text = '#' + tag.text;
@@ -91,6 +94,13 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 	var backup = function() {
 		console.log("Backing up Goo Doo data.");
 		localStorage['goodoo-backup-' + (new Date())] = localStorage.goodoo;
+		// var load = function(key) {
+		// 	return localStorage['goodoo-backup-' + key];
+		// };
+		// var store = function(key, data) {
+		// 	localStorage['goodoo-backup-' + key] = data;
+		// };
+		// backup.run(load, store, JSON.stringify(localStorage.goodoo));
 		$timeout(backup, 1000 * 60 * 10); // 10 mins
 		console.log("Back up done.");
 	};

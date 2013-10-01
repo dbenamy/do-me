@@ -99,8 +99,8 @@
         <ul data-role="listview" data-inset="true">
           <li data-role="fieldcontain">
             <form ng-submit="tagsCtrl.addTag()" data-ajax="false">
-              <input type="email" placeholder="Add saved tag" ng-model="tagsCtrl.newTag">
-              <!-- type="email" makes @ and # more quickly accessible on ios -->
+              <input placeholder="Add saved tag" ng-model="tagsCtrl.newTag">
+              <!-- type="email" would make @ and # more quickly accessible on ios but breaks ng-model binding -->
             </form>
           </li>
         </ul>
@@ -138,8 +138,8 @@
         <ul data-role="listview">
           <li data-role="fieldcontain">
             <form ng-submit="tasksCtrl.addTask()" data-ajax="false">
-              <input type="email" placeholder="Add new task. Eg, '#FixApt #@Home Hang shelves'" ng-model="tasksCtrl.newTask">
-              <!-- type="email" makes @ and # more quickly accessible on ios -->
+              <input placeholder="Add new task. Eg, '#FixApt #@Home Hang shelves'" ng-model="tasksCtrl.newTask">
+              <!-- type="email" would make @ and # more quickly accessible on ios but breaks ng-model binding -->
             </form>
           </li>
 

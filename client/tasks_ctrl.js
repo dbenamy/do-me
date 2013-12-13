@@ -22,6 +22,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 	$scope.cursor = 0; // index of cursor position with 0 being the top task in the results
 	$scope.editing = false; // true if the task pointed to by the cursor is being edited
 	$scope.editTaskText = {}; // key: cursor position, val: what's in the edit box. shit doesn't work right using the same variable for all edit inputs
+	$scope.newTask = ''; // backs new task input
 
 	$scope.addTask = function() {
 		var tags = $scope.parseTags($scope.newTask);
@@ -118,6 +119,15 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 			});
 			$scope.results = arrayOfResults;
 		}
+
+		// console.log('trace1');
+		// console.log($scope.newTask);
+		// if ($scope.newTask === '') {
+		// 	console.log('trace2');
+		// 	angular.forEach(searchTags, function(tag) {
+		// 		$scope.newTask += (tag + ' ');
+		// 	})
+		// }
 
 		$('input').blur();
 	};
@@ -265,6 +275,43 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		console.log('$scope tasks:');
 		console.log($scope.tasks);
 	};
+
+	// jqNewTaskInput = $('#new-task-input');
+	// jqNewTaskInput.on('focus', function() {
+	// 	console.log(jqNewTaskInput);
+	// 	// console.log(jqNewTaskInput.value);
+	// 	// if (jqNewTaskInput.value === '') {
+	// 		// jqNewTaskInput.value = $scope.searchStr;
+	// 	console.log($scope.newTask);
+	// 	if ($scope.newTask == '') { // TODO ===
+	// 		$scope.newTask = $scope.searchStr.text; // TODO parsed tags
+	// 	}
+	// });
+
+	// $scope.autocompleteTaskTags = function(event) {
+	// 	var allTags = [];
+	// 	angular.forEach(storage.tags, function(tag) {
+	// 		if (tag.deleted === false) {
+	// 			allTags.push(tag.text);
+	// 		}
+	// 	});
+	// 	console.log("All tags:");
+	// 	console.log(allTags);
+
+	// 	// TODO newTask is winding up as undefined on mobile version only.
+	// 	console.log($scope.newTask);
+
+	// 	// TODO new plan- only autocomplete on desktop. search for exists widget and see if i can use it or grab some code.
+	// 	// $('#new-task-input').
+	// 	// var newTags = $scope.parseTags($scope.newTask);
+	// 	// angular.forEach(newTags, function(newTag) {
+	// 	// 	angular.forEach(allTags, function(availableTag))
+	// 	// 	if (allTags[tag]) {
+	// 	// 		console.log(tag + ' exists.');
+	// 	// 	}
+	// 	// });
+	// };
+	// $scope.$watch('newTask', $scope.autocompleteTaskTags);
 });
 
 // TODO move to controller

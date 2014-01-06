@@ -4,13 +4,27 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 	// $rootScope.tags = []; // this gets created by load()
 	$rootScope.searchStr = {text: ''}; // it's an obj because sharing refs to a string doesn't work
 
+	var setLocalStorage = function(key, val) {
+		try {
+			localStorage[key] = val;
+		} catch (error) {
+			console.log("Exception while writing to localStorage key " + key + ":");
+			console.log(error);
+			if (error.name === 'QuotaExceededError') {
+				alert("Whoops, Do Me ran out of space! Please email daniel@benamy.info and let me know so I can fix this.");
+			} else {
+				throw(error);
+			}
+		}
+	};
+
 	var save = function() {
 		var appData = JSON.parse(localStorage.goodoo || '{}');
 		appData.tasks = $rootScope.tasks;
 		appData.tags = $rootScope.tags;
 		console.log("Saving:");
 		console.log(appData);
-		localStorage.goodoo = JSON.stringify(appData);
+		setLocalStorage('goodoo', JSON.stringify(appData));
 	};
 
 	$rootScope.$watch('tasks', save, true);
@@ -93,7 +107,16 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 
 	var backup = function() {
 		console.log("Backing up Goo Doo data.");
-		localStorage['goodoo-backup-' + (new Date())] = localStorage.goodoo;
+
+		// Temporary backup pruning
+		// angular.forEach(Object.keys(localStorage), function(key) {
+		// 	if (key.indexOf('backup') >= 0 && key.indexOf('Jan') == -1) {
+		// 		localStorage.removeItem(key);
+		// 		console.log("Removed " + key);
+		// 	}
+		// });
+
+		setLocalStorage('goodoo-backup-' + (new Date()), localStorage.goodoo);
 		// var load = function(key) {
 		// 	return localStorage['goodoo-backup-' + key];
 		// };

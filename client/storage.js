@@ -4,15 +4,16 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 	// $rootScope.tags = []; // this gets created by load()
 	$rootScope.searchStr = {text: ''}; // it's an obj because sharing refs to a string doesn't work
 
-	var setLocalStorage = function(key, val) {
+	var handleStorageErrors = function(func) {
 		try {
-			localStorage[key] = val;
+			func();
 		} catch (error) {
-			console.log("Exception while writing to localStorage key " + key + ":");
+			console.log("Exception while writing to localStorage.");
 			console.log(error);
 			if (error.name === 'QuotaExceededError') {
-				alert("Whoops, Do Me ran out of space! Please email daniel@benamy.info and let me know so I can fix this.");
+				alert("Whoops, Do Me ran out of space and any changes weren't saved! Please email daniel@benamy.info and let me know so I can fix this.");
 			} else {
+				alert("Whoops, Do Me broke! Please email daniel@benamy.info and let me know so I can fix this.");
 				throw(error);
 			}
 		}
@@ -24,7 +25,9 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 		appData.tags = $rootScope.tags;
 		console.log("Saving:");
 		console.log(appData);
-		setLocalStorage('goodoo', JSON.stringify(appData));
+		handleStorageErrors(function() {
+			localStorage.goodoo = JSON.stringify(appData);
+		});
 	};
 
 	$rootScope.$watch('tasks', save, true);
@@ -106,24 +109,24 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 	load();
 
 	var backup = function() {
-		console.log("Backing up Goo Doo data.");
+		console.log("Backing up Do Me data with backup.js.");
+		handleStorageErrors(function() {
+			backupjs.backup(JSON.parse(localStorage.goodoo)); // pass in an obj because backup.js stringifies it
+		});
 
-		// Temporary backup pruning
-		// angular.forEach(Object.keys(localStorage), function(key) {
-		// 	if (key.indexOf('backup') >= 0 && key.indexOf('Jan') == -1) {
-		// 		localStorage.removeItem(key);
-		// 		console.log("Removed " + key);
-		// 	}
-		// });
+		var oldBackupPrefix = 'goodoo-backup-';
+		angular.forEach(Object.keys(localStorage), function(key) {
+			if (key.indexOf(oldBackupPrefix) === 0) {
+				var dateStr = key.slice(oldBackupPrefix.length);
+				var dateMs = Date.parse(dateStr);
+				console.log("Found old backup with date " + (new Date(dateMs)));
+				// When I'm confident that backup.js is working right, uncomment this:
+				// localStorage.setItem('backupjs-' + dateMs, localStorage.getItem(key));
+				// localStorage.removeItem(key);
+				// console.log("Migrated " + key + " to backup.js");
+			}
+		});
 
-		setLocalStorage('goodoo-backup-' + (new Date()), localStorage.goodoo);
-		// var load = function(key) {
-		// 	return localStorage['goodoo-backup-' + key];
-		// };
-		// var store = function(key, data) {
-		// 	localStorage['goodoo-backup-' + key] = data;
-		// };
-		// backup.run(load, store, JSON.stringify(localStorage.goodoo));
 		$timeout(backup, 1000 * 60 * 10); // 10 mins
 		console.log("Back up done.");
 	};

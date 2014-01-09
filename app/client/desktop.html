@@ -3,7 +3,8 @@
 
   <head>
     <title>Do Me</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" href="libs/font-awesome-4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/main.css">
     <script src="libs/angular.min.js"></script>
     <script src="libs/jquery-1.8.3.min.js"></script>
     <script src="libs/keymaster.min.js"></script>
@@ -53,7 +54,7 @@
 
         <form id="search" ng-submit="search()">
           <input type="text" class="search" placeholder="Search for tag" ng-model="searchTemp">
-          <button type="submit" class="button icon-search" value="Search" ng-click="searchForTag($event, searchTemp)"></button>
+          <button type="submit" class="fa fa-search" value="Search" ng-click="searchForTag($event, searchTemp)"></button>
         </form>
       </div>
     </header>
@@ -75,13 +76,13 @@
               <td width="100%"><!-- so delete icons are mashed to the right -->
               </td>
               <td>
-                <button ng-click="deleteTag(tag)" class="button icon-minus" value="Delete" />
+                <i class="fa fa-minus-circle" ng-click="deleteTag(tag)"></i>
               </td>
             </tr>
           </table>
           <form ng-submit="addTag()">
             <input ng-model="newTag" placeholder="Add tag" />
-            <button type="submit" class="button icon-plus" value="Add" />
+            <button type="submit" class="fa fa-plus" value="Add" />
           </form>
         </div>
       </div>
@@ -92,15 +93,15 @@
           <ul>
             <li ng-repeat="task in remaining()">
               <div ng-hide="editing && $index == cursor">
-                <span ng-show="$index == cursor" class="icon-caret-right cursor"></span>
-                <input type="checkbox" id="toggle" ng-model="task.done" ng-change="updatedTask(task)" >
+                <i ng-show="$index == cursor" class="fa fa-chevron-right"></i>
+                <input type="checkbox" id="toggle" class="checkbox" ng-model="task.done" ng-change="updatedTask(task)" >
                 <a href="" class="tag" ng-repeat="tag in task.tags" ng-click="searchForTag($event, tag)">{{tag}} </a>
                 <span ng-click="editTask($index)" class="task" ng-bind-html-unsafe="linkify(task.text)"></span>
               </div>
   
               <form ng-submit="updateTask()" ng-show="editing && $index == cursor">
                 <input class="edit{{$index}} text" ng-model="editTaskText[cursor]">
-                <button type="submit" class="button icon-ok" value="Save"></button>
+                <button type="submit" value="Save">Save</button>
               </form>
             </li>
           </ul>
@@ -108,12 +109,12 @@
   
         <form ng-submit="addTask()" class="addClass">
           <input type="text" class="new-task" placeholder="Add new task" ng-model="newTask" style="padding: 11px 2%;">
-          <button type="submit" class="button icon-plus" value="Add"></button>
+          <button type="submit" class="fa fa-plus" value="Add"></button>
         </form>
     
         <div id="sync" ng-controller="SyncCtrl">
           <a href="" class="syncit" ng-click="sync()" ng-hide="syncStatus == 'syncing'">
-            <i class="icon-refresh"></i> Sync now
+            Sync now
           </a>
           <span class="syncit" ng-show="syncStatus == 'syncing'">Syncing...</span>
           <br />

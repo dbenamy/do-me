@@ -1,7 +1,7 @@
 CACHE MANIFEST
 
 # Change the version to make browsers check for new versions of all the files listed here:
-# version 46
+# version 47
 # TODO Make the version dynamically calculated & filled in.
 
 CACHE:
@@ -11,6 +11,12 @@ mobile.html
 css/main.css
 libs/angular.min.js
 libs/backup-0.1.js
+libs/font-awesome-4.0.3/css/font-awesome.min.css
+libs/font-awesome-4.0.3/fonts/FontAwesome.otf
+libs/font-awesome-4.0.3/fonts/fontawesome-webfont.eot
+libs/font-awesome-4.0.3/fonts/fontawesome-webfont.svg
+libs/font-awesome-4.0.3/fonts/fontawesome-webfont.ttf
+libs/font-awesome-4.0.3/fonts/fontawesome-webfont.woff
 libs/jquery-1.8.3.min.js
 libs/jquery.mobile/images/ajax-loader.gif
 libs/jquery.mobile/images/icons-18-black.png

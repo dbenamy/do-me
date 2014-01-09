@@ -23,7 +23,7 @@ h4 {
 
 input.new-task, 
 input.search {
-	width: 70%;
+	width: 80%;
 	border: 1px solid #ddd;
 	padding: 5px 10px;
 	font-size: 100%;
@@ -35,57 +35,27 @@ input.new-task {
 }
 
 input.text {
-		padding: 2px 5px;
-		border: none;
-		font-size: 100%;
-		color: #666;
-		width: 91.4%;
+	font-size: 100%;
+	color: #666;
+	width: 80%;
 }
 
+.fa {
+	color: #10C9E6;	
+}
+
+.fa-minus-circle,
 input.button,
 button {
-		background: #10C9E6;
-		color: #fff;
-		border: none;
-		cursor: pointer;
-		padding: 10px;
-		font-size: 100%;
-}
-
-button.icon-search {
-		padding: 8px 2.5% 11px 2.5%;
-		font-size: 150%;
-}
-
-button.icon-plus {
-		padding: 12px 3% 12px 3%;
-}
-
-button.icon-ok {
-		padding: 1px 4.2% 2px 2%;
-}
-
-
-input.button:hover,
-button:hover {
-		background: #0FA6BD;
+	cursor: pointer;
 }
 
 input[type=checkbox]:checked ~ div {
 		background: red;
 }
 
-.icon-check-empty {
-		font-size: 200%;
-		color: #bbb;
-}
-
 .checkbox {
-		cursor: pointer;
-}
-
-.checkbox:hover {
-		color: #0FA6BD;
+	cursor: pointer;
 }
 
 header {
@@ -95,12 +65,13 @@ header {
 		z-index: 1;
 		padding: 10px 0;
 		background: #fafafa;
-		-moz-box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
-		-webkit-box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
-		box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.1);
+		-moz-box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+		-webkit-box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
 }
 
-#hdr, #container {
+#hdr,
+#container {
 	margin: 0 auto;
 	width: 75%;
 }
@@ -174,6 +145,14 @@ ul {
 		margin: 20px;
 }
 
+li .fa-chevron-right{
+	left: -20px;
+	position: relative;
+	display: block;
+	height: 0;
+	top: 4px;
+}
+
 #sync {
 		font-size: 70%;
 		color: #999;
@@ -186,7 +165,6 @@ ul {
 		font-size: 150%;
 }
 
-.syncit:hover .icon-refresh,
 .syncit:hover {
 		text-decoration: none;
 		color: #0FA6BD;
@@ -202,61 +180,15 @@ ul {
 
 /* Icons */
 
-li .icon-caret-right {
-		display: none;
-}
-
 .addClass {
 		margin: 20px 0;
 }
 
-.icon-refresh {
-		color: #10C9E6;
-}
-		
 .task {
 		padding: 2px 5px;
 }
 
 .task:hover {
-		background: #eee;
-}
-
-
-@media (min-width:600px) {
-		
-		#main {
-				max-width: 100%;
-				margin: 0 auto;
-				width: 600px;
-				margin-bottom: 280px;
-		}
-
-		input.search {
-				width: 100%;
-		}
-		
-		input.new-task {
-				width: 100%;
-		}
-
-		button.icon-search{
-				padding: 8px 11px 11px 11px;
-		}
-		
-		button.icon-plus {
-				padding: 12px 3% 12px 3%;
-		}
-
-		li .icon-caret-right{
-				font-size: 100%;
-				left: -47px;
-				color: #10C9E6;
-				position: relative;
-				display: block;
-				height: 0px;
-				top: 2px;
-		}
-
-		
+	background: #eee;
+	cursor: pointer;
 }

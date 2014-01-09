@@ -1,11 +1,8 @@
 CACHE MANIFEST
 
 # Change the version to make browsers check for new versions of all the files listed here:
-# version 43
+# version 46
 # TODO Make the version dynamically calculated & filled in.
-# TODO When I do that, I can also add the code version to the api responses and
-# make the app offer to reload if a sync reports a new version available. Can
-# probably move the code from index.html which checks on page load.
 
 CACHE:
 index.html
@@ -13,6 +10,7 @@ desktop.html
 mobile.html
 css/main.css
 libs/angular.min.js
+libs/backup-0.1.js
 libs/jquery-1.8.3.min.js
 libs/jquery.mobile/images/ajax-loader.gif
 libs/jquery.mobile/images/icons-18-black.png

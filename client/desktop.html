@@ -11,9 +11,12 @@
     <script src="libs/humanized_time_span.js"></script>
     <link rel="stylesheet" type="text/css" href="libs/message/themes/message_default.css">
     <script src="libs/message/message.js"></script>
+    <script src="libs/backup-0.1.js"></script>
 
     <script type="text/javascript">
       // Check if a new cache is available on page load.
+      // TODO Move this to a background poller to speed up page load and detect
+      // new version in long-running instances.
       window.addEventListener('load', function(e) {
         window.applicationCache.addEventListener('updateready', function(e) {
           if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {

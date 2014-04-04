@@ -72,7 +72,7 @@
       <div data-role="content">
         <ul data-role="listview" data-inset="true">
           <li>
-            <a href="#show-tasks" ng-click="tagsCtrl.searchFor('')">All Tasks</a>
+            <a href="#show-tasks" ng-click="tagsCtrl.searchFor('')">All Not Waiting</a>
           </li>
           <li ng-show="tagsCtrl.results.length == 0">
             You don't have any lists. Click edit lists above to add some.
@@ -81,7 +81,7 @@
             <a href="#show-tasks" ng-click="tagsCtrl.searchFor(tag.text)">{{tag.text}}</a>
           </li>
           <li>
-            <a href="#show-tasks" ng-click="tagsCtrl.searchFor('(waiting')">Waiting</a>
+            <a href="#show-tasks" ng-click="tagsCtrl.searchFor('waiting:only')">Waiting</a>
           </li>
           <li data-role="fieldcontain">
             <form ng-submit="tagsCtrl.searchHandler($event, tagsCtrl.searchTemp)">
@@ -135,7 +135,7 @@
     
       <div data-role="header">
         <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
-        <h1 ng-show="tasksCtrl.searchStr.text == ''">All Tasks</h1>
+        <h1 ng-show="tasksCtrl.searchStr.text == ''">All Not Waiting</h1>
         <h1 ng-show="tasksCtrl.searchStr.text != ''">{{searchStr.text}}</h1>
       </div><!-- /header -->
     

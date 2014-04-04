@@ -74,16 +74,18 @@
           <li>
             <a href="#show-tasks" ng-click="tagsCtrl.searchFor('')">All Tasks</a>
           </li>
-          <li ng-show="tagsCtrl.remaining().length == 0">
+          <li ng-show="tagsCtrl.results.length == 0">
             You don't have any lists. Click edit lists above to add some.
           </li>
           <li ng-repeat="tag in tagsCtrl.presentTags() | orderBy:'text'">
             <a href="#show-tasks" ng-click="tagsCtrl.searchFor(tag.text)">{{tag.text}}</a>
           </li>
+          <li>
+            <a href="#show-tasks" ng-click="tagsCtrl.searchFor('(waiting')">Waiting</a>
+          </li>
           <li data-role="fieldcontain">
-            <!-- <input type="text" placeholder="Search for tags" ng-click="searchFor(tag.text)" /> -->
-            <form ng-submit="tagsCtrl.searchForTag($event, tagsCtrl.searchTemp)"> <!-- TODO dedupe search funcs -->
-              <input type="text" placeholder="Search for tag" ng-model="tagsCtrl.searchTemp">
+            <form ng-submit="tagsCtrl.searchHandler($event, tagsCtrl.searchTemp)">
+              <input type="text" placeholder="Search for text or tag" ng-model="tagsCtrl.searchTemp">
             </form>
           </li>
         </ul>
@@ -146,9 +148,9 @@
             </form>
           </li>
 
-          <li ng-show="tasksCtrl.remaining().length == 0">This list is all done!</li>
+          <li ng-show="tasksCtrl.results.length == 0">Nothing to do!</li>
 
-          <li ng-repeat="task in tasksCtrl.remaining()">
+          <li ng-repeat="task in tasksCtrl.results">
             <!-- <div class="ui-grid-a">
               <!-- <div class="ui-block-a" style="width: 80%"> -->
               <a href="#edit-task" ng-click="tasksCtrl.editTask($index)">

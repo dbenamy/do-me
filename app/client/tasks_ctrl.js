@@ -17,7 +17,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 	$scope.tasks = storage.tasks;
 	$scope.searchStr = storage.searchStr;
 	$scope.searchTemp = ''; // working space which backs search text box.
-	$scope.results = $scope.tasks; // results of search. includes done and remaining tasks.
+	$scope.results = $scope.tasks; // results of search. ie, what to show.
 	$scope.taskNextId = 0;
 	$scope.cursor = 0; // index of cursor position with 0 being the top task in the results
 	$scope.editing = false; // true if the task pointed to by the cursor is being edited
@@ -105,74 +105,93 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 	};
 
 	$scope.search = function() {
-		var searchTags = $scope.parseTags($scope.searchStr.text);
-		console.log("Searching for tasks with all these tags:");
-		console.log(searchTags);
-		if ($scope.searchStr.text === "") {
-			$scope.results = $scope.tasks;
-		} else {
-			var arrayOfResults = [];
-			angular.forEach($scope.tasks, function(task) {
-				if (task.done === false && $scope.taskHasTags(task, searchTags)) {
-					arrayOfResults.push(task);
-				}
+		var criteria = parseSearch($scope.searchStr.text);
+		// console.log("Searching for tasks with these criteria:");
+		// console.log(criteria);
+		var wordRegexes = $.map(criteria.lowerWords, function(word) {
+			return (new RegExp('(^|\\W)' + escapeRegExp(word) + '($|\\W)', 'i'));
+		});
+		// console.log(wordRegexes);
+
+		var arrayOfResults = [];
+		angular.forEach($scope.tasks, function(task) {
+			var taskHasEveryTag = criteria.lowerTags.every(function(t) {
+				return $.map(task.tags, toLowerCase).indexOf(t) >= 0;
+			})
+			if (criteria.lowerTags.length > 0 && !taskHasEveryTag) {
+				return;
+			}
+			var taskHasEveryWord = wordRegexes.every(function(regexp) {
+				return task.text.match(regexp) !== null;
 			});
-			$scope.results = arrayOfResults;
-		}
-
-		// console.log('trace1');
-		// console.log($scope.newTask);
-		// if ($scope.newTask === '') {
-		// 	console.log('trace2');
-		// 	angular.forEach(searchTags, function(tag) {
-		// 		$scope.newTask += (tag + ' ');
-		// 	})
-		// }
-
-		$('input').blur();
+			if (criteria.lowerWords.length > 0 && !taskHasEveryWord) {
+				return;
+			}
+			if (!criteria.includeDone && task.done) {
+				return;
+			}
+			arrayOfResults.push(task);
+		});
+		$scope.results = arrayOfResults;
 	};
+
+	toLowerCase = function(str) {
+		return str.toLowerCase();
+	};
+
+	escapeRegExp = function(str) {
+		// From http://stackoverflow.com/a/6969486/229371
+		return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+	}
+
+	parseSearch = function(text) {
+		var INCLUDE_DONE_REGEX = /(^|\s)includedone:[^ ]+/i;
+
+		var toParse = text;
+
+		// var SEARCH_TAG_REGEX = /(^|\s)label:[^ ]+/gi;
+		// var arrayOfTags = trimAndLowerEach(text.match(SEARCH_TAG_REGEX) || []);
+		// arrayOfTags = $.map(arrayOfTags, function(x) { return x.replace(/^label:/i, ''); });
+		// Maybe just stick with existing tag syntax for starters:
+		var arrayOfTags = trimAndLowerEach(toParse.match(TAG_REGEX) || []);
+		// console.log(arrayOfTags);
+		toParse = toParse.replace(TAG_REGEX, '');
+
+		var includeDoneMatch = toParse.match(INCLUDE_DONE_REGEX);
+		if (includeDoneMatch === null) {
+			includeDoneMatch = ['includedone:false'];
+		}
+		var includeDoneText = includeDoneMatch[0].replace('includedone:', '');
+		// console.log(includeDoneText);
+		var includeDone = ($.trim(includeDoneText).toLowerCase() === 'true');
+		toParse = toParse.replace(INCLUDE_DONE_REGEX, '');
+
+		// var arrayOfWords = trimAndLowerEach(toParse.replace(SEARCH_TAG_REGEX, '').split(' '));
+		var arrayOfWords = trimAndLowerEach(toParse.split(' '));
+		// console.log(arrayOfWords);
+
+		return {
+			lowerTags: arrayOfTags,
+			lowerWords: arrayOfWords,
+			includeDone: includeDone
+		};
+	};
+
+	trimAndLowerEach = function(arr) {
+		var trimmed = $.map(arr, function(item) { return $.trim(item); });
+		var filtered = $.grep(trimmed, function(item) { return item.length > 0; });
+		var lowered = $.map(filtered, toLowerCase);
+		return lowered;
+	}
 
 	$scope.$watch('tasks', $scope.search, true); // if we change tasks (eg adding one), re-search to update what's shown.
 	$scope.$watch('searchStr', $scope.search, true);
 	$scope.$watch('searchStr', function() { $scope.searchTemp = $scope.searchStr.text; }, true);
 
-	$scope.taskHasTags = function(task, searchTags) {
-		var taskHasAllTags = true;
-		angular.forEach(searchTags, function(searchTag) {
-			if (task.tags.indexOf(searchTag) === -1) {
-				taskHasAllTags = false;
-			}
-		});
-		return taskHasAllTags;
-	};
-
-	$scope.remaining = function() {
-		var arrayOfRemainingTasks = [];
-		angular.forEach($scope.results, function(todo) {
-			if (todo.done === false) {
-				arrayOfRemainingTasks.push(todo);
-			}
-		});
-		return arrayOfRemainingTasks;
-	};
-	
-	$scope.done = function() {
-		var arrayOfDoneTasks = [];
-		angular.forEach($scope.results, function(todo) {
-			if (todo.done === true) {
-				arrayOfDoneTasks.push(todo);
-			}
-		});
-		return arrayOfDoneTasks;
-	};
-	
-	$scope.killTasks = function() {
-		$scope.tasks = $scope.remaining();
-	};
-
-	$scope.searchForTag = function(event, tag) {
-		$scope.searchStr.text = tag;
+	$scope.searchHandler = function(event, searchStr) {
+		$scope.searchStr.text = searchStr;
 		event.preventDefault(); // so "#" doesn't wind up in the url
+		$('input').blur();
 	};
 
 	$scope.linkify = function(text) {
@@ -259,8 +278,8 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 	$scope.makeCursorOk = function() {
 		if ($scope.cursor < 0) {
 			$scope.cursor = 0;
-		} else if ($scope.cursor >= $scope.remaining().length && $scope.cursor > 0) {
-			$scope.cursor = $scope.remaining().length - 1;
+		} else if ($scope.cursor >= $scope.results.length && $scope.cursor > 0) {
+			$scope.cursor = $scope.results.length - 1;
 		}
 	};
 	$scope.$watch('results', $scope.makeCursorOk, true);
@@ -268,7 +287,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 
 	// Returns task that cursor points to
 	$scope.getCurrentTask = function() {
-		return $scope.remaining()[$scope.cursor];
+		return $scope.results[$scope.cursor];
 	};
 
 	$scope.logTasks = function() {

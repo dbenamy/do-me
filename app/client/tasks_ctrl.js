@@ -107,10 +107,8 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 	$scope.search = function() {
 		var criteria = parseSearch($scope.searchStr.text);
 		// console.log("Searching for tasks with these criteria:");
-		// console.log(criteria);
-		var wordRegexes = $.map(criteria.lowerWords, function(word) {
-			return (new RegExp('(^|\\W)' + escapeRegExp(word) + '($|\\W)', 'i'));
-		});
+		console.log(criteria);
+		var wordRegexes = $.map(criteria.lowerWords, makeWordRegex);
 		// console.log(wordRegexes);
 
 		var arrayOfResults = [];
@@ -127,7 +125,14 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 			if (criteria.lowerWords.length > 0 && !taskHasEveryWord) {
 				return;
 			}
-			if (!criteria.includeDone && task.done) {
+			if (criteria.done != 'include' && task.done) {
+				return;
+			}
+			var taskIsWaiting = task.text.toLowerCase().indexOf('(waiting') === 0;
+			if (criteria.waiting === 'hide' && taskIsWaiting) {
+				return;
+			}
+			if (criteria.waiting === 'only' && !taskIsWaiting) {
 				return;
 			}
 			arrayOfResults.push(task);
@@ -139,41 +144,38 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		return str.toLowerCase();
 	};
 
+	makeWordRegex = function(word) {
+		return (new RegExp('(^|\\W)' + escapeRegExp(word) + '($|\\W)', 'i'));
+	};
+
 	escapeRegExp = function(str) {
 		// From http://stackoverflow.com/a/6969486/229371
 		return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 	}
 
 	parseSearch = function(text) {
-		var INCLUDE_DONE_REGEX = /(^|\s)includedone:[^ ]+/i;
-
 		var toParse = text;
 
-		// var SEARCH_TAG_REGEX = /(^|\s)label:[^ ]+/gi;
-		// var arrayOfTags = trimAndLowerEach(text.match(SEARCH_TAG_REGEX) || []);
-		// arrayOfTags = $.map(arrayOfTags, function(x) { return x.replace(/^label:/i, ''); });
-		// Maybe just stick with existing tag syntax for starters:
 		var arrayOfTags = trimAndLowerEach(toParse.match(TAG_REGEX) || []);
 		// console.log(arrayOfTags);
 		toParse = toParse.replace(TAG_REGEX, '');
 
-		var includeDoneMatch = toParse.match(INCLUDE_DONE_REGEX);
-		if (includeDoneMatch === null) {
-			includeDoneMatch = ['includedone:false'];
-		}
-		var includeDoneText = includeDoneMatch[0].replace('includedone:', '');
-		// console.log(includeDoneText);
-		var includeDone = ($.trim(includeDoneText).toLowerCase() === 'true');
-		toParse = toParse.replace(INCLUDE_DONE_REGEX, '');
+		var doneRes = extractSearchOption(toParse, 'done', 'hide');
+		toParse = doneRes.newToParse;
+		var done = $.trim(doneRes.lowerValue);
 
-		// var arrayOfWords = trimAndLowerEach(toParse.replace(SEARCH_TAG_REGEX, '').split(' '));
+		var waitingRes = extractSearchOption(toParse, 'waiting', 'hide');
+		toParse = waitingRes.newToParse;
+		var waiting = $.trim(waitingRes.lowerValue);
+
 		var arrayOfWords = trimAndLowerEach(toParse.split(' '));
 		// console.log(arrayOfWords);
 
 		return {
 			lowerTags: arrayOfTags,
 			lowerWords: arrayOfWords,
-			includeDone: includeDone
+			done: done,
+			waiting: waiting
 		};
 	};
 
@@ -182,7 +184,24 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		var filtered = $.grep(trimmed, function(item) { return item.length > 0; });
 		var lowered = $.map(filtered, toLowerCase);
 		return lowered;
-	}
+	};
+
+	/**
+	 * Resulting value will be lowercase.
+	 **/
+	extractSearchOption = function(toParse, option, defaultVal) {
+		var regexp = new RegExp('(^|\\W)' + escapeRegExp(option + ':') + '[^ ]+', 'i');
+		// console.log(regexp);
+		var match = toParse.match(regexp);
+		// console.log(match);
+		if (match === null) {
+			match = [option + ':' + defaultVal];
+		}
+		return {
+			newToParse: toParse.replace(regexp, ''),
+			lowerValue: match[0].toLowerCase().replace(option.toLowerCase() + ':', '')
+		};
+	};
 
 	$scope.$watch('tasks', $scope.search, true); // if we change tasks (eg adding one), re-search to update what's shown.
 	$scope.$watch('searchStr', $scope.search, true);

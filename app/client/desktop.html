@@ -64,8 +64,8 @@
       <div id="sidebar">
         <div ng-controller="TagsCtrl">
           <h4>Tags:</h4>
-          <strong ng-show="searchStr.text == ''">All Tasks</strong>
-          <a ng-hide="searchStr.text == ''" href="" ng-click="searchFor('')">All Tasks</a>
+          <strong ng-show="searchStr.text == ''">All Not Waiting</strong>
+          <a ng-hide="searchStr.text == ''" href="" ng-click="searchFor('')">All Not Waiting</a>
 
           <table class="">
             <tr ng-repeat="tag in presentTags() | orderBy:'text'">
@@ -81,8 +81,8 @@
             </tr>
           </table>
           
-          <strong ng-show="searchStr.text == '(waiting'">Waiting</strong>
-          <a ng-hide="searchStr.text == '(waiting'" href="" ng-click="searchFor('(waiting')">Waiting</a>
+          <strong ng-show="searchStr.text == 'waiting:only'">Waiting</strong>
+          <a ng-hide="searchStr.text == 'waiting:only'" href="" ng-click="searchFor('waiting:only')">Waiting</a>
 
           <form ng-submit="addTag()">
             <input ng-model="newTag" placeholder="Add tag" />

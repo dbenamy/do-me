@@ -184,8 +184,9 @@
     
       <div data-role="content" >
         <form ng-submit="tasksCtrl.updateTask()" data-ajax="false">
-          <input placeholder='Eg, "#FixApt #@Home Hang shelves"' ng-model="tasksCtrl.editTaskText[tasksCtrl.cursor]" />
+          <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="tasksCtrl.editTaskText[tasksCtrl.cursor]" /></textarea>
         </form>
+        <div>&nbsp;</div>
         <a href="#" ng-click="tasksCtrl.finishTask()" data-role="button" data-icon="check" style="background: green; color: white;">
           Task Done
         </a>

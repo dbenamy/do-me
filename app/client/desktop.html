@@ -53,8 +53,8 @@
         <div ng-controller="MessageCtrl"></div> <!-- Just a place holder to load controller. Nothing shown here. -->
 
         <form id="search" ng-submit="search()">
-          <input type="text" class="search" placeholder="Search for tag" ng-model="searchTemp">
-          <button type="submit" class="fa fa-search" value="Search" ng-click="searchForTag($event, searchTemp)"></button>
+          <input type="text" class="search" placeholder="Search for text or tag" ng-model="searchTemp">
+          <button type="submit" class="fa fa-search" value="Search" ng-click="searchHandler($event, searchTemp)"></button>
         </form>
       </div>
     </header>
@@ -80,6 +80,10 @@
               </td>
             </tr>
           </table>
+          
+          <strong ng-show="searchStr.text == '(waiting'">Waiting</strong>
+          <a ng-hide="searchStr.text == '(waiting'" href="" ng-click="searchFor('(waiting')">Waiting</a>
+
           <form ng-submit="addTag()">
             <input ng-model="newTag" placeholder="Add tag" />
             <button type="submit" class="fa fa-plus" value="Add" />
@@ -89,13 +93,13 @@
 
       <div id="main">
         <div class="task-list todo">
-          <span ng-show="remaining().length == 0">This list is all done!</span>
+          <span ng-show="results.length == 0">Nothing to do!</span>
           <ul>
-            <li ng-repeat="task in remaining()">
+            <li ng-repeat="task in results">
               <div ng-hide="editing && $index == cursor">
                 <i ng-show="$index == cursor" class="fa fa-chevron-right"></i>
                 <input type="checkbox" id="toggle" class="checkbox" ng-model="task.done" ng-change="updatedTask(task)" >
-                <a href="" class="tag" ng-repeat="tag in task.tags" ng-click="searchForTag($event, tag)">{{tag}} </a>
+                <a href="" class="tag" ng-repeat="tag in task.tags" ng-click="searchHandler($event, tag)">{{tag}} </a>
                 <span ng-click="editTask($index)" class="task" ng-bind-html-unsafe="linkify(task.text)"></span>
               </div>
   

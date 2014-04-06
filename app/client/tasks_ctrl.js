@@ -37,6 +37,9 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 				done: false,
 				updated_at: storage.utcTs()
 			});
+			if ($.mobile) {
+				history.back();
+			}
 		} else {
 			alert("Whoops, can't add an empty task.");
 		}
@@ -72,7 +75,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 			task.text = newText;
 			task.updated_at = storage.utcTs();
 			$scope.editing = false;
-			console.log($scope.tasks);
+			// console.log($scope.tasks);
 			if ($.mobile) {
 				history.back();
 			}

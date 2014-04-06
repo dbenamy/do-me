@@ -137,17 +137,13 @@
         <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
         <h1 ng-show="tasksCtrl.searchStr.text == ''">All Not Waiting</h1>
         <h1 ng-show="tasksCtrl.searchStr.text != ''">{{searchStr.text}}</h1>
+        <a href="#add-task" data-role="button" data-icon="plus">
+          Add Task
+        </a>
       </div><!-- /header -->
     
       <div data-role="content">
         <ul data-role="listview">
-          <li data-role="fieldcontain">
-            <form ng-submit="tasksCtrl.addTask()" data-ajax="false">
-              <input placeholder="Add new task. Eg, '#FixApt #@Home Hang shelves'" ng-model="tasksCtrl.newTask">
-              <!-- type="email" would make @ and # more quickly accessible on ios but breaks ng-model binding -->
-            </form>
-          </li>
-
           <li ng-show="tasksCtrl.results.length == 0">Nothing to do!</li>
 
           <li ng-repeat="task in tasksCtrl.results">
@@ -171,6 +167,26 @@
       </div><!-- /content -->
     
     </div><!-- /tasks page -->
+    
+    
+    <div data-role="page" id="add-task" ngm-shared-controller="tasksCtrl:TasksCtrl">
+    
+      <div data-role="header">
+        <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
+        <h1>Add Task</h1>
+      </div><!-- /header -->
+    
+      <div data-role="content" >
+        <form data-ajax="false">
+          <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="tasksCtrl.newTask" /></textarea>
+          <div>&nbsp;</div>
+          <a href="#" ng-click="tasksCtrl.addTask()" data-role="button" data-icon="plus">
+            Add
+          </a>
+        </form>
+      </div><!-- /content -->
+    
+    </div><!-- /edit page -->
     
     
     <div data-role="page" id="edit-task" ngm-shared-controller="tasksCtrl:TasksCtrl">

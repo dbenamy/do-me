@@ -1,8 +1,7 @@
 CACHE MANIFEST
 
 # Change the version to make browsers check for new versions of all the files listed here:
-# version 49
-# TODO Make the version dynamically calculated & filled in.
+# version 50
 
 CACHE:
 index.html

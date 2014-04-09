@@ -177,12 +177,8 @@
       </div><!-- /header -->
     
       <div data-role="content" >
-        <form data-ajax="false">
-          <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="tasksCtrl.newTask" /></textarea>
-          <div>&nbsp;</div>
-          <a href="#" ng-click="tasksCtrl.addTask()" data-role="button" data-icon="plus">
-            Add
-          </a>
+        <form ng-submit="tasksCtrl.addTask()" data-ajax="false">
+          <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="tasksCtrl.newTask" class="submit-on-enter"></textarea>
         </form>
       </div><!-- /content -->
     
@@ -200,7 +196,7 @@
     
       <div data-role="content" >
         <form ng-submit="tasksCtrl.updateTask()" data-ajax="false">
-          <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="tasksCtrl.editTaskText[tasksCtrl.cursor]" /></textarea>
+          <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="tasksCtrl.editTaskText[tasksCtrl.cursor]" class="submit-on-enter"></textarea>
         </form>
         <div>&nbsp;</div>
         <a href="#" ng-click="tasksCtrl.finishTask()" data-role="button" data-icon="check" style="background: green; color: white;">
@@ -223,5 +219,13 @@
       
     </div><!-- /help page -->
 
+    <script type="text/javascript">
+      $('.submit-on-enter').keydown(function(event) {
+        if (event.keyCode === 13) {
+          $(this).submit();
+          return false;
+        };
+      })
+    </script>
   </body>
 </html>

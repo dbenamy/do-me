@@ -8,13 +8,21 @@ angular.module('do-me').controller('TagsCtrl', function($scope, storage) {
 	};
 
 	$scope.presentTags = function() {
-		var present = [];
-		angular.forEach($scope.tags, function(tag) {
-			if (!tag.deleted) {
-				present.push(tag);
-			}
+		return $scope.tags.filter(function(tag) {
+			return !tag.deleted;
 		});
-		return present;
+	};
+
+	$scope.contexts = function() {
+		return $scope.presentTags().filter(function(tag) {
+			return tag.text[0] === '@';
+		});
+	};
+
+	$scope.projects = function() {
+		return $scope.presentTags().filter(function(tag) {
+			return tag.text[0] === '#';
+		});
 	};
 
 	$scope.addTag = function() {

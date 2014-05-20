@@ -23,9 +23,17 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 	$scope.editing = false; // true if the task pointed to by the cursor is being edited
 	$scope.editTaskText = {}; // key: cursor position, val: what's in the edit box. shit doesn't work right using the same variable for all edit inputs
 	$scope.newTask = ''; // backs new task input
+	$scope.selectedProject = ''; // only used on mobile
+	$scope.selectedContext = ''; // only used on mobile
 
 	$scope.addTask = function() {
 		var tags = $scope.parseTags($scope.newTask);
+		if ($scope.selectedProject.length > 0) {
+			tags.push($scope.selectedProject);
+		}
+		if ($scope.selectedContext.length > 0) {
+			tags.push($scope.selectedContext);
+		}
 		var text = $.trim($scope.newTask.replace(TAG_REGEX, ''));
 		console.log("New text is: " + text);
 
@@ -45,12 +53,6 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		}
 
 		$scope.newTask = '';
-
-		// if ($.mobile) {
-		// 	console.log('trace 1');
-		// 	// $('ul.tasks').listview('refresh');
-		// 	$('ul.tasks').trigger('create');
-		// }
 	};
 
 	$scope.editTask = function(index) {
@@ -114,6 +116,8 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		var wordRegexes = $.map(criteria.lowerWords, makeWordRegex);
 		// console.log(wordRegexes);
 
+		updateSelectedTagsForMobile(criteria.lowerTags);
+
 		var arrayOfResults = [];
 		angular.forEach($scope.tasks, function(task) {
 			var taskHasEveryTag = criteria.lowerTags.every(function(t) {
@@ -143,20 +147,20 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		$scope.results = arrayOfResults;
 	};
 
-	toLowerCase = function(str) {
+	var toLowerCase = function(str) {
 		return str.toLowerCase();
 	};
 
-	makeWordRegex = function(word) {
+	var makeWordRegex = function(word) {
 		return (new RegExp('(^|\\W)' + escapeRegExp(word) + '($|\\W)', 'i'));
 	};
 
-	escapeRegExp = function(str) {
+	var escapeRegExp = function(str) {
 		// From http://stackoverflow.com/a/6969486/229371
 		return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 	}
 
-	parseSearch = function(text) {
+	var parseSearch = function(text) {
 		var toParse = text;
 
 		var arrayOfTags = trimAndLowerEach(toParse.match(TAG_REGEX) || []);
@@ -182,7 +186,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		};
 	};
 
-	trimAndLowerEach = function(arr) {
+	var trimAndLowerEach = function(arr) {
 		var trimmed = $.map(arr, function(item) { return $.trim(item); });
 		var filtered = $.grep(trimmed, function(item) { return item.length > 0; });
 		var lowered = $.map(filtered, toLowerCase);
@@ -192,7 +196,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 	/**
 	 * Resulting value will be lowercase.
 	 **/
-	extractSearchOption = function(toParse, option, defaultVal) {
+	var extractSearchOption = function(toParse, option, defaultVal) {
 		var regexp = new RegExp('(^|\\W)' + escapeRegExp(option + ':') + '[^ ]+', 'i');
 		// console.log(regexp);
 		var match = toParse.match(regexp);
@@ -232,6 +236,10 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		return urlLinked.replace(PHONE_REGEX, function(number) {
 			return '<a href="tel:' + number + '" ' + STOP_CLICK_PROPAGATION + '>' + number + '</a>';
 		});
+	};
+
+	var updateSelectedTagsForMobile = function(lowerTags) {
+		// TODO set selections
 	};
 
 	// Keyboard Shortcuts

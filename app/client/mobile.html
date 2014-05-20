@@ -169,7 +169,7 @@
     </div><!-- /tasks page -->
     
     
-    <div data-role="page" id="add-task" ngm-shared-controller="tasksCtrl:TasksCtrl">
+    <div data-role="page" id="add-task" ngm-shared-controller="tasksCtrl:TasksCtrl tagsCtrl:TagsCtrl">
     
       <div data-role="header">
         <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
@@ -179,6 +179,20 @@
       <div data-role="content" >
         <form ng-submit="tasksCtrl.addTask()" data-ajax="false">
           <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="tasksCtrl.newTask" class="submit-on-enter"></textarea>
+          Project:
+          <select ng-model="tasksCtrl.selectedProject">
+            <option value=""></option>
+            <option ng-repeat="tag in tagsCtrl.projects() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
+          </select>
+          Context:
+          <select ng-model="tasksCtrl.selectedContext">
+            <option value=""></option>
+            <option ng-repeat="tag in tagsCtrl.contexts() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
+          </select>
+        <br>
+        <a href="#" ng-click="tasksCtrl.addTask()" data-role="button" data-icon="save" style="background: blue; color: white;">
+          Save
+        </a>
         </form>
       </div><!-- /content -->
     
@@ -201,6 +215,10 @@
         <div>&nbsp;</div>
         <a href="#" ng-click="tasksCtrl.finishTask()" data-role="button" data-icon="check" style="background: green; color: white;">
           Task Done
+        </a>
+        <br>
+        <a href="#" ng-click="tasksCtrl.addTask()" data-role="button" data-icon="save" style="background: blue; color: white;">
+          Save
         </a>
       </div><!-- /content -->
     

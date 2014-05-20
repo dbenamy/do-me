@@ -52,7 +52,7 @@
 
         <div ng-controller="MessageCtrl"></div> <!-- Just a place holder to load controller. Nothing shown here. -->
 
-        <form id="search" ng-submit="search()">
+        <form id="search" ng-submit="searchFor(searchTemp)">
           <input type="text" class="search" placeholder="Search for text or tag" ng-model="searchTemp">
           <button type="submit" class="fa fa-search" value="Search" ng-click="searchHandler($event, searchTemp)"></button>
         </form>

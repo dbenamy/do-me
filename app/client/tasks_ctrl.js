@@ -109,7 +109,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		task.updated_at = storage.utcTs();
 	};
 
-	$scope.search = function() {
+	var search = function() {
 		var criteria = parseSearch($scope.searchStr.text);
 		// console.log("Searching for tasks with these criteria:");
 		console.log(criteria);
@@ -210,8 +210,8 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		};
 	};
 
-	$scope.$watch('tasks', $scope.search, true); // if we change tasks (eg adding one), re-search to update what's shown.
-	$scope.$watch('searchStr', $scope.search, true);
+	$scope.$watch('tasks', search, true); // if we change tasks (eg adding one), re-search to update what's shown.
+	$scope.$watch('searchStr', search, true);
 	$scope.$watch('searchStr', function() { $scope.searchTemp = $scope.searchStr.text; }, true);
 
 	$scope.searchHandler = function(event, searchStr) {

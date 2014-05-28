@@ -13,6 +13,11 @@ angular.module('do-me').service('net', function($http) {
 	// 		$http.post('/api/log', angular.toJson(data, true));
 	// 	}
 	// };
+	// window.onload = function() {
+	// 	setTimeout(function() {
+	// 		$http.post('/api/log', angular.toJson(window.performance.timing, true));
+	// 	}, 0);
+	// };
 
 	downloadData = function(success, error, offline) {
 		// console.log("Downloading.");

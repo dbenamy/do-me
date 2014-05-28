@@ -45,7 +45,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 				done: false,
 				updated_at: storage.utcTs()
 			});
-			if ($.mobile) {
+			if (window.do_me.mobile === true) {
 				history.back();
 			}
 		} else {
@@ -78,7 +78,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 			task.updated_at = storage.utcTs();
 			$scope.editing = false;
 			// console.log($scope.tasks);
-			if ($.mobile) {
+			if (window.do_me.mobile === true) {
 				history.back();
 			}
 		} else {
@@ -90,7 +90,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		var task = $scope.getCurrentTask();
 		task.done = true;
 		task.updated_at = storage.utcTs();
-		if ($.mobile) {
+		if (window.do_me.mobile === true) {
 			history.back();
 		}
 	};

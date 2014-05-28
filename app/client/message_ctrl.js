@@ -17,7 +17,7 @@ angular.module('do-me').controller('MessageCtrl', function($scope, storage) {
 	// TODO dedupe w sync.js
 	var tasksById = function(tasks) {
 		var res = {};
-		$.each(tasks, function(i, task) {
+		angular.forEach(tasks, function(task, i) {
 			res[task.id] = task;
 		});
 		return res;

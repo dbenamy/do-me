@@ -34,7 +34,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		if ($scope.selectedContext.length > 0) {
 			tags.push($scope.selectedContext);
 		}
-		var text = $.trim($scope.newTask.replace(TAG_REGEX, ''));
+		var text = $scope.newTask.replace(TAG_REGEX, '').trim();
 		console.log("New text is: " + text);
 
 		if (text !== "") {
@@ -69,7 +69,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		console.log("Updating task using: " + updatedTaskDesc);
 		var task = $scope.getCurrentTask();
 		var newTags = $scope.parseTags(updatedTaskDesc);
-		var newText = $.trim(updatedTaskDesc.replace(TAG_REGEX, ''));
+		var newText = updatedTaskDesc.replace(TAG_REGEX, '').trim();
 
 		if (newText !== "") {
 			console.log(newText);
@@ -98,8 +98,8 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 	$scope.parseTags = function(text) {
 		var arrayOfTags = text.match(TAG_REGEX) || [];
 		console.log(arrayOfTags);
-		arrayOfTags = $.map(arrayOfTags, function(tag, i) {
-			return $.trim(tag);
+		arrayOfTags = arrayOfTags.map(function(tag, i) {
+			return tag.trim();
 		});
 		console.log(arrayOfTags);
 		return arrayOfTags;
@@ -113,7 +113,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		var criteria = parseSearch($scope.searchStr.text);
 		// console.log("Searching for tasks with these criteria:");
 		console.log(criteria);
-		var wordRegexes = $.map(criteria.lowerWords, makeWordRegex);
+		var wordRegexes = criteria.lowerWords.map(makeWordRegex);
 		// console.log(wordRegexes);
 
 		updateSelectedTagsForMobile(criteria.lowerTags);
@@ -121,7 +121,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		var arrayOfResults = [];
 		angular.forEach($scope.tasks, function(task) {
 			var taskHasEveryTag = criteria.lowerTags.every(function(t) {
-				return $.map(task.tags, toLowerCase).indexOf(t) >= 0;
+				return task.tags.map(toLowerCase).indexOf(t) >= 0;
 			})
 			if (criteria.lowerTags.length > 0 && !taskHasEveryTag) {
 				return;
@@ -158,7 +158,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 	var escapeRegExp = function(str) {
 		// From http://stackoverflow.com/a/6969486/229371
 		return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-	}
+	};
 
 	var parseSearch = function(text) {
 		var toParse = text;
@@ -169,11 +169,11 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 
 		var doneRes = extractSearchOption(toParse, 'done', 'hide');
 		toParse = doneRes.newToParse;
-		var done = $.trim(doneRes.lowerValue);
+		var done = doneRes.lowerValue.trim();
 
 		var waitingRes = extractSearchOption(toParse, 'waiting', 'hide');
 		toParse = waitingRes.newToParse;
-		var waiting = $.trim(waitingRes.lowerValue);
+		var waiting = waitingRes.lowerValue.trim();
 
 		var arrayOfWords = trimAndLowerEach(toParse.split(' '));
 		// console.log(arrayOfWords);
@@ -187,9 +187,9 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 	};
 
 	var trimAndLowerEach = function(arr) {
-		var trimmed = $.map(arr, function(item) { return $.trim(item); });
-		var filtered = $.grep(trimmed, function(item) { return item.length > 0; });
-		var lowered = $.map(filtered, toLowerCase);
+		var trimmed = arr.map(function(item) { return item.trim(); });
+		var filtered = trimmed.filter(function(item) { return item.length > 0; });
+		var lowered = filtered.map(toLowerCase);
 		return lowered;
 	};
 

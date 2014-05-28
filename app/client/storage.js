@@ -111,7 +111,8 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 	var backup = function() {
 		console.log("Backing up Do Me data with backup.js.");
 		handleStorageErrors(function() {
-			backupjs.backup(JSON.parse(localStorage.goodoo)); // pass in an obj because backup.js stringifies it
+			var obj = JSON.parse(localStorage.goodoo);
+			backupjs.backup(obj); // pass in an obj because backup.js stringifies it
 		});
 
 		var oldBackupPrefix = 'goodoo-backup-';

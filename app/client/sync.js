@@ -22,7 +22,7 @@ angular.module('do-me').service('sync', function (storage) {
 		// console.log(clientTasks);
 		// console.log(serverTasks);
 		var serverTasksById = _objsById(serverTasks);
-		$.each(clientTasks, function(i, task) {
+		angular.forEach(clientTasks, function(task, i) {
 			if (task.id in serverTasksById) {
 				var serverTask = serverTasksById[task.id];
 				delete serverTasksById[task.id];
@@ -57,7 +57,7 @@ angular.module('do-me').service('sync', function (storage) {
 		});
 		// Anything left in serverTasksById doesn't exist in clientTasks and
 		// should be added to the result.
-		$.each(serverTasksById, function(id, serverTask) {
+		angular.forEach(serverTasksById, function(serverTask, id) {
 			clientTasks.push(serverTask);
 		});
 		// console.log('Merged. New tasks:');
@@ -66,7 +66,7 @@ angular.module('do-me').service('sync', function (storage) {
 
 	var _objsById = function(objs) {
 		var res = {};
-		$.each(objs, function(i, obj) {
+		angular.forEach(objs, function(obj, i) {
 			res[obj.id] = obj;
 		});
 		return res;
@@ -80,7 +80,7 @@ angular.module('do-me').service('sync', function (storage) {
 		console.log(clientTags);
 		console.log(serverTags);
 		var serverTagsById = _objsById(serverTags);
-		$.each(clientTags, function(i, tag) {
+		angular.forEach(clientTags, function(tag, i) {
 			if (tag.id in serverTagsById) {
 				var serverTag = serverTagsById[tag.id];
 				delete serverTagsById[tag.id];
@@ -91,7 +91,7 @@ angular.module('do-me').service('sync', function (storage) {
 				}
 			}
 		});
-		$.each(serverTagsById, function(id, tag) {
+		angular.forEach(serverTagsById, function(tag, id) {
 			clientTags.push(tag);
 		});
 		console.log('Merged. New tags:');

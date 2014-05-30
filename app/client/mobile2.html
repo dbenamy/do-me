@@ -1,0 +1,261 @@
+<!doctype html>
+<html manifest="do-me.manifest" ng-app="do-me">
+
+  <head>
+    <title>Do Me</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <!--  <meta name="viewport" content="user-scalable=no, width=device-width,   initial-scale=1.0, maximum-scale=1.0"/> -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <!-- <link rel="apple-touch-startup-image" href="startup.png" /> -->
+    
+    <script src="libs/jquery-1.8.3.min.js"></script>
+    <script src="libs/angular.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="libs/mobile-angular-ui-1.1.0-beta.22/mobile-angular-ui-base.min.css">
+    <script src="libs/mobile-angular-ui-1.1.0-beta.22/mobile-angular-ui.min.js"></script>
+    <script src="libs/keymaster.min.js"></script>
+    <script src="libs/sprintf-0.5.js"></script>
+    <script src="libs/humanized_time_span.js"></script>
+    <link rel="stylesheet" type="text/css" href="libs/message/themes/message_default.css">
+    <script src="libs/message/message.js"></script>
+    <script src="libs/backup-0.1.js"></script>
+
+    <script type="text/javascript">
+      window.do_me = {mobile: true};
+
+      // Check if a new cache is available on page load.
+      // TODO Move this to a background poller to speed up page load and detect
+      // new version in long-running instances.
+      window.addEventListener('load', function(e) {
+        window.applicationCache.addEventListener('updateready', function(e) {
+          if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+            // Browser downloaded a new app cache.
+            // Swap it in and reload the page to get the new hotness.
+            window.applicationCache.swapCache();
+            if (confirm("A new version of this site is available. Load it?")) {
+              window.location.reload();
+            } else {
+              alert("Things may not work properly until you reload the page.");
+            }
+          }
+        }, false);
+      }, false);
+
+      angular.module('do-me', ['mobile-angular-ui']); // define the do-me module
+
+      angular.module('do-me').controller('PageCtrl', function($scope) {
+        $scope.page = 'list-tags';
+      });
+    </script>
+    <script src="tasks_ctrl.js"></script>
+    <script src="tags_ctrl.js"></script>
+    <script src="sync_ctrl.js"></script>
+    <script src="message_ctrl.js"></script>
+    <script src="storage.js"></script>
+    <script src="sync.js"></script>
+    <script src="net.js"></script>
+  </head>
+  
+  <body>
+
+    <div ng-controller="MessageCtrl"></div> <!-- Just a place holder to load controller. Nothing shown here. -->
+
+    <div ng-controller="SyncCtrl"></div> <!-- Just a place holder to load controller. Nothing shown here. -->
+
+    <div class="app" ng-controller="PageCtrl">
+      <div class="navbar navbar-app navbar-absolute-top">
+        <div class="btn-group pull-left">
+          <!-- <div ng-click="page='help'" class="btn btn-navbar"> -->
+            <!-- <i class="fa fa-bars"></i> Help -->
+          <!-- </div> -->
+          <!-- <div ng-click="page='edit-tags'" class="btn btn-navbar"> -->
+            <!-- <i class="fa fa-list"></i> Edit Tags -->
+          <!-- </div> -->
+        </div>
+        <div class="navbar-brand navbar-brand-center">
+          <span>Tags (Lists)</span>
+        </div>
+        <div class="btn-group pull-right">
+          <div ng-click="page='add-task'" class="btn btn-navbar">
+            <i class="fa fa-plus"></i> Task
+          </div>
+        </div>
+      </div><!-- /header -->
+    
+      <div class="app-body" ng-controller="TasksCtrl">
+        <div class="app-content">
+          <div class="scrollable">
+            <div class="scrollable-content">
+
+              <div ng-controller="TagsCtrl" ng-show="page == 'list-tags'">
+                <div class="list-group">
+                  <a href="#" class="list-group-item" ng-click="searchFor('')">
+                    All Not Waiting <i class="fa fa-chevron-right pull-right"></i>
+                  </a>
+                  <div class="list-group-item" ng-show="presentTags().length == 0">
+                    You don't have any lists. Click edit lists above to add some.
+                  </div>
+                  <a ng-repeat="tag in presentTags() | orderBy:'text'" href="#" class="list-group-item" ng-click="searchFor(tag.text); page = 'list-tasks'">
+                    {{tag.text}} <i class="fa fa-chevron-right pull-right"></i>
+                  </a>
+                  <a href="#" class="list-group-item" ng-click="searchFor('waiting:only')">
+                    Waiting <i class="fa fa-chevron-right pull-right"></i>
+                  </a>
+                  <form class="" ng-submit="tagsCtrl.searchHandler($event, tagsCtrl.searchTemp)">
+                    <input type="search" class="form-control app-search" placeholder="Search for text or tag" ng-model="tagsCtrl.searchTemp">
+                  </form>
+                </div><!-- /list-group -->
+              </div>
+
+              <div ng-show="page == 'add-task'">
+                <!-- <div data-role="content" > -->
+                  <form ng-submit="addTask()">
+                    <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="newTask" class="submit-on-enter"></textarea>
+                    Project:
+                    <select ng-model="selectedProject">
+                      <option value=""></option>
+                      <option ng-repeat="tag in tagsCtrl.projects() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
+                    </select>
+                    Context:
+                    <select ng-model="selectedContext">
+                      <option value=""></option>
+                      <option ng-repeat="tag in tagsCtrl.contexts() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
+                    </select>
+                  <br>
+                  <a href="#" ng-click="addTask()" data-role="button" data-icon="save" style="background: blue; color: white;">
+                    Save
+                  </a>
+                  </form>
+                <!-- </div>/content -->
+              </div>
+
+            </div><!-- /scrollable-content -->
+          </div><!-- /scrollable -->
+        </div>
+      </div>    
+    </div>
+    
+    <div data-role="page" id="edit-tags" ngm-shared-controller="tagsCtrl:TagsCtrl">
+    
+      <div data-role="header">
+        <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
+        <h1>Edit Tags</h1>
+      </div><!-- /header -->
+    
+      <div data-role="content">
+        <ul data-role="listview" data-inset="true">
+          <li data-role="fieldcontain">
+            <form ng-submit="tagsCtrl.addTag()" data-ajax="false">
+              <input placeholder="Add saved tag" ng-model="tagsCtrl.newTag">
+              <!-- type="email" would make @ and # more quickly accessible on ios but breaks ng-model binding -->
+            </form>
+          </li>
+        </ul>
+
+        <ul>
+          Deleting a tag will only delete it from the list of tags; it <b>won't delete any tasks</b> even if they use that tag.
+        </ul>
+        
+        <ul data-role="listview" data-inset="true">
+          <li ng-repeat="tag in tagsCtrl.presentTags() | orderBy:'text'" data-icon="delete">
+            <a href="" ng-click="tagsCtrl.deleteTag(tag)">{{tag.text}}</a>
+          </li>
+<!--      TODO save and cancel buttons instead of back
+          <li class="ui-body ui-body-b">
+            <fieldset class="ui-grid-a">
+                <div class="ui-block-a"><button type="submit" data-theme="d">Cancel</button></div>
+                <div class="ui-block-b"><button type="submit" data-theme="a">Save</button></div>
+              </fieldset>
+          </li>
+ -->
+        </ul>
+      </div><!-- /content -->
+    
+    </div><!-- /edit-tags page -->
+        
+    <div data-role="page" id="show-tasks" ngm-shared-controller="tasksCtrl:TasksCtrl">
+    
+      <div data-role="header">
+        <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
+        <h1 ng-show="tasksCtrl.searchStr.text == ''">All Not Waiting</h1>
+        <h1 ng-show="tasksCtrl.searchStr.text != ''">{{searchStr.text}}</h1>
+        <a href="#add-task" data-role="button" data-icon="plus">
+          Add Task
+        </a>
+      </div><!-- /header -->
+    
+      <div data-role="content">
+        <ul data-role="listview">
+          <li ng-show="tasksCtrl.results.length == 0">Nothing to do!</li>
+
+          <li ng-repeat="task in tasksCtrl.results">
+            <!-- <div class="ui-grid-a">
+              <!-- <div class="ui-block-a" style="width: 80%"> -->
+              <a href="#edit-task" ng-click="tasksCtrl.editTask($index)">
+                <h3 ng-bind-html-unsafe="tasksCtrl.linkify(task.text)" style="white-space:normal;"></h3>
+                <p><strong ng-repeat="tag in task.tags">{{tag}} </strong></p>
+              </a>
+              <!-- </div> -->
+              <!-- <div class="ui-block-b" style="width: 20%"> -->
+<!--                 <form action="#edit-task" method="get">
+                  <button type="submit" data-icon="arrow-r">&nbsp;</button>
+                </form>
+ -->
+         <!-- <a href="#edit-task" data-role="button" data-icon="delete" data-theme="b">&nbsp;</a> -->
+              <!-- </div> -->
+            <!-- </div> -->
+          </li>
+        </ul>
+      </div><!-- /content -->
+    
+    </div><!-- /tasks page -->
+        
+    
+    <div data-role="page" id="edit-task" ngm-shared-controller="tasksCtrl:TasksCtrl">
+    
+      <div data-role="header">
+        <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
+        <!-- <a href="#main" data-icon="delete">Cancel</a> -->
+        <h1>Edit Task</h1>
+        <!-- <a href="#main" id="save" data-icon="check" data-theme="b">Save</a> -->
+      </div><!-- /header -->
+    
+      <div data-role="content" >
+        <form ng-submit="tasksCtrl.updateTask()" data-ajax="false">
+          <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="tasksCtrl.editTaskText[tasksCtrl.cursor]" class="submit-on-enter"></textarea>
+        </form>
+        <div>&nbsp;</div>
+        <a href="#" ng-click="tasksCtrl.finishTask()" data-role="button" data-icon="check" style="background: green; color: white;">
+          Task Done
+        </a>
+        <br>
+        <a href="#" ng-click="tasksCtrl.addTask()" data-role="button" data-icon="save" style="background: blue; color: white;">
+          Save
+        </a>
+      </div><!-- /content -->
+    
+    </div><!-- /edit page -->
+    
+    
+    <div data-role="page" id="help">
+
+      <div data-role="header">
+        <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
+        <h1>Help</h1>
+      </div><!-- /header -->
+    
+      <p>I love feedback! Please email it to
+      <a href="mailto:daniel@benamy.info">daniel@benamy.info</a>.</p>
+      
+    </div><!-- /help page -->
+
+    <script type="text/javascript">
+      $('.submit-on-enter').keydown(function(event) {
+        if (event.keyCode === 13) {
+          $(this).submit();
+          return false;
+        };
+      })
+    </script>
+  </body>
+</html>

@@ -18,9 +18,9 @@ angular.module('do-me').service('sync', function (storage) {
 	 * serverTasks should be the array of tasks downloaded from the server.
 	 */
 	var _mergeTasks = function(clientTasks, serverTasks) {
-		// console.log('Merging tasks:');
-		// console.log(clientTasks);
-		// console.log(serverTasks);
+		// _log('Merging tasks:');
+		// _log(clientTasks);
+		// _log(serverTasks);
 		var serverTasksById = _objsById(serverTasks);
 		angular.forEach(clientTasks, function(task, i) {
 			if (task.id in serverTasksById) {
@@ -60,8 +60,8 @@ angular.module('do-me').service('sync', function (storage) {
 		angular.forEach(serverTasksById, function(serverTask, id) {
 			clientTasks.push(serverTask);
 		});
-		// console.log('Merged. New tasks:');
-		// console.log(clientTasks);
+		// _log('Merged. New tasks:');
+		// _log(clientTasks);
 	};
 
 	var _objsById = function(objs) {
@@ -75,10 +75,10 @@ angular.module('do-me').service('sync', function (storage) {
 	/**
 	 * Merges serverTags into clientTags, modifying clientTags.
 	 */
-	_mergeTags = function(clientTags, serverTags) {
-		console.log('Merging tags:');
-		console.log(clientTags);
-		console.log(serverTags);
+	var _mergeTags = function(clientTags, serverTags) {
+		_log('Merging tags:');
+		_log(clientTags);
+		_log(serverTags);
 		var serverTagsById = _objsById(serverTags);
 		angular.forEach(clientTags, function(tag, i) {
 			if (tag.id in serverTagsById) {
@@ -94,8 +94,12 @@ angular.module('do-me').service('sync', function (storage) {
 		angular.forEach(serverTagsById, function(tag, id) {
 			clientTags.push(tag);
 		});
-		console.log('Merged. New tags:');
-		console.log(clientTags);
+		_log('Merged. New tags:');
+		_log(clientTags);
+	};
+
+	var _log = function(thing) {
+		// console.log(thing);
 	};
 
 	return {

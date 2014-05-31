@@ -44,7 +44,7 @@
       angular.module('do-me', ['mobile-angular-ui']); // define the do-me module
 
       angular.module('do-me').controller('PageCtrl', function($scope) {
-        $scope.page = 'list-tags';
+        $scope.page = 'show-tags';
       });
     </script>
     <script src="tasks_ctrl.js"></script>
@@ -71,23 +71,27 @@
           <!-- <div ng-click="page='edit-tags'" class="btn btn-navbar"> -->
             <!-- <i class="fa fa-list"></i> Edit Tags -->
           <!-- </div> -->
+          <div ng-show="page == 'add-task'" ng-click="page = 'show-tags'" class="btn btn-navbar">
+            <i class="fa fa-caret-left"></i> Back
+          </div>
         </div>
         <div class="navbar-brand navbar-brand-center">
-          <span>Tags (Lists)</span>
+          <span ng-show="page == 'show-tags'">Tags (Lists)</span>
+          <span ng-show="page == 'add-task'">Add Task</span>
         </div>
         <div class="btn-group pull-right">
-          <div ng-click="page='add-task'" class="btn btn-navbar">
+          <div ng-show="page == 'show-tags' || page == 'show-tasks'" ng-click="page = 'add-task'" class="btn btn-navbar">
             <i class="fa fa-plus"></i> Task
           </div>
         </div>
       </div><!-- /header -->
     
-      <div class="app-body" ng-controller="TasksCtrl">
+      <div class="app-body">
         <div class="app-content">
           <div class="scrollable">
             <div class="scrollable-content">
 
-              <div ng-controller="TagsCtrl" ng-show="page == 'list-tags'">
+              <div ng-controller="TagsCtrl" ng-show="page == 'show-tags'">
                 <div class="list-group">
                   <a href="#" class="list-group-item" ng-click="searchFor('')">
                     All Not Waiting <i class="fa fa-chevron-right pull-right"></i>
@@ -101,32 +105,39 @@
                   <a href="#" class="list-group-item" ng-click="searchFor('waiting:only')">
                     Waiting <i class="fa fa-chevron-right pull-right"></i>
                   </a>
-                  <form class="" ng-submit="tagsCtrl.searchHandler($event, tagsCtrl.searchTemp)">
-                    <input type="search" class="form-control app-search" placeholder="Search for text or tag" ng-model="tagsCtrl.searchTemp">
+                  <form class="" ng-submit="tagsCtrl.searchHandler($event, searchTemp)">
+                    <input type="search" class="form-control app-search" placeholder="Search for text or tag" ng-model="searchTemp">
                   </form>
                 </div><!-- /list-group -->
               </div>
 
-              <div ng-show="page == 'add-task'">
-                <!-- <div data-role="content" > -->
-                  <form ng-submit="addTask()">
-                    <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="newTask" class="submit-on-enter"></textarea>
-                    Project:
-                    <select ng-model="selectedProject">
-                      <option value=""></option>
-                      <option ng-repeat="tag in tagsCtrl.projects() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
-                    </select>
-                    Context:
-                    <select ng-model="selectedContext">
-                      <option value=""></option>
-                      <option ng-repeat="tag in tagsCtrl.contexts() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
-                    </select>
-                  <br>
-                  <a href="#" ng-click="addTask()" data-role="button" data-icon="save" style="background: blue; color: white;">
-                    Save
-                  </a>
+              <div ng-controller="TasksCtrl" ng-show="page == 'add-task'">
+                <div class="list-group" ng-controller="TagsCtrl">
+                  <form>
+                    <div class="list-group-item">
+                      <textarea placeholder='Eg, "Hang shelves"' ng-model="newTask" class="form-control submit-on-enter"></textarea>
+                    </div>
+                    <div class="list-group-item">
+                      Project:
+                      <select ng-model="selectedProject" class="form-control">
+                        <option value=""></option>
+                        <option ng-repeat="tag in projects() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
+                      </select> 
+                    </div>
+                    <div class="list-group-item">
+                      Context:
+                      <select ng-model="selectedContext" class="form-control">
+                        <option value=""></option>
+                        <option ng-repeat="tag in contexts() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
+                      </select>
+                    </div>
+                    <div class="list-group-item">
+                      <button ng-click="addTask()" class="btn btn-primary">
+                        Save
+                      </button>
+                    </div>
                   </form>
-                <!-- </div>/content -->
+                </div><!-- /list-group -->
               </div>
 
             </div><!-- /scrollable-content -->

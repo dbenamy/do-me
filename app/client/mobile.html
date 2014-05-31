@@ -48,6 +48,7 @@
     </script>
     <script src="tasks_ctrl.js"></script>
     <script src="tags_ctrl.js"></script>
+    <script src="search_ctrl.js"></script>
     <script src="sync_ctrl.js"></script>
     <script src="message_ctrl.js"></script>
     <script src="storage.js"></script>
@@ -55,7 +56,7 @@
     <script src="net.js"></script>
   </head>
   
-  <body>
+  <body ng-controller="SearchCtrl">
 
     <div ng-controller="MessageCtrl"></div> <!-- Just a place holder to load controller. Nothing shown here. -->
 
@@ -86,8 +87,8 @@
             <a href="#show-tasks" ng-click="tagsCtrl.searchFor('waiting:only')">Waiting</a>
           </li>
           <li data-role="fieldcontain">
-            <form ng-submit="tagsCtrl.searchHandler($event, tagsCtrl.searchTemp)">
-              <input type="text" placeholder="Search for text or tag" ng-model="tagsCtrl.searchTemp">
+            <form ng-submit="tagsCtrl.searchHandler($event, searchTemp)">
+              <input type="text" placeholder="Search for text or tag" ng-model="searchTemp">
             </form>
           </li>
         </ul>

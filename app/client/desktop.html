@@ -41,12 +41,13 @@
     <script src="tags_ctrl.js"></script>
     <script src="sync_ctrl.js"></script>
     <script src="message_ctrl.js"></script>
+    <script src="search_ctrl.js"></script>
     <script src="storage.js"></script>
     <script src="sync.js"></script>
     <script src="net.js"></script>
   </head>
   
-  <body ng-controller="TasksCtrl">
+  <body ng-controller="SearchCtrl">
     
     <header>
       <div id="hdr">
@@ -72,8 +73,8 @@
           <table class="">
             <tr ng-repeat="tag in presentTags() | orderBy:'text'">
               <td>
-                <strong ng-show="searchStr.text == ('#' + tag.text)">{{tag.text}}</strong>
-                <a href="" ng-hide="searchStr.text == ('#' + tag.text)" ng-click="searchFor(tag.text)">{{tag.text}}</a>
+                <strong ng-show="searchStr.text == tag.text">{{tag.text}}</strong>
+                <a href="" ng-hide="searchStr.text == tag.text" ng-click="searchFor(tag.text)">{{tag.text}}</a>
               </td>
               <td width="100%"><!-- so delete icons are mashed to the right -->
               </td>
@@ -93,7 +94,7 @@
         </div>
       </div>
 
-      <div id="main">
+      <div ng-controller="TasksCtrl" id="main">
         <div class="task-list todo">
           <span ng-show="results.length == 0">Nothing to do!</span>
           <ul>

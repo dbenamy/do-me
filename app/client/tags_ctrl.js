@@ -1,14 +1,9 @@
 angular.module('do-me').controller('TagsCtrl', function($scope, storage) {
-	$scope.tasks = storage.tasks; // watching storage.tasks directly doesn't work
-	$scope.tags = storage.tags;
-	$scope.searchStr = storage.searchStr;
+	var _tags = storage.tags;
 
-	$scope.searchFor = function(tagStr) {
-		$scope.searchStr.text = tagStr;
-	};
-
+	// TODO make this a scope var instead of a function so if the tags change from sync, UI redraws.
 	$scope.presentTags = function() {
-		return $scope.tags.filter(function(tag) {
+		return _tags.filter(function(tag) {
 			return !tag.deleted;
 		});
 	};
@@ -26,9 +21,9 @@ angular.module('do-me').controller('TagsCtrl', function($scope, storage) {
 	};
 
 	$scope.addTag = function() {
-		console.log($scope.tags);
+		console.log(_tags);
 		// TODO if it exists and is deleted, undelete it
-		$scope.tags.push({
+		_tags.push({
 			text: $scope.newTag,
 			deleted: false,
 			lastUpdated: storage.utcTs()

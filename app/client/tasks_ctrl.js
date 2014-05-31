@@ -1,23 +1,7 @@
-// angular.module('do-me').directive('repeatDone', function() {
-// 		return function(scope, element, attrs) {
-// 			if (scope.$last) {
-// 				console.log('trace1');
-// 				$(element).parent().trigger('create');
-// 			}
-// 		};
-// 	});
-
-
-// angular.module('do-me').config(function($locationProvider) { $locationProvider.html5Mode(false); });
-
 angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
-	var TAG_REGEX = /(^|\s)[#@][^ ]+/g;
-	
-	// Data / models that have to do with this controller
+	var TAG_REGEX = /(^|\s)[#@][^ ]+/g; // TODO DRY- move to common service or something
+
 	$scope.tasks = storage.tasks;
-	$scope.searchStr = storage.searchStr;
-	$scope.searchTemp = ''; // working space which backs search text box.
-	$scope.results = $scope.tasks; // results of search. ie, what to show.
 	$scope.taskNextId = 0;
 	$scope.cursor = 0; // index of cursor position with 0 being the top task in the results
 	$scope.editing = false; // true if the task pointed to by the cursor is being edited
@@ -109,117 +93,6 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		task.updated_at = storage.utcTs();
 	};
 
-	var search = function() {
-		var criteria = parseSearch($scope.searchStr.text);
-		// console.log("Searching for tasks with these criteria:");
-		console.log(criteria);
-		var wordRegexes = criteria.lowerWords.map(makeWordRegex);
-		// console.log(wordRegexes);
-
-		updateSelectedTagsForMobile(criteria.lowerTags);
-
-		var arrayOfResults = [];
-		angular.forEach($scope.tasks, function(task) {
-			var taskHasEveryTag = criteria.lowerTags.every(function(t) {
-				return task.tags.map(toLowerCase).indexOf(t) >= 0;
-			})
-			if (criteria.lowerTags.length > 0 && !taskHasEveryTag) {
-				return;
-			}
-			var taskHasEveryWord = wordRegexes.every(function(regexp) {
-				return task.text.match(regexp) !== null;
-			});
-			if (criteria.lowerWords.length > 0 && !taskHasEveryWord) {
-				return;
-			}
-			if (criteria.done != 'include' && task.done) {
-				return;
-			}
-			var taskIsWaiting = task.text.toLowerCase().indexOf('(waiting') === 0;
-			if (criteria.waiting === 'hide' && taskIsWaiting) {
-				return;
-			}
-			if (criteria.waiting === 'only' && !taskIsWaiting) {
-				return;
-			}
-			arrayOfResults.push(task);
-		});
-		$scope.results = arrayOfResults;
-	};
-
-	var toLowerCase = function(str) {
-		return str.toLowerCase();
-	};
-
-	var makeWordRegex = function(word) {
-		return (new RegExp('(^|\\W)' + escapeRegExp(word) + '($|\\W)', 'i'));
-	};
-
-	var escapeRegExp = function(str) {
-		// From http://stackoverflow.com/a/6969486/229371
-		return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-	};
-
-	var parseSearch = function(text) {
-		var toParse = text;
-
-		var arrayOfTags = trimAndLowerEach(toParse.match(TAG_REGEX) || []);
-		// console.log(arrayOfTags);
-		toParse = toParse.replace(TAG_REGEX, '');
-
-		var doneRes = extractSearchOption(toParse, 'done', 'hide');
-		toParse = doneRes.newToParse;
-		var done = doneRes.lowerValue.trim();
-
-		var waitingRes = extractSearchOption(toParse, 'waiting', 'hide');
-		toParse = waitingRes.newToParse;
-		var waiting = waitingRes.lowerValue.trim();
-
-		var arrayOfWords = trimAndLowerEach(toParse.split(' '));
-		// console.log(arrayOfWords);
-
-		return {
-			lowerTags: arrayOfTags,
-			lowerWords: arrayOfWords,
-			done: done,
-			waiting: waiting
-		};
-	};
-
-	var trimAndLowerEach = function(arr) {
-		var trimmed = arr.map(function(item) { return item.trim(); });
-		var filtered = trimmed.filter(function(item) { return item.length > 0; });
-		var lowered = filtered.map(toLowerCase);
-		return lowered;
-	};
-
-	/**
-	 * Resulting value will be lowercase.
-	 **/
-	var extractSearchOption = function(toParse, option, defaultVal) {
-		var regexp = new RegExp('(^|\\W)' + escapeRegExp(option + ':') + '[^ ]+', 'i');
-		// console.log(regexp);
-		var match = toParse.match(regexp);
-		// console.log(match);
-		if (match === null) {
-			match = [option + ':' + defaultVal];
-		}
-		return {
-			newToParse: toParse.replace(regexp, ''),
-			lowerValue: match[0].toLowerCase().replace(option.toLowerCase() + ':', '')
-		};
-	};
-
-	$scope.$watch('tasks', search, true); // if we change tasks (eg adding one), re-search to update what's shown.
-	$scope.$watch('searchStr', search, true);
-	$scope.$watch('searchStr', function() { $scope.searchTemp = $scope.searchStr.text; }, true);
-
-	$scope.searchHandler = function(event, searchStr) {
-		$scope.searchStr.text = searchStr;
-		event.preventDefault(); // so "#" doesn't wind up in the url
-		$('input').blur();
-	};
-
 	$scope.linkify = function(text) {
 		var STOP_CLICK_PROPAGATION = 'onclick="var event = arguments[0] || window.event; event.stopPropagation();"';
 
@@ -236,10 +109,6 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 		return urlLinked.replace(PHONE_REGEX, function(number) {
 			return '<a href="tel:' + number + '" ' + STOP_CLICK_PROPAGATION + '>' + number + '</a>';
 		});
-	};
-
-	var updateSelectedTagsForMobile = function(lowerTags) {
-		// TODO set selections
 	};
 
 	// Keyboard Shortcuts
@@ -362,17 +231,3 @@ angular.module('do-me').controller('TasksCtrl', function($scope, storage) {
 	// };
 	// $scope.$watch('newTask', $scope.autocompleteTaskTags);
 });
-
-// TODO move to controller
-function showShortcuts() {
-	var overlay = document.getElementById('overlay');
-	var shortcuts = document.getElementById('shortcuts');
-	overlay.style.opacity = 0.8;
-	if(overlay.style.display == "block"){
-		overlay.style.display = "none";
-		shortcuts.style.display = "none";
-	} else {
-		overlay.style.display = "block";
-		shortcuts.style.display = "block";
-	}
-}

@@ -32,17 +32,22 @@ angular.module('do-me').service('tasks', function(storage) {
 	};
 
 	var update = function(args) {
-		console.log("Updating task using: " + args.text);
 		var task = args.task;
-		var newTags = _parseTags(args.text);
-		var newText = args.text.replace(TAG_REGEX, '').trim();
+		var text = ('text' in args ? args.text : task.text);
+		var done = ('done' in args ? args.done : task.done);
 
+		console.log("Updating task using: " + text);
+		var newTags = _parseTags(text);
+		
+		var newText = text.replace(TAG_REGEX, '').trim();
 		if (newText === "") {
 			return "Whoops, can't set text to blank.";
 		}
 		console.log(newText);
+
 		task.tags = newTags;
 		task.text = newText;
+		task.done = done;
 		task.updated_at = storage.utcTs();
 		return null;
 	};

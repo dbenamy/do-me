@@ -31,15 +31,14 @@ angular.module('do-me').controller('TasksCtrl', function($scope, search, storage
 		$scope.cursor = index; // have to overwrite cursor because a click can trigger this
 		var task = _getCurrentTask();
 		$scope.editing.text = task.tags.concat([task.text]).join(' ');
+		// TODO wrap in "if desktop":
 		$('input.edit' + $scope.cursor).focus();
 	};
 
 	$scope.updateTask = function() {
 		var error = tasks.update({
 			task: _getCurrentTask(),
-			text: $scope.editing.text,
-			project: $scope.selectedProject,
-			context: $scope.selectedContext
+			text: $scope.editing.text
 		});
 		if (error === null) {
 			$scope.editing.text = null;

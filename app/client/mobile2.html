@@ -44,16 +44,20 @@
       angular.module('do-me', ['mobile-angular-ui']); // define the do-me module
 
       angular.module('do-me').controller('PageCtrl', function($scope) {
-        $scope.page = 'show-tags';
+        $scope.page = {};
+        $scope.page.ref = 'show-tags';
       });
     </script>
-    <script src="tasks_ctrl.js"></script>
-    <script src="tags_ctrl.js"></script>
-    <script src="sync_ctrl.js"></script>
-    <script src="message_ctrl.js"></script>
     <script src="storage.js"></script>
-    <script src="sync.js"></script>
     <script src="net.js"></script>
+    <script src="search.js"></script>
+    <script src="sync.js"></script>
+    <script src="tasks.js"></script>
+    <script src="message_ctrl.js"></script>
+    <script src="search_ctrl.js"></script>
+    <script src="sync_ctrl.js"></script>
+    <script src="tags_ctrl.js"></script>
+    <script src="tasks_ctrl.js"></script>
   </head>
   
   <body>
@@ -65,22 +69,25 @@
     <div class="app" ng-controller="PageCtrl">
       <div class="navbar navbar-app navbar-absolute-top">
         <div class="btn-group pull-left">
-          <!-- <div ng-click="page='help'" class="btn btn-navbar"> -->
+          <!-- <div ng-click="page.ref='help'" class="btn btn-navbar"> -->
             <!-- <i class="fa fa-bars"></i> Help -->
           <!-- </div> -->
-          <!-- <div ng-click="page='edit-tags'" class="btn btn-navbar"> -->
+          <!-- <div ng-click="page.ref='edit-tags'" class="btn btn-navbar"> -->
             <!-- <i class="fa fa-list"></i> Edit Tags -->
           <!-- </div> -->
-          <div ng-show="page == 'add-task'" ng-click="page = 'show-tags'" class="btn btn-navbar">
+          <div ng-show="page.ref == 'add-task'" ng-click="page.ref = 'show-tags'" class="btn btn-navbar">
             <i class="fa fa-caret-left"></i> Back
           </div>
         </div>
-        <div class="navbar-brand navbar-brand-center">
-          <span ng-show="page == 'show-tags'">Tags (Lists)</span>
-          <span ng-show="page == 'add-task'">Add Task</span>
+        <div class="navbar-brand navbar-brand-center" ng-controller="SearchCtrl">
+          <span ng-show="page.ref == 'show-tags'">Tags (Lists)</span>
+          <span ng-show="page.ref == 'show-tasks' && searchInput == ''">All Not Waiting</span>
+          <span ng-show="page.ref == 'show-tasks' && searchInput != ''">{{searchStr.text}}</span>
+          <span ng-show="page.ref == 'add-task'">Add Task</span>
+          <span ng-show="page.ref == 'edit-task'">Edit Task</span>
         </div>
         <div class="btn-group pull-right">
-          <div ng-show="page == 'show-tags' || page == 'show-tasks'" ng-click="page = 'add-task'" class="btn btn-navbar">
+          <div ng-show="page.ref == 'show-tags' || page.ref == 'show-tasks'" ng-click="page.ref = 'add-task'" class="btn btn-navbar">
             <i class="fa fa-plus"></i> Task
           </div>
         </div>
@@ -91,15 +98,15 @@
           <div class="scrollable">
             <div class="scrollable-content">
 
-              <div ng-controller="TagsCtrl" ng-show="page == 'show-tags'">
+              <div ng-show="page.ref == 'show-tags'" ng-controller="TagsCtrl">
                 <div class="list-group">
-                  <a href="#" class="list-group-item" ng-click="searchFor('')">
+                  <a href="#" class="list-group-item" ng-click="searchFor(''); page.ref = 'show-tasks'">
                     All Not Waiting <i class="fa fa-chevron-right pull-right"></i>
                   </a>
                   <div class="list-group-item" ng-show="presentTags().length == 0">
                     You don't have any lists. Click edit lists above to add some.
                   </div>
-                  <a ng-repeat="tag in presentTags() | orderBy:'text'" href="#" class="list-group-item" ng-click="searchFor(tag.text); page = 'list-tasks'">
+                  <a ng-repeat="tag in presentTags() | orderBy:'text'" href="#" class="list-group-item" ng-click="searchFor(tag.text); page.ref = 'list-tasks'">
                     {{tag.text}} <i class="fa fa-chevron-right pull-right"></i>
                   </a>
                   <a href="#" class="list-group-item" ng-click="searchFor('waiting:only')">
@@ -111,34 +118,74 @@
                 </div><!-- /list-group -->
               </div>
 
-              <div ng-controller="TasksCtrl" ng-show="page == 'add-task'">
-                <div class="list-group" ng-controller="TagsCtrl">
-                  <form>
-                    <div class="list-group-item">
-                      <textarea placeholder='Eg, "Hang shelves"' ng-model="newTask" class="form-control submit-on-enter"></textarea>
+              <div ng-controller="TasksCtrl"> <!-- need this to be shared between pages -->
+
+                <div ng-show="page.ref == 'show-tasks'">
+                  <div class="list-group">
+                    <div class="list-group-item" ng-show="getResults().length == 0">
+                      Nothing to do!
                     </div>
-                    <div class="list-group-item">
-                      Project:
-                      <select ng-model="selectedProject" class="form-control">
-                        <option value=""></option>
-                        <option ng-repeat="tag in projects() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
-                      </select> 
-                    </div>
-                    <div class="list-group-item">
-                      Context:
-                      <select ng-model="selectedContext" class="form-control">
-                        <option value=""></option>
-                        <option ng-repeat="tag in contexts() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
-                      </select>
-                    </div>
-                    <div class="list-group-item">
-                      <button ng-click="addTask()" class="btn btn-primary">
-                        Save
-                      </button>
-                    </div>
-                  </form>
-                </div><!-- /list-group -->
-              </div>
+                    <a ng-repeat="task in getResults()" href="#" class="list-group-item" ng-click="editTask($index); page.ref = 'edit-task'">
+                      <span ng-bind-html-unsafe="linkify(task.text)" style="white-space:normal;"></span>
+                      <i class="fa fa-chevron-right pull-right"></i>
+                      <br>
+                      <small ng-repeat="tag in task.tags">{{tag}} </small>
+                    </a>
+                  </div>
+                </div><!-- /tasks page -->
+
+                <div ng-show="page.ref == 'add-task'">
+                  <div class="list-group">
+                    <form>
+                      <div class="list-group-item">
+                        <textarea placeholder='Eg, "Hang shelves"' ng-model="newTask" class="form-control"></textarea>
+                      </div>
+                      <div ng-controller="TagsCtrl">
+                        <div class="list-group-item">
+                          Project:
+                          <select ng-model="selectedProject" class="form-control">
+                            <option value=""></option>
+                            <option ng-repeat="tag in projects() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
+                          </select> 
+                        </div>
+                        <div class="list-group-item">
+                          Context:
+                          <select ng-model="selectedContext" class="form-control">
+                            <option value=""></option>
+                            <option ng-repeat="tag in contexts() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="list-group-item">
+                        <button ng-click="addTask(); page.ref = 'show-tags'" class="btn btn-primary"> <!-- TODO this will go back even if new task wasn't saved. Hopefully I'll fix this when I try page routing. -->
+                          Save
+                        </button>
+                      </div>
+                    </form>
+                  </div><!-- /list-group -->
+                </div>
+
+                <div ng-show="page.ref == 'edit-task'">
+                  <div class="list-group">
+                    <form>
+                      <div class="list-group-item">
+                        <textarea placeholder='Eg, "Hang shelves"' ng-model="editing.text" class="form-control"></textarea>
+                      </div>
+                      <div class="list-group-item">
+                        <button ng-click="updateTask(); page.ref = 'show-tags'" class="btn btn-primary"> <!-- TODO this will go back even if new task wasn't saved. Hopefully I'll fix this when I try page routing. -->
+                          Save
+                        </button>
+                      </div>
+                      <div class="list-group-item">
+                        <button ng-click="finishTask(); page.ref = 'show-tags'" class="btn btn-primary" style="background: green; color: white;">
+                          Task Done
+                        </button>
+                      </div>
+                    </form>
+                  </div><!-- /list-group -->
+                </div>
+
+              </div> <!-- /TaskCtrl -->
 
             </div><!-- /scrollable-content -->
           </div><!-- /scrollable -->
@@ -146,7 +193,7 @@
       </div>    
     </div>
     
-    <div data-role="page" id="edit-tags" ngm-shared-controller="tagsCtrl:TagsCtrl">
+    <div data-role="page.ref" id="edit-tags" ngm-shared-controller="tagsCtrl:TagsCtrl">
     
       <div data-role="header">
         <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
@@ -184,70 +231,7 @@
     
     </div><!-- /edit-tags page -->
         
-    <div data-role="page" id="show-tasks" ngm-shared-controller="tasksCtrl:TasksCtrl">
-    
-      <div data-role="header">
-        <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
-        <h1 ng-show="tasksCtrl.searchStr.text == ''">All Not Waiting</h1>
-        <h1 ng-show="tasksCtrl.searchStr.text != ''">{{searchStr.text}}</h1>
-        <a href="#add-task" data-role="button" data-icon="plus">
-          Add Task
-        </a>
-      </div><!-- /header -->
-    
-      <div data-role="content">
-        <ul data-role="listview">
-          <li ng-show="tasksCtrl.results.length == 0">Nothing to do!</li>
-
-          <li ng-repeat="task in tasksCtrl.results">
-            <!-- <div class="ui-grid-a">
-              <!-- <div class="ui-block-a" style="width: 80%"> -->
-              <a href="#edit-task" ng-click="tasksCtrl.editTask($index)">
-                <h3 ng-bind-html-unsafe="tasksCtrl.linkify(task.text)" style="white-space:normal;"></h3>
-                <p><strong ng-repeat="tag in task.tags">{{tag}} </strong></p>
-              </a>
-              <!-- </div> -->
-              <!-- <div class="ui-block-b" style="width: 20%"> -->
-<!--                 <form action="#edit-task" method="get">
-                  <button type="submit" data-icon="arrow-r">&nbsp;</button>
-                </form>
- -->
-         <!-- <a href="#edit-task" data-role="button" data-icon="delete" data-theme="b">&nbsp;</a> -->
-              <!-- </div> -->
-            <!-- </div> -->
-          </li>
-        </ul>
-      </div><!-- /content -->
-    
-    </div><!-- /tasks page -->
         
-    
-    <div data-role="page" id="edit-task" ngm-shared-controller="tasksCtrl:TasksCtrl">
-    
-      <div data-role="header">
-        <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
-        <!-- <a href="#main" data-icon="delete">Cancel</a> -->
-        <h1>Edit Task</h1>
-        <!-- <a href="#main" id="save" data-icon="check" data-theme="b">Save</a> -->
-      </div><!-- /header -->
-    
-      <div data-role="content" >
-        <form ng-submit="tasksCtrl.updateTask()" data-ajax="false">
-          <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="tasksCtrl.editTaskText[tasksCtrl.cursor]" class="submit-on-enter"></textarea>
-        </form>
-        <div>&nbsp;</div>
-        <a href="#" ng-click="tasksCtrl.finishTask()" data-role="button" data-icon="check" style="background: green; color: white;">
-          Task Done
-        </a>
-        <br>
-        <a href="#" ng-click="tasksCtrl.addTask()" data-role="button" data-icon="save" style="background: blue; color: white;">
-          Save
-        </a>
-      </div><!-- /content -->
-    
-    </div><!-- /edit page -->
-    
-    
     <div data-role="page" id="help">
 
       <div data-role="header">

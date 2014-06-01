@@ -51,11 +51,11 @@
     <script src="search.js"></script>
     <script src="sync.js"></script>
     <script src="tasks.js"></script>
-    <script src="TODO.js"></script>
     <script src="message_ctrl.js"></script>
     <script src="search_ctrl.js"></script>
     <script src="sync_ctrl.js"></script>
     <script src="tags_ctrl.js"></script>
+    <script src="tasks_ctrl.js"></script>
   </head>
   
   <body ng-controller="SearchCtrl">
@@ -136,9 +136,9 @@
     
     </div><!-- /edit-tags page -->
         
-    <div data-role="page" id="show-tasks" ng-controller="SearchCtrl">
+    <div data-role="page" id="show-tasks">
     
-      <div data-role="header">
+      <div data-role="header" ng-controller="SearchCtrl">
         <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
         <h1 ng-show="searchInput == ''">All Not Waiting</h1>
         <h1 ng-show="searchInput != ''">{{searchInput}}</h1>
@@ -147,15 +147,15 @@
         </a>
       </div><!-- /header -->
     
-      <div data-role="content">
+      <div data-role="content" ngm-shared-controller="taskCtrl:TasksCtrl">
         <ul data-role="listview">
-          <li ng-show="getResults().length == 0">Nothing to do!</li>
+          <li ng-show="taskCtrl.getResults().length == 0">Nothing to do!</li>
 
-          <li ng-repeat="task in getResults()">
+          <li ng-repeat="task in taskCtrl.getResults()">
             <!-- <div class="ui-grid-a">
               <!-- <div class="ui-block-a" style="width: 80%"> -->
-              <a href="#edit-task" ng-click="editTask($index)">
-                <h3 ng-bind-html-unsafe="linkify(task.text)" style="white-space:normal;"></h3>
+              <a href="#edit-task" ng-click="taskCtrl.editTask($index)">
+                <h3 ng-bind-html-unsafe="taskCtrl.linkify(task.text)" style="white-space:normal;"></h3>
                 <p><strong ng-repeat="tag in task.tags">{{tag}} </strong></p>
               </a>
               <!-- </div> -->
@@ -174,7 +174,7 @@
     </div><!-- /tasks page -->
     
     
-    <div data-role="page" id="add-task" ngm-shared-controller="tasksCtrl:TasksCtrl tagsCtrl:TagsCtrl">
+    <div data-role="page" id="add-task" ngm-shared-controller="taskCtrl:TasksCtrl tagsCtrl:TagsCtrl">
     
       <div data-role="header">
         <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
@@ -182,20 +182,20 @@
       </div><!-- /header -->
     
       <div data-role="content" >
-        <form ng-submit="tasksCtrl.addTask()" data-ajax="false">
-          <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="tasksCtrl.newTask" class="submit-on-enter"></textarea>
+        <form ng-submit="taskCtrl.addTask()" data-ajax="false">
+          <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="taskCtrl.newTask" class="submit-on-enter"></textarea>
           Project:
-          <select ng-model="tasksCtrl.selectedProject">
+          <select ng-model="taskCtrl.selectedProject">
             <option value=""></option>
             <option ng-repeat="tag in tagsCtrl.projects() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
           </select>
           Context:
-          <select ng-model="tasksCtrl.selectedContext">
+          <select ng-model="taskCtrl.selectedContext">
             <option value=""></option>
             <option ng-repeat="tag in tagsCtrl.contexts() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
           </select>
         <br>
-        <a href="#" ng-click="tasksCtrl.addTask()" data-role="button" data-icon="save" style="background: blue; color: white;">
+        <a href="#" ng-click="taskCtrl.addTask()" data-role="button" data-icon="save" style="background: blue; color: white;">
           Save
         </a>
         </form>
@@ -204,7 +204,7 @@
     </div><!-- /edit page -->
     
     
-    <div data-role="page" id="edit-task" ngm-shared-controller="tasksCtrl:TasksCtrl">
+    <div data-role="page" id="edit-task" ngm-shared-controller="taskCtrl:TasksCtrl">
     
       <div data-role="header">
         <a href="#" data-role="button" data-icon="back" data-rel="back">Back</a>
@@ -214,15 +214,15 @@
       </div><!-- /header -->
     
       <div data-role="content" >
-        <form ng-submit="tasksCtrl.updateTask()" data-ajax="false">
-          <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="tasksCtrl.editTaskText[tasksCtrl.cursor]" class="submit-on-enter"></textarea>
+        <form ng-submit="taskCtrl.updateTask()" data-ajax="false">
+          <textarea placeholder='Eg, "#FixApt @Home Hang shelves"' ng-model="taskCtrl.editing.text" class="submit-on-enter"></textarea>
         </form>
         <div>&nbsp;</div>
-        <a href="#" ng-click="tasksCtrl.finishTask()" data-role="button" data-icon="check" style="background: green; color: white;">
+        <a href="#" ng-click="taskCtrl.finishTask()" data-role="button" data-icon="check" style="background: green; color: white;">
           Task Done
         </a>
         <br>
-        <a href="#" ng-click="tasksCtrl.addTask()" data-role="button" data-icon="save" style="background: blue; color: white;">
+        <a href="#" ng-click="taskCtrl.addTask()" data-role="button" data-icon="save" style="background: blue; color: white;">
           Save
         </a>
       </div><!-- /content -->

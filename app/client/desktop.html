@@ -42,11 +42,11 @@
     <script src="search.js"></script>
     <script src="sync.js"></script>
     <script src="tasks.js"></script>
-    <script src="desktop_task_list_ctrl.js"></script>
     <script src="message_ctrl.js"></script>
     <script src="search_ctrl.js"></script>
     <script src="sync_ctrl.js"></script>
     <script src="tags_ctrl.js"></script>
+    <script src="tasks_ctrl.js"></script>
   </head>
   
   <body>
@@ -95,7 +95,7 @@
         </div>
       </div>
 
-      <div ng-controller="DesktopTaskListCtrl" id="main">
+      <div ng-controller="TasksCtrl" id="main">
         
         <div class="task-list todo">
           <span ng-show="getResults().length == 0">Nothing to do!</span>

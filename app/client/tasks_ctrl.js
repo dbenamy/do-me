@@ -2,9 +2,10 @@ angular.module('do-me').controller('TasksCtrl', function($scope, search, storage
 	$scope.getResults = search.getResults; // Import into scope so tempate get use it.
 	$scope.linkify = tasks.linkify;
 
-	$scope.cursor = 0; // Index of cursor position with 0 being the top task in the results.
+	$scope.cursor = 0; // Index of cursor position with 0 being the top task in the results. Used on mobile to store which task being edited.
+	// TODO try replacing this with a simple $scope.editTask = ''
 	$scope.editing = {
-		text: null // Tags & desc of task being edited (for desktop), or null if not editing.
+		text: null // Tags & desc of task being edited, or null if not editing.
 	};
 	$scope.newTask = '';
 	$scope.selectedProject = ''; // only used on mobile

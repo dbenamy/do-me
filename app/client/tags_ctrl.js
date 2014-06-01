@@ -1,5 +1,7 @@
-angular.module('do-me').controller('TagsCtrl', function($scope, storage) {
+angular.module('do-me').controller('TagsCtrl', function($scope, search, storage) {
 	var _tags = storage.tags;
+
+	$scope.searchFor = search.searchFor;
 
 	// TODO make this a scope var instead of a function so if the tags change from sync, UI redraws.
 	$scope.presentTags = function() {
@@ -37,4 +39,8 @@ angular.module('do-me').controller('TagsCtrl', function($scope, storage) {
 		tag.deleted = true;
 		tag.lastUpdated = storage.utcTs();
 	};
+
+	// $scope.searchFor = function(searchStr) {
+	// 	search.searchStr.text = searchStr;
+	// };
 });

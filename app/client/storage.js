@@ -2,7 +2,9 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 	// Variables:
 	// $rootScope.tasks = []; // this gets created by load()
 	// $rootScope.tags = []; // this gets created by load()
-	$rootScope.searchStr = {text: ''}; // it's an obj because sharing refs to a string doesn't work
+	// var _searchStr = {text: ''}; // it's an obj because sharing refs to a string doesn't work
+	// var _selectedTask = null;
+	// var _searchResults = [];
 
 	var handleStorageErrors = function(func) {
 		try {
@@ -136,8 +138,10 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 	// Stuff exposed by the service:
 	return {
 		tasks: $rootScope.tasks,
+		// selectedTask: _selectedTask,
 		tags: $rootScope.tags,
-		searchStr: $rootScope.searchStr,
+		// searchStr: _searchStr,
+		// searchResults: _searchResults,
 		utcTs: utcTs,
 		generateId: generateId,
 		normalizeTags: normalizeTags

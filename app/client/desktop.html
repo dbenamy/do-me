@@ -37,27 +37,28 @@
 
       angular.module('do-me', []); // define the do-me module
     </script>
-    <script src="tasks_ctrl.js"></script>
-    <script src="tags_ctrl.js"></script>
-    <script src="sync_ctrl.js"></script>
+    <script src="storage.js"></script>
+    <script src="net.js"></script>
+    <script src="search.js"></script>
+    <script src="sync.js"></script>
+    <script src="tasks.js"></script>
+    <script src="desktop_task_list_ctrl.js"></script>
     <script src="message_ctrl.js"></script>
     <script src="search_ctrl.js"></script>
-    <script src="storage.js"></script>
-    <script src="sync.js"></script>
-    <script src="net.js"></script>
+    <script src="sync_ctrl.js"></script>
+    <script src="tags_ctrl.js"></script>
   </head>
   
-  <body ng-controller="SearchCtrl">
-    
+  <body>
+    <div ng-controller="MessageCtrl"></div> <!-- Just a place holder to load controller. Nothing shown here. -->
+
     <header>
       <div id="hdr">
         <h1 id="logo">Do Me</h1>
 
-        <div ng-controller="MessageCtrl"></div> <!-- Just a place holder to load controller. Nothing shown here. -->
-
-        <form id="search" ng-submit="searchFor(searchTemp)">
-          <input type="text" class="search" placeholder="Search for text or tag" ng-model="searchTemp">
-          <button type="submit" class="fa fa-search" value="Search" ng-click="searchHandler($event, searchTemp)"></button>
+        <form ng-controller="SearchCtrl" id="search" ng-submit="searchFor(searchInput)">
+          <input type="text" class="search" placeholder="Search for text or tag" ng-model="searchInput">
+          <button type="submit" class="fa fa-search" value="Search" ng-click="searchHandler($event, searchInput)"></button>
         </form>
       </div>
     </header>
@@ -94,27 +95,28 @@
         </div>
       </div>
 
-      <div ng-controller="TasksCtrl" id="main">
+      <div ng-controller="DesktopTaskListCtrl" id="main">
+        
         <div class="task-list todo">
-          <span ng-show="results.length == 0">Nothing to do!</span>
+          <span ng-show="getResults().length == 0">Nothing to do!</span>
           <ul>
-            <li ng-repeat="task in results">
-              <div ng-hide="editing && $index == cursor">
+            <li ng-repeat="task in getResults()">
+              <div ng-hide="editing.text && $index == cursor">
                 <i ng-show="$index == cursor" class="fa fa-chevron-right"></i>
                 <input type="checkbox" id="toggle" class="checkbox" ng-model="task.done" ng-change="updatedTask(task)" >
                 <a href="" class="tag" ng-repeat="tag in task.tags" ng-click="searchHandler($event, tag)">{{tag}} </a>
                 <span ng-click="editTask($index)" class="task" ng-bind-html-unsafe="linkify(task.text)"></span>
               </div>
   
-              <form ng-submit="updateTask()" ng-show="editing && $index == cursor">
-                <input class="edit{{$index}} text" ng-model="editTaskText[cursor]">
+              <form ng-submit="updateTask()" ng-show="editing.text && $index == cursor">
+                <input class="edit{{$index}} text" ng-model="editing.text">
                 <button type="submit" value="Save">Save</button>
               </form>
             </li>
           </ul>
         </div>
   
-        <form ng-submit="addTask()" class="addClass">
+        <form ng-submit="addTask(newTask)" class="addClass">
           <input type="text" class="new-task" placeholder="Add new task" ng-model="newTask" style="padding: 11px 2%;">
           <button type="submit" class="fa fa-plus" value="Add"></button>
         </form>

@@ -62,6 +62,11 @@ angular.module('do-me').controller('SyncCtrl', function($scope, $timeout, storag
 
 	$scope.$watch('syncLastSuccess', updatePrettyLastSynced);
 
+	$scope.logTasks = function() {
+		console.log('tasks:');
+		console.log($scope._tasks);
+	};
+
 	var _timeFormats = {
 		past: [
 			{ ceiling: 10, text: "just now" },

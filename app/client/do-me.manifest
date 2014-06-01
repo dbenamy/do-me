@@ -1,16 +1,16 @@
 CACHE MANIFEST
 
 # Change the version to make browsers check for new versions of all the files listed here:
-# version 54
+# version 56
 
 CACHE:
 index.html
 desktop.html
 mobile.html
-mobile2.html
 css/main.css
 libs/angular.min.js
 libs/backup-0.1.js
+# TODO Reuse font aweseom from mobile angular ui on desktop so I don't need 2 copies.
 libs/font-awesome-4.0.3/css/font-awesome.min.css
 libs/font-awesome-4.0.3/fonts/FontAwesome.otf
 libs/font-awesome-4.0.3/fonts/fontawesome-webfont.eot
@@ -18,14 +18,6 @@ libs/font-awesome-4.0.3/fonts/fontawesome-webfont.svg
 libs/font-awesome-4.0.3/fonts/fontawesome-webfont.ttf
 libs/font-awesome-4.0.3/fonts/fontawesome-webfont.woff
 libs/jquery-1.8.3.min.js
-libs/jquery.mobile/images/ajax-loader.gif
-libs/jquery.mobile/images/icons-18-black.png
-libs/jquery.mobile/images/icons-18-white.png
-libs/jquery.mobile/images/icons-36-black.png
-libs/jquery.mobile/images/icons-36-white.png
-libs/jquery.mobile/jquery.mobile-1.3.1.min.css
-libs/jquery.mobile/jquery.mobile-1.3.1.min.js
-libs/jquery-mobile-angular-adapter.min.js
 libs/keymaster.min.js
 libs/mobile-angular-ui-1.1.0-beta.22/FontAwesome.otf
 libs/mobile-angular-ui-1.1.0-beta.22/fontawesome-webfont.eot
@@ -38,13 +30,16 @@ libs/sprintf-0.5.js
 libs/humanized_time_span.js
 libs/message/themes/message_default.css
 libs/message/message.js
-tasks_ctrl.js
-tags_ctrl.js
-sync_ctrl.js
-message_ctrl.js
 storage.js
-sync.js
 net.js
+search.js
+sync.js
+tasks.js
+message_ctrl.js
+search_ctrl.js
+sync_ctrl.js
+tags_ctrl.js
+tasks_ctrl.js
 
 NETWORK:
 /api/log

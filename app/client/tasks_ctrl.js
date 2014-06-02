@@ -59,6 +59,13 @@ angular.module('do-me').controller('TasksCtrl', function($scope, search, storage
 		}
 	};
 
+	$scope.updatedTask = function(task) {
+		// Needed to update the timestamp
+		tasks.update({
+			task: task
+		});
+	};
+
 	var _getCurrentTask = function() {
 		return $scope.getResults()[$scope.cursor];
 	};

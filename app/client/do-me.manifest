@@ -1,7 +1,7 @@
 CACHE MANIFEST
 
 # Change the version to make browsers check for new versions of all the files listed here:
-# version 56
+# version 58
 
 CACHE:
 index.html
@@ -14,16 +14,16 @@ libs/backup-0.1.js
 libs/font-awesome-4.0.3/css/font-awesome.min.css
 libs/font-awesome-4.0.3/fonts/FontAwesome.otf
 libs/font-awesome-4.0.3/fonts/fontawesome-webfont.eot
-libs/font-awesome-4.0.3/fonts/fontawesome-webfont.svg
-libs/font-awesome-4.0.3/fonts/fontawesome-webfont.ttf
-libs/font-awesome-4.0.3/fonts/fontawesome-webfont.woff
+libs/font-awesome-4.0.3/fonts/fontawesome-webfont.svg?v=4.0.3
+libs/font-awesome-4.0.3/fonts/fontawesome-webfont.ttf?v=4.0.3
+libs/font-awesome-4.0.3/fonts/fontawesome-webfont.woff?v=4.0.3
 libs/jquery-1.8.3.min.js
 libs/keymaster.min.js
 libs/mobile-angular-ui-1.1.0-beta.22/FontAwesome.otf
 libs/mobile-angular-ui-1.1.0-beta.22/fontawesome-webfont.eot
-libs/mobile-angular-ui-1.1.0-beta.22/fontawesome-webfont.svg
-libs/mobile-angular-ui-1.1.0-beta.22/fontawesome-webfont.ttf
-libs/mobile-angular-ui-1.1.0-beta.22/fontawesome-webfont.woff
+libs/mobile-angular-ui-1.1.0-beta.22/fontawesome-webfont.svg?v=4.0.3
+libs/mobile-angular-ui-1.1.0-beta.22/fontawesome-webfont.ttf?v=4.0.3
+libs/mobile-angular-ui-1.1.0-beta.22/fontawesome-webfont.woff?v=4.0.3
 libs/mobile-angular-ui-1.1.0-beta.22/mobile-angular-ui-base.min.css
 libs/mobile-angular-ui-1.1.0-beta.22/mobile-angular-ui.min.js
 libs/sprintf-0.5.js

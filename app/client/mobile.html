@@ -99,7 +99,7 @@
           <!-- <div ng-click="page.ref='edit-tags'" class="btn btn-navbar"> -->
             <!-- <i class="fa fa-list"></i> Edit Tags -->
           <!-- </div> -->
-          <div ng-show="page.ref == 'add-task' || page.ref == 'edit-tags' || page.ref == 'help'" ng-click="page.ref = 'show-tags'" class="btn btn-navbar">
+          <div ng-show="['show-tasks', 'add-task', 'edit-task', 'edit-tags', 'help'].indexOf(page.ref) >= 0" ng-click="page.ref = 'show-tags'" class="btn btn-navbar">
             <i class="fa fa-caret-left"></i> Back
           </div>
         </div>

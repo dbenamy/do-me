@@ -39,8 +39,4 @@ angular.module('do-me').controller('TagsCtrl', function($scope, search, storage)
 		tag.deleted = true;
 		tag.lastUpdated = storage.utcTs();
 	};
-
-	// $scope.searchFor = function(searchStr) {
-	// 	search.searchStr.text = searchStr;
-	// };
 });

@@ -141,7 +141,7 @@
                     <div class="list-group-item" ng-show="getResults().length == 0">
                       Nothing to do!
                     </div>
-                    <a ng-repeat="task in getResults()" href="#" class="list-group-item" ng-click="editTask($index); page.ref = 'edit-task'">
+                    <a ng-repeat="task in getResults() track by $index" href="#" class="list-group-item" ng-click="editTask($index); page.ref = 'edit-task'">
                       <span ng-bind-html="linkify(task.text)" style="white-space:normal;"></span>
                       <i class="fa fa-chevron-right pull-right"></i>
                       <br>

@@ -5,8 +5,7 @@
     <title>Do Me</title>
     <link rel="stylesheet" href="libs/font-awesome-4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/main.css">
-    <script src="libs/angular.min.js"></script>
-    <script src="libs/jquery-1.8.3.min.js"></script>
+    <script src="libs/angular-1.2.16.min.js"></script>
     <script src="libs/keymaster.min.js"></script>
     <script src="libs/sprintf-0.5.js"></script>
     <script src="libs/humanized_time_span.js"></script>
@@ -56,7 +55,7 @@
       <div id="hdr">
         <h1 id="logo">Do Me</h1>
 
-        <form ng-controller="SearchCtrl" id="search" ng-submit="searchFor(searchInput)">
+        <form ng-controller="SearchCtrl" id="search">
           <input type="text" class="search" placeholder="Search for text or tag" ng-model="searchInput">
           <button type="submit" class="fa fa-search" value="Search" ng-click="searchHandler($event, searchInput)"></button>
         </form>
@@ -100,12 +99,12 @@
         <div class="task-list todo">
           <span ng-show="getResults().length == 0">Nothing to do!</span>
           <ul>
-            <li ng-repeat="task in getResults()">
+            <li ng-repeat="task in getResults() track by $index">
               <div ng-hide="editing.text && $index == cursor">
                 <i ng-show="$index == cursor" class="fa fa-chevron-right"></i>
                 <input type="checkbox" id="toggle" class="checkbox" ng-model="task.done" ng-change="updatedTask(task)" >
                 <a href="" class="tag" ng-repeat="tag in task.tags" ng-click="searchHandler($event, tag)">{{tag}} </a>
-                <span ng-click="editTask($index)" class="task" ng-bind-html-unsafe="linkify(task.text)"></span>
+                <span ng-click="editTask($index)" class="task" ng-bind-html="linkify(task.text)"></span>
               </div>
   
               <form ng-submit="updateTask()" ng-show="editing.text && $index == cursor">

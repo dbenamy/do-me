@@ -32,7 +32,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, search, storage
 		var task = _getCurrentTask();
 		$scope.editing.text = task.tags.concat([task.text]).join(' ');
 		// TODO wrap in "if desktop":
-		$('input.edit' + $scope.cursor).focus();
+		document.querySelector('input.edit' + $scope.cursor).focus();
 	};
 
 	$scope.updateTask = function() {
@@ -112,17 +112,23 @@ angular.module('do-me').controller('TasksCtrl', function($scope, search, storage
 	};
 
 	shortcut('/', function() {
-		$('input.search').focus().select();
+		var elem = document.querySelector('input.search');
+		elem.focus();
+		elem.select();
 		return false; // stop the event so the character doesn't go into text box
 	});
 
 	shortcut('a, n, t', function() {
-		$('input.new-task').focus().select();
+		var elem = document.querySelector('input.new-task');
+		elem.focus();
+		elem.select();
 		return false; // stop the event so the character doesn't go into text box
 	});
 
 	shortcut('escape', function() {
-		$('input').blur();
+		angular.forEach(document.querySelectorAll('input'), function(elem) {
+			elem.blur();
+		});
 	});
 
 	shortcut('j', function() {

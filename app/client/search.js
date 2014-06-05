@@ -1,31 +1,25 @@
 angular.module('do-me').service('search', function($rootScope, storage) {
-	var TAG_REGEX = /(^|\s)[#@][^ ]+/g; // TODO DRY- move to common service or something
+	var TAG_REGEX = /(^|\s)[#@][^ ]+/g; // TODO DRY
 	
-	// I need a scope here and want this to be a service so I think I have to use the root scope. I don't love this because I'm polluting a global namespace, but I can't figure out a better solution.
-	var _tasks = storage.tasks; // needs to be in $rootScope so controller can $watch it.
-	var searchData = {text: ''}; //storage.searchStr; // this is in storage so other controllers can set search.
-	// $rootScope.searchTemp = ''; // working space which backs search text box so ctrl can set it to search.
-	// $rootScope.results = $rootScope.searchResults; //_tasks;
-	var results = [];
+	var _tasks = storage.tasks;
+	var _searchStr = {ref: ''};
+	var _results = [];
 
 	var set = function(searchStr) {
-		searchData.text = searchStr;
+		_searchStr.ref = searchStr;
 	};
 
 	var get = function() {
-		return searchData.text;
+		return _searchStr.ref;
 	};
 
 	var getResults = function() {
-		return results;
+		return _results;
 	};
 
 	var search = function() {
-		var criteria = parseSearch(searchData.text);
-		// console.log("Searching for tasks with these criteria:");
-		console.log(criteria);
+		var criteria = parseSearch(_searchStr.ref);
 		var wordRegexes = criteria.lowerWords.map(makeWordRegex);
-		// console.log(wordRegexes);
 
 		updateSelectedTagsForMobile(criteria.lowerTags);
 
@@ -55,17 +49,16 @@ angular.module('do-me').service('search', function($rootScope, storage) {
 			}
 			arrayOfResults.push(task);
 		});
-		results = arrayOfResults;
+		_results = arrayOfResults;
 	};
 
 	$rootScope.$watch(function() { return _tasks; }, search, true); // if we change tasks (eg adding one), re-search to update what's shown.
-	$rootScope.$watch(function() { return searchData.text; }, search);
+	$rootScope.$watch(function() { return _searchStr.ref; }, search);
 
 	var parseSearch = function(text) {
 		var toParse = text;
 
 		var arrayOfTags = trimAndLowerEach(toParse.match(TAG_REGEX) || []);
-		// console.log(arrayOfTags);
 		toParse = toParse.replace(TAG_REGEX, '');
 
 		var doneRes = extractSearchOption(toParse, 'done', 'hide');
@@ -77,7 +70,6 @@ angular.module('do-me').service('search', function($rootScope, storage) {
 		var waiting = waitingRes.lowerValue.trim();
 
 		var arrayOfWords = trimAndLowerEach(toParse.split(' '));
-		// console.log(arrayOfWords);
 
 		return {
 			lowerTags: arrayOfTags,
@@ -131,7 +123,6 @@ angular.module('do-me').service('search', function($rootScope, storage) {
 	return {
 		searchFor: set, // TODO rename to set
 		get: get,
-		// results: results
 		getResults: getResults
 	};
 });

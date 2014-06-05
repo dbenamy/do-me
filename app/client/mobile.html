@@ -160,14 +160,14 @@
                       <div ng-controller="TagsCtrl">
                         <div class="list-group-item">
                           Project:
-                          <select ng-model="selectedProject" class="form-control">
+                          <select ng-model="selectedProject.ref" class="form-control">
                             <option value=""></option>
                             <option ng-repeat="tag in projects() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
                           </select> 
                         </div>
                         <div class="list-group-item">
                           Context:
-                          <select ng-model="selectedContext" class="form-control">
+                          <select ng-model="selectedContext.ref" class="form-control">
                             <option value=""></option>
                             <option ng-repeat="tag in contexts() | orderBy:'text'" value="{{tag.text}}">{{tag.text}}</option>
                           </select>

@@ -8,14 +8,14 @@ angular.module('do-me').controller('TasksCtrl', function($scope, search, storage
 		text: null // Tags & desc of task being edited, or null if not editing.
 	};
 	$scope.newTask = '';
-	$scope.selectedProject = ''; // only used on mobile
-	$scope.selectedContext = ''; // only used on mobile
+	$scope.selectedProject = {ref: ''}; // only used on mobile
+	$scope.selectedContext = {ref: ''}; // only used on mobile
 
 	$scope.addTask = function() {
 		var error = tasks.add({
 			text: $scope.newTask,
-			project: $scope.selectedProject,
-			context: $scope.selectedContext
+			project: $scope.selectedProject.ref,
+			context: $scope.selectedContext.ref
 		});
 		if (error === null) {
 			$scope.newTask = '';

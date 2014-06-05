@@ -1,14 +1,14 @@
 CACHE MANIFEST
 
 # Change the version to make browsers check for new versions of all the files listed here:
-# version 65
+# version 66
 
 CACHE:
 index.html
 desktop.html
 mobile.html
 css/main.css
-libs/angular.min.js
+libs/angular-1.2.16.min.js
 libs/backup-0.1.js
 # TODO Reuse font aweseom from mobile angular ui on desktop so I don't need 2 copies.
 libs/font-awesome-4.0.3/css/font-awesome.min.css
@@ -17,7 +17,6 @@ libs/font-awesome-4.0.3/fonts/fontawesome-webfont.eot
 libs/font-awesome-4.0.3/fonts/fontawesome-webfont.svg?v=4.0.3
 libs/font-awesome-4.0.3/fonts/fontawesome-webfont.ttf?v=4.0.3
 libs/font-awesome-4.0.3/fonts/fontawesome-webfont.woff?v=4.0.3
-libs/jquery-1.8.3.min.js
 libs/keymaster.min.js
 libs/mobile-angular-ui-1.1.0-beta.22/FontAwesome.otf
 libs/mobile-angular-ui-1.1.0-beta.22/fontawesome-webfont.eot

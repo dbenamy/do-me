@@ -1,4 +1,4 @@
-angular.module('do-me').service('tasks', function(storage) {
+angular.module('do-me').service('tasks', function($sce, storage) {
 	var TAG_REGEX = /(^|\s)[#@][^ ]+/g; // TODO DRY in search- move to common service or something
 
 	var _tasks = storage.tasks;
@@ -65,9 +65,11 @@ angular.module('do-me').service('tasks', function(storage) {
 		});
 
 		var PHONE_REGEX = /(1[ -.])?\(?[0-9]{3}\)?[ -.]?[0-9]{3}[ -.]?[0-9]{4}/gi;
-		return urlLinked.replace(PHONE_REGEX, function(number) {
+		var phoneLinked = urlLinked.replace(PHONE_REGEX, function(number) {
 			return '<a href="tel:' + number + '" ' + STOP_CLICK_PROPAGATION + '>' + number + '</a>';
 		});
+
+		return $sce.trustAsHtml(phoneLinked);
 	};
 
 	_parseTags = function(text) {

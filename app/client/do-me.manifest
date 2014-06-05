@@ -1,7 +1,7 @@
 CACHE MANIFEST
 
 # Change the version to make browsers check for new versions of all the files listed here:
-# version 67
+# version 71
 
 CACHE:
 index.html
@@ -9,6 +9,7 @@ desktop.html
 mobile.html
 css/main.css
 libs/angular-1.2.16.min.js
+libs/angular-touch-1.2.16.min.js
 libs/backup-0.1.js
 # TODO Reuse font aweseom from mobile angular ui on desktop so I don't need 2 copies.
 libs/font-awesome-4.0.3/css/font-awesome.min.css

@@ -9,6 +9,7 @@
     <!-- <link rel="apple-touch-startup-image" href="startup.png" /> -->
     
     <script src="libs/angular-1.2.16.min.js"></script>
+    <script src="libs/angular-touch-1.2.16.min.js"></script>
     <link rel="stylesheet" type="text/css" href="libs/mobile-angular-ui-1.1.0-beta.22/mobile-angular-ui-base.min.css">
     <script src="libs/mobile-angular-ui-1.1.0-beta.22/mobile-angular-ui.min.js"></script>
     <script src="libs/keymaster.min.js"></script>
@@ -39,7 +40,7 @@
         }, false);
       }, false);
 
-      angular.module('do-me', ['mobile-angular-ui']); // define the do-me module
+      angular.module('do-me', ['ngTouch', 'mobile-angular-ui']); // define the do-me module
 
       angular.module('do-me').controller('PageCtrl', function($scope) {
         $scope.page = {};

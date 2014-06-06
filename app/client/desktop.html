@@ -71,7 +71,7 @@
           <a ng-hide="searchStr.text == ''" href="" ng-click="searchFor('')">All Not Waiting</a>
 
           <table class="">
-            <tr ng-repeat="tag in presentTags() | orderBy:'text'">
+            <tr ng-repeat="tag in presentTags() track by $index | orderBy:'text'">
               <td>
                 <strong ng-show="searchStr.text == tag.text">{{tag.text}}</strong>
                 <a href="" ng-hide="searchStr.text == tag.text" ng-click="searchFor(tag.text)">{{tag.text}}</a>

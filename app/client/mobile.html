@@ -22,24 +22,6 @@
     <script type="text/javascript">
       window.do_me = {mobile: true};
 
-      // Check if a new cache is available on page load.
-      // TODO Move this to a background poller to speed up page load and detect
-      // new version in long-running instances.
-      window.addEventListener('load', function(e) {
-        window.applicationCache.addEventListener('updateready', function(e) {
-          if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
-            // Browser downloaded a new app cache.
-            // Swap it in and reload the page to get the new hotness.
-            window.applicationCache.swapCache();
-            if (confirm("A new version of this site is available. Load it?")) {
-              window.location.reload();
-            } else {
-              alert("Things may not work properly until you reload the page.");
-            }
-          }
-        }, false);
-      }, false);
-
       angular.module('do-me', ['ngTouch', 'mobile-angular-ui']); // define the do-me module
 
       angular.module('do-me').controller('PageCtrl', function($scope) {
@@ -57,6 +39,7 @@
     <script src="sync_ctrl.js"></script>
     <script src="tags_ctrl.js"></script>
     <script src="tasks_ctrl.js"></script>
+    <script src="application-cache.js"></script>
   </head>
   
   <body ng-controller="PageCtrl">

@@ -1,6 +1,5 @@
 angular.module('do-me').controller('SyncCtrl', function($scope, $timeout, storage, sync, net) {
-	$scope.tasks = storage.tasks; // watching storage.tasks directly doesn't work
-
+	$scope.tasksVersion = storage.tasksVersion; // watching storage.tasks directly doesn't work
 	$scope.downloadAsFile = net.downloadAsFile;
 
 	$scope.syncStatus = null;  // can be 'idle', 'syncing', 'error', or 'offline'
@@ -41,7 +40,7 @@ angular.module('do-me').controller('SyncCtrl', function($scope, $timeout, storag
 		}, errorSyncing, offline);
 	};
 
-	$scope.$watch('tasks', $scope.sync, true);
+	$scope.$watch('tasksVersion', $scope.sync, true);
 
 	var updatePrettyLastSynced = function() {
 		if ($scope.syncStatus === 'error') {
@@ -64,7 +63,7 @@ angular.module('do-me').controller('SyncCtrl', function($scope, $timeout, storag
 
 	$scope.logTasks = function() {
 		console.log('tasks:');
-		console.log($scope._tasks);
+		console.log(storage.tasks);
 	};
 
 	var _timeFormats = {

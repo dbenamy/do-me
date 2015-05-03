@@ -2,6 +2,7 @@ angular.module('do-me').service('tasks', function($sce, storage) {
 	var TAG_REGEX = /(^|\s)[#@][^ ]+/g; // TODO DRY in search- move to common service or something
 
 	var _tasks = storage.tasks;
+	var _tasksVersion = storage.tasksVersion;
 	
 	var add = function(args) {
 		var text = args.text;
@@ -28,6 +29,7 @@ angular.module('do-me').service('tasks', function($sce, storage) {
 			done: false,
 			updated_at: storage.utcTs()
 		});
+		_tasksVersion.ref++;
 		return null;
 	};
 
@@ -49,6 +51,7 @@ angular.module('do-me').service('tasks', function($sce, storage) {
 		task.text = newText;
 		task.done = done;
 		task.updated_at = storage.utcTs();
+		_tasksVersion.ref++;
 		return null;
 	};
 

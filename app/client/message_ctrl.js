@@ -1,18 +1,19 @@
 angular.module('do-me').controller('MessageCtrl', function($scope, storage) {
-	$scope.tasks = storage.tasks; // watching storage.tasks directly doesn't work
+	$scope.tasksVersion = storage.tasksVersion;
+	_prevTasks = JSON.parse(JSON.stringify(storage.tasks));
 
-	var notifyIfTaskFinished = function(newTasks, oldTasks) {
-		console.log(newTasks);
-		var newTasksById = tasksById(newTasks);
-		angular.forEach(oldTasks, function(oldTask) {
+	var notifyIfTaskFinished = function() {
+		var newTasksById = tasksById(storage.tasks);
+		angular.forEach(_prevTasks, function(oldTask) {
 			var newTask = newTasksById[oldTask.id];
 			if (!oldTask.done && newTask && newTask.done) {
 				dhtmlx.message("Finished: " + oldTask.text);
 			}
 		});
+		_prevTasks = JSON.parse(JSON.stringify(storage.tasks));
 	};
 
-	$scope.$watch('tasks', notifyIfTaskFinished, true);
+	$scope.$watch('tasksVersion', notifyIfTaskFinished, true);
 
 	// TODO dedupe w sync.js
 	var tasksById = function(tasks) {

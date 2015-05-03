@@ -2,9 +2,7 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 	// Variables:
 	// $rootScope.tasks = []; // this gets created by load()
 	// $rootScope.tags = []; // this gets created by load()
-	// var _searchStr = {text: ''}; // it's an obj because sharing refs to a string doesn't work
-	// var _selectedTask = null;
-	// var _searchResults = [];
+	$rootScope.tasksVersion = {ref: 0}; // used for cheap watching of task changes. has to be an object so users can copy reference and watch it.
 
 	var handleStorageErrors = function(func) {
 		try {
@@ -32,7 +30,7 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 		});
 	};
 
-	$rootScope.$watch('tasks', save, true);
+	$rootScope.$watch('tasksVersion', save, true);
 	$rootScope.$watch('tags', save, true);
 
 	var utcTs = function() {
@@ -84,6 +82,7 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 		console.log("Loaded:");
 		console.log(appData);
 		$rootScope.tasks = appData.tasks; // all tasks, done and remaining
+		$rootScope.tasksVersion.ref++;
 		$rootScope.tags = appData.tags;
 	};
 
@@ -138,10 +137,8 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 	// Stuff exposed by the service:
 	return {
 		tasks: $rootScope.tasks,
-		// selectedTask: _selectedTask,
+		tasksVersion: $rootScope.tasksVersion,
 		tags: $rootScope.tags,
-		// searchStr: _searchStr,
-		// searchResults: _searchResults,
 		utcTs: utcTs,
 		generateId: generateId,
 		normalizeTags: normalizeTags

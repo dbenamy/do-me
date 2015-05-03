@@ -8,6 +8,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <!-- <link rel="apple-touch-startup-image" href="startup.png" /> -->
     
+    <!--script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script-->
     <script src="libs/angular-1.2.16.min.js"></script>
     <script src="libs/angular-touch-1.2.16.min.js"></script>
     <link rel="stylesheet" type="text/css" href="libs/mobile-angular-ui-1.1.0-beta.22/mobile-angular-ui-base.min.css">
@@ -88,7 +89,7 @@
         </div>
         <div class="btn-group pull-right">
           <div ng-show="page.ref == 'show-tags' || page.ref == 'show-tasks'" ng-click="page.ref = 'add-task'" class="btn btn-navbar">
-            <i class="fa fa-plus"></i> Task
+            <i class="fa fa-plus" id="add-task-btn"></i> Task
           </div>
         </div>
       </div><!-- /header -->
@@ -98,7 +99,7 @@
           <div class="scrollable">
             <div class="scrollable-content">
 
-              <div ng-show="page.ref == 'show-tags'" ng-controller="TagsCtrl">
+              <div ng-if="page.ref == 'show-tags'" ng-controller="TagsCtrl">
                 <div class="list-group">
                   <a href="#" class="list-group-item" ng-click="searchFor(''); page.ref = 'show-tasks'">
                     All Not Waiting <i class="fa fa-chevron-right pull-right"></i>
@@ -120,7 +121,7 @@
 
               <div ng-controller="TasksCtrl"> <!-- need this to be shared between pages -->
 
-                <div ng-show="page.ref == 'show-tasks'">
+                <div ng-if="page.ref == 'show-tasks'">
                   <div class="list-group">
                     <div class="list-group-item" ng-show="getResults().length == 0">
                       Nothing to do!
@@ -134,11 +135,11 @@
                   </div>
                 </div><!-- /tasks page -->
 
-                <div ng-show="page.ref == 'add-task'">
+                <div ng-if="page.ref == 'add-task'">
                   <div class="list-group">
                     <form>
                       <div class="list-group-item">
-                        <textarea placeholder='Eg, "Hang shelves"' ng-model="newTask" class="form-control"></textarea>
+                        <textarea placeholder='Eg, "Hang shelves"' ng-model="newTask.ref" class="form-control"></textarea>
                       </div>
                       <div ng-controller="TagsCtrl">
                         <div class="list-group-item">
@@ -165,7 +166,7 @@
                   </div><!-- /list-group -->
                 </div>
 
-                <div ng-show="page.ref == 'edit-task'">
+                <div ng-if="page.ref == 'edit-task'">
                   <div class="list-group">
                     <form>
                       <div class="list-group-item">
@@ -187,7 +188,7 @@
 
               </div> <!-- /TaskCtrl -->
 
-              <div ng-show="page.ref == 'edit-tags'" ng-controller="TagsCtrl">
+              <div ng-if="page.ref == 'edit-tags'" ng-controller="TagsCtrl">
                 <div class="list-group">
                   <form ng-submit="addTag()">
                     <input class="form-control" placeholder="Add saved tag" ng-model="newTag">
@@ -215,7 +216,7 @@
                 </div><!-- /content -->
               </div><!-- /edit-tags page -->
 
-              <div ng-show="page.ref == 'help'">
+              <div ng-if="page.ref == 'help'">
                 <div class="list-group">
                   <div class="list-group-item">
                     <p>I love feedback! Please email it to

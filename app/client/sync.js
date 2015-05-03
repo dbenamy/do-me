@@ -18,6 +18,7 @@ angular.module('do-me').service('sync', function (storage) {
 	 * serverTasks should be the array of tasks downloaded from the server.
 	 */
 	var _mergeTasks = function(clientTasks, serverTasks) {
+		var changedClient = false;
 		// _log('Merging tasks:');
 		// _log(clientTasks);
 		// _log(serverTasks);
@@ -52,6 +53,7 @@ angular.module('do-me').service('sync', function (storage) {
 					task.tags = serverTask.tags;
 					task.done = serverTask.done;
 					task.updated_at = serverTask.updated_at;
+					changedClient = true;
 				}
 			}
 		});
@@ -59,9 +61,13 @@ angular.module('do-me').service('sync', function (storage) {
 		// should be added to the result.
 		angular.forEach(serverTasksById, function(serverTask, id) {
 			clientTasks.push(serverTask);
+			changedClient = true;
 		});
 		// _log('Merged. New tasks:');
 		// _log(clientTasks);
+		if (changedClient) {
+			storage.tasksVersion.ref++;
+		}
 	};
 
 	var _objsById = function(objs) {

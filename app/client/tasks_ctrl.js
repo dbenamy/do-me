@@ -2,23 +2,25 @@ angular.module('do-me').controller('TasksCtrl', function($scope, search, storage
 	$scope.getResults = search.getResults; // Import into scope so tempate get use it.
 	$scope.linkify = tasks.linkify;
 
-	$scope.cursor = 0; // Index of cursor position with 0 being the top task in the results. Used on mobile to store which task being edited.
+	$scope.cursor = 0; // Index of cursor position with 0 being the top task in the results. Also used on mobile to store which task being edited.
 	// TODO try replacing this with a simple $scope.editTask = ''
 	$scope.editing = {
 		text: null // Tags & desc of task being edited, or null if not editing.
 	};
-	$scope.newTask = '';
+	$scope.newTask = {ref: ''};
 	$scope.selectedProject = {ref: ''}; // only used on mobile
 	$scope.selectedContext = {ref: ''}; // only used on mobile
 
+	$scope.$watch('newTask', function() { console.log($scope.newTask.ref); }, true);
+
 	$scope.addTask = function() {
 		var error = tasks.add({
-			text: $scope.newTask,
+			text: $scope.newTask.ref,
 			project: $scope.selectedProject.ref,
 			context: $scope.selectedContext.ref
 		});
 		if (error === null) {
-			$scope.newTask = '';
+			$scope.newTask.ref = '';
 		} else {
 			alert(error);
 		}
@@ -31,8 +33,8 @@ angular.module('do-me').controller('TasksCtrl', function($scope, search, storage
 		$scope.cursor = index; // have to overwrite cursor because a click can trigger this
 		var task = _getCurrentTask();
 		$scope.editing.text = task.tags.concat([task.text]).join(' ');
-		// TODO wrap in "if desktop":
-		document.querySelector('input.edit' + $scope.cursor).focus();
+		// TODO wrap in "if desktop" and fix:
+		// document.querySelector('input.edit' + $scope.cursor).focus();
 	};
 
 	$scope.updateTask = function() {
@@ -158,9 +160,9 @@ angular.module('do-me').controller('TasksCtrl', function($scope, search, storage
 	// 	// console.log(jqNewTaskInput.value);
 	// 	// if (jqNewTaskInput.value === '') {
 	// 		// jqNewTaskInput.value = $scope.searchStr;
-	// 	console.log($scope.newTask);
-	// 	if ($scope.newTask == '') { // TODO ===
-	// 		$scope.newTask = $scope.searchStr.text; // TODO parsed tags
+	// 	console.log($scope.newTask.ref);
+	// 	if ($scope.newTask.ref == '') { // TODO ===
+	// 		$scope.newTask.ref = $scope.searchStr.text; // TODO parsed tags
 	// 	}
 	// });
 
@@ -175,11 +177,11 @@ angular.module('do-me').controller('TasksCtrl', function($scope, search, storage
 	// 	console.log(allTags);
 
 	// 	// TODO newTask is winding up as undefined on mobile version only.
-	// 	console.log($scope.newTask);
+	// 	console.log($scope.newTask.ref);
 
 	// 	// TODO new plan- only autocomplete on desktop. search for exists widget and see if i can use it or grab some code.
 	// 	// $('#new-task-input').
-	// 	// var newTags = $scope.parseTags($scope.newTask);
+	// 	// var newTags = $scope.parseTags($scope.newTask.ref);
 	// 	// angular.forEach(newTags, function(newTag) {
 	// 	// 	angular.forEach(allTags, function(availableTag))
 	// 	// 	if (allTags[tag]) {

@@ -2,6 +2,7 @@ angular.module('do-me').service('search', function($rootScope, storage) {
 	var TAG_REGEX = /(^|\s)[#@][^ ]+/g; // TODO DRY
 	
 	var _tasks = storage.tasks;
+	var _tasksVersion = storage.tasksVersion;
 	var _searchStr = {ref: ''};
 	var _results = [];
 
@@ -52,7 +53,7 @@ angular.module('do-me').service('search', function($rootScope, storage) {
 		_results = arrayOfResults;
 	};
 
-	$rootScope.$watch(function() { return _tasks; }, search, true); // if we change tasks (eg adding one), re-search to update what's shown.
+	$rootScope.$watch(function() { return _tasksVersion; }, search, true); // if we change tasks (eg adding one), re-search to update what's shown.
 	$rootScope.$watch(function() { return _searchStr.ref; }, search);
 
 	var parseSearch = function(text) {

@@ -30,6 +30,7 @@ libs/sprintf-0.5.js
 libs/humanized_time_span.js
 libs/message/themes/message_default.css
 libs/message/message.js
+application-cache.js
 storage.js
 net.js
 search.js

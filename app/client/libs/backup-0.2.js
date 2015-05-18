@@ -132,6 +132,14 @@ if (!Array.prototype.map) {
 var backupjs = function() {
 	var PREFIX = 'backupjs-';
 
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error#Example.3A_Custom_Error_Types
+	function FutureBackupError(backupDate) {
+		this.name = 'FutureBackupError';
+		this.message = 'backup.js found a saved backup with a timestamp in the future (' + backupDate + '). Aborting backup to prevent data loss in case of a bug or a computer with wrong time.';
+	}
+	FutureBackupError.prototype = Object.create(Error.prototype);
+	FutureBackupError.prototype.constructor = FutureBackupError;
+
 	var debug = function(msg) {
 		// Uncomment for debugging.
 		// console.log(msg);
@@ -163,46 +171,42 @@ var backupjs = function() {
 	};
 
 	/**
-	 * Load the data backed up at the given Date() without JSON parsing it.
-	 **/
-	var loadRaw = function(date) {
-		return localStorage.getItem(PREFIX + date.getTime());
-	};
-
-	/**
-	 * Load the data backed up at the given Date().
+	 * Load the data backed up at the given Date() and returns a promise.
 	 **/
 	var load = function(date) {
-		return JSON.parse(loadRaw(date));
+		return localforage.getItem(PREFIX + date.getTime());
 	};
 
 	/**
-	 * Returns an array of the Dates of all backups, in order, with the newest
-	 * first.
+	 * Returns a promise of an array of the Dates of all backups, in order,
+	 * with the newest first.
 	 **/
 	var list = function() {
-		var storedKeys = Object.keys(localStorage);
-		var backupKeys = storedKeys.filter(function(key) {
-			return key.slice(0, PREFIX.length) === PREFIX;
-		});
-		
-		var timestamps = backupKeys.map(function(key) {
-			var ts = key.slice(PREFIX.length);
-			return parseInt(ts, 10);
-		});
-		timestamps.sort(function(a, b) {
-			return b - a;
-		});
+		return new Promise(function(resolve, reject) {
+			localforage.keys().then(function(storedKeys) {
+				var backupKeys = storedKeys.filter(function(key) {
+					return key.slice(0, PREFIX.length) === PREFIX;
+				});
+				
+				var timestamps = backupKeys.map(function(key) {
+					var ts = key.slice(PREFIX.length);
+					return parseInt(ts, 10);
+				});
+				timestamps.sort(function(a, b) {
+					return b - a;
+				});
 
-		var dates = timestamps.map(function(timestamp) {
-			return new Date(timestamp);
-		});
+				var dates = timestamps.map(function(timestamp) {
+					return new Date(timestamp);
+				});
 
-		debug("list() returning " + dates.length + " backups:");
-		for (var i = 0; i < dates.length; i++) {
-			debug("  " + dates[i].toUTCString() + ", " + dates[i].getTime());
-		}
-		return dates;
+				debug("list() returning " + dates.length + " backups:");
+				for (var i = 0; i < dates.length; i++) {
+					debug("  " + dates[i].toUTCString() + ", " + dates[i].getTime());
+				}
+				resolve(dates);
+			});
+		});
 	};
 
 	/**
@@ -210,10 +214,16 @@ var backupjs = function() {
 	 **/
 	var deleteAllBackups = function() {
 		debug("Deleting all backups.");
-		list().map(function(backupDate) {
-			debug("Deleting backup " + backupDate.toUTCString());
-			localStorage.removeItem(PREFIX + backupDate.getTime());
-			return null;
+		return list().then(function(dates) {
+			var promises = [];
+			dates.map(function(backupDate) {
+				debug("Deleting backup " + backupDate.toUTCString());
+				promises.push(localforage.removeItem(PREFIX + backupDate.getTime()));
+				return null;
+			});
+			return Promise.all(promises).then(function() {
+				debug("Deleted all backups.");
+			});
 		});
 	};
 
@@ -280,13 +290,16 @@ var backupjs = function() {
 	 * Delete anything else.
 	 **/
 	var pruneBackups = function() {
-		var backupDates = list();
-		var toDeleteDates = datesToDelete(backupDates);
-		debug("Deleting " + toDeleteDates.length + " unneeded backups:");
-		for (var i = toDeleteDates.length - 1; i >= 0; i--) {
-			debug("  " + toDeleteDates[i].toUTCString() + ", " + toDeleteDates[i].getTime());
-			localStorage.removeItem(PREFIX + toDeleteDates[i].getTime());
-		}
+		return list().then(function(backupDates) {
+			var toDeleteDates = datesToDelete(backupDates);
+			debug("Deleting " + toDeleteDates.length + " unneeded backups:");
+			var promises = [];
+			for (var i = toDeleteDates.length - 1; i >= 0; i--) {
+				debug("  " + toDeleteDates[i].toUTCString() + ", " + toDeleteDates[i].getTime());
+				promises.push(localforage.removeItem(PREFIX + toDeleteDates[i].getTime()));
+			}
+			return Promise.all(promises);
+		});
 	};
 
 	/**
@@ -295,30 +308,34 @@ var backupjs = function() {
 	 * Runs the backup first so it doesn't delete any old backups unless there's
 	 * definitely a new one.
 	 *
-	 * Runs JSON.stringify on data. Make sure everything in data can be stringified.
-	 * If you have Date objects in there and want this to work on older browsers,
-	 * add a Date.toJSON(). The es5-shim library can do that
+	 * Runs JSON.stringify on data in old browsers so if you care about them,
+	 * make sure everything in data can be stringified. (See localforage for
+	 * details). If you have Date objects in there and want this to work on
+	 * older browsers, add a Date.toJSON(). The es5-shim library can do that
 	 * (https://github.com/es-shims/es5-shim).
 	 *
-	 * Can throw an exception for QuotaExceededError or FutureBackupError.
+	 * Returns a promise. Possible rejections include QuotaExceededError or
+	 * FutureBackupError.
 	 **/
 	var backup = function(data) {
-		var dataJson = JSON.stringify(data);
-		
-		debug("Checking that there are no backups from the future.");
-		var backupDates = list();
-		if (backupDates.length > 0 && backupDates[0] > getNowDate()) {
-			throw {
-				name: 'FutureBackupError',
-				message: 'backup.js found a saved backup with a timestamp in the future (' + backupDates[0] + '). Aborting backup to prevent data loss in case of a bug or a computer with wrong time.'
-			};
-		}
-
-		debug("Saving backup.");
-		localStorage.setItem(PREFIX + getNowDate().getTime(), dataJson);
-
-		debug("Pruning backups.");
-		pruneBackups();
+		var checkFuturePromise = new Promise(function(resolve, reject) {
+			debug("Checking that there are no backups from the future.");
+			list().then(function(backupDates) {
+				if (backupDates.length > 0 && backupDates[0] > getNowDate()) {
+					reject(new FutureBackupError(backupDates[0]));
+				}
+				resolve();
+			});
+		});
+		var savePromise = checkFuturePromise.then(function() {
+			debug("Saving backup.");
+			return localforage.setItem(PREFIX + getNowDate().getTime(), data);
+		});
+		var prunePromise = savePromise.then(function() {
+			debug("Pruning backups.");
+			return pruneBackups();
+		});
+		return prunePromise;
 	};
 
 	return {

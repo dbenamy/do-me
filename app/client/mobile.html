@@ -8,22 +8,23 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <!-- <link rel="apple-touch-startup-image" href="startup.png" /> -->
     
-    <!--script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script-->
     <script src="libs/angular-1.2.16.min.js"></script>
     <script src="libs/angular-touch-1.2.16.min.js"></script>
     <link rel="stylesheet" type="text/css" href="libs/mobile-angular-ui-1.1.0-beta.22/mobile-angular-ui-base.min.css">
     <script src="libs/mobile-angular-ui-1.1.0-beta.22/mobile-angular-ui.min.js"></script>
+    <script src="libs/localforage-1.2.3.min.js"></script>
+    <script src="libs/angular-localforage-1.2.2.min.js"></script>
     <script src="libs/keymaster.min.js"></script>
     <script src="libs/sprintf-0.5.js"></script>
     <script src="libs/humanized_time_span.js"></script>
     <link rel="stylesheet" type="text/css" href="libs/message/themes/message_default.css">
     <script src="libs/message/message.js"></script>
-    <script src="libs/backup-0.1.js"></script>
+    <script src="libs/backup-0.2.js"></script>
 
     <script type="text/javascript">
       window.do_me = {mobile: true};
 
-      angular.module('do-me', ['ngTouch', 'mobile-angular-ui']); // define the do-me module
+      angular.module('do-me', ['ngTouch', 'mobile-angular-ui', 'LocalForageModule']);
 
       angular.module('do-me').controller('PageCtrl', function($scope) {
         $scope.page = {};

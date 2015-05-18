@@ -1,33 +1,29 @@
-angular.module('do-me').service('storage', function($rootScope, $timeout) {
-	// Variables:
-	// $rootScope.tasks = []; // this gets created by load()
-	// $rootScope.tags = []; // this gets created by load()
+angular.module('do-me').service('storage', function($rootScope, $timeout, $localForage) {
+	// Variables: TODO make them function variables instead of rootScope
+	$rootScope.tasks = [];
+	$rootScope.tags = [];
 	$rootScope.tasksVersion = {ref: 0}; // used for cheap watching of task changes. has to be an object so users can copy reference and watch it.
 
-	var handleStorageErrors = function(func) {
-		try {
-			func();
-		} catch (error) {
-			console.log("Exception while writing to localStorage.");
-			console.log(error);
-			if (error.name === 'QuotaExceededError') {
-				alert("Whoops, Do Me ran out of space and any changes weren't saved! Please email daniel@benamy.info and let me know so I can fix this.");
-			} else {
-				alert("Whoops, Do Me broke! Please email daniel@benamy.info and let me know so I can fix this.");
-				throw(error);
-			}
-		}
+	var handleStorageErrors = function(error) {
+		console.log("Exception while accessing storage.");
+		console.log(error);
+		alert("Whoops, Do Me broke! Please email daniel@benamy.info and let me know so I can fix this.");
+		throw(error);
 	};
 
 	var save = function() {
-		var appData = JSON.parse(localStorage.goodoo || '{}');
-		appData.tasks = $rootScope.tasks;
-		appData.tags = $rootScope.tags;
-		console.log("Saving:");
-		console.log(appData);
-		handleStorageErrors(function() {
-			localStorage.goodoo = JSON.stringify(appData);
-		});
+		console.log("Saving.");
+		$localForage.getItem('do-me').then(function(existingData) {
+			console.log("Merging existing data and saving:");
+			var data = existingData || {};
+			data.tasks = $rootScope.tasks;
+			data.tags = $rootScope.tags;
+			console.log(data);
+			return $localForage.setItem('do-me', data);
+		}).then(function() {
+			console.log("Removing old data from localStorage.");
+			localStorage.removeItem('goodoo');
+		}).catch(handleStorageErrors);
 	};
 
 	$rootScope.$watch('tasksVersion', save, true);
@@ -51,7 +47,24 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 	};
 
 	var load = function() {
-		var appData = JSON.parse(localStorage.goodoo || '{}');
+		var data = {};
+
+		// Temporarily load from local storage too until I migrate to local forage.
+		var loadedData = JSON.parse(localStorage.goodoo || '{}');
+		angular.extend(data, loadedData);
+
+		$localForage.getItem('do-me').then(function(loadedData) {
+			angular.extend(data, loadedData || {});
+			migrateDb(data);
+			// Update existing array objects since other code already has refs
+			// to it before this promise runs.
+			$rootScope.tasks.push.apply($rootScope.tasks, data.tasks); // all tasks, done and remaining
+			$rootScope.tasksVersion.ref++;
+			$rootScope.tags.push.apply($rootScope.tags, data.tags);
+		}).catch(handleStorageErrors);
+	};
+
+	var migrateDb = function(appData) {
 		if (!appData.tasks) {
 			appData.tasks = [
 				{
@@ -79,11 +92,6 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 			];
 		}
 		normalizeTags(appData.tags);
-		console.log("Loaded:");
-		console.log(appData);
-		$rootScope.tasks = appData.tasks; // all tasks, done and remaining
-		$rootScope.tasksVersion.ref++;
-		$rootScope.tags = appData.tags;
 	};
 
 	var normalizeTags = function(tags) {
@@ -111,26 +119,10 @@ angular.module('do-me').service('storage', function($rootScope, $timeout) {
 
 	var backup = function() {
 		console.log("Backing up Do Me data with backup.js.");
-		handleStorageErrors(function() {
-			var obj = JSON.parse(localStorage.goodoo);
-			backupjs.backup(obj); // pass in an obj because backup.js stringifies it
-		});
-
-		var oldBackupPrefix = 'goodoo-backup-';
-		angular.forEach(Object.keys(localStorage), function(key) {
-			if (key.indexOf(oldBackupPrefix) === 0) {
-				var dateStr = key.slice(oldBackupPrefix.length);
-				var dateMs = Date.parse(dateStr);
-				console.log("Found old backup with date " + (new Date(dateMs)));
-				// When I'm confident that backup.js is working right, uncomment this:
-				// localStorage.setItem('backupjs-' + dateMs, localStorage.getItem(key));
-				// localStorage.removeItem(key);
-				// console.log("Migrated " + key + " to backup.js");
-			}
-		});
-
+		backupjs.backup({tasks: $rootScope.tasks, tags: $rootScope.tags}).then(function() {
+			console.log("Back up done.");
+		}).catch(handleStorageErrors);
 		$timeout(backup, 1000 * 60 * 10); // 10 mins
-		console.log("Back up done.");
 	};
 	backup();
 

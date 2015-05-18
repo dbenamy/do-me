@@ -6,17 +6,19 @@
     <link rel="stylesheet" href="libs/font-awesome-4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="libs/angular-1.2.16.min.js"></script>
+    <script src="libs/localforage-1.2.3.min.js"></script>
+    <script src="libs/angular-localforage-1.2.2.min.js"></script>
     <script src="libs/keymaster.min.js"></script>
     <script src="libs/sprintf-0.5.js"></script>
     <script src="libs/humanized_time_span.js"></script>
     <link rel="stylesheet" type="text/css" href="libs/message/themes/message_default.css">
     <script src="libs/message/message.js"></script>
-    <script src="libs/backup-0.1.js"></script>
+    <script src="libs/backup-0.2.js"></script>
 
     <script type="text/javascript">
       window.do_me = {mobile: false};
 
-      angular.module('do-me', []); // define the do-me module
+      angular.module('do-me', ['LocalForageModule']);
     </script>
     <script src="storage.js"></script>
     <script src="net.js"></script>
@@ -98,8 +100,8 @@
           </ul>
         </div>
   
-        <form ng-submit="addTask(newTask)" class="addClass">
-          <input type="text" class="new-task" placeholder="Add new task" ng-model="newTask" style="padding: 11px 2%;">
+        <form ng-submit="addTask()" class="addClass">
+          <input type="text" class="new-task" placeholder="Add new task" ng-model="newTask.ref" style="padding: 11px 2%;">
           <button type="submit" class="fa fa-plus" value="Add"></button>
         </form>
     

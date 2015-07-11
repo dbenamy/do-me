@@ -1,4 +1,6 @@
-angular.module('do-me').controller('TasksCtrl', function($scope, search, storage, tasks) {
+angular.module('do-me').controller('TasksCtrl', function($scope, search, db, storage, tasks) {
+	// This doesn't actually use the storage service but something needs to load it.
+	
 	$scope.getResults = search.getResults; // Import into scope so tempate get use it.
 	$scope.linkify = tasks.linkify;
 
@@ -144,7 +146,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, search, storage
 	shortcut('c, f', function() {
 		var task = _getCurrentTask();
 		task.done = true;
-		task.updated_at = storage.utcTs();
+		task.updated_at = db.utcTs();
 	});
 
 	shortcut('o, enter', function() {
@@ -168,7 +170,7 @@ angular.module('do-me').controller('TasksCtrl', function($scope, search, storage
 
 	// $scope.autocompleteTaskTags = function(event) {
 	// 	var allTags = [];
-	// 	angular.forEach(storage.tags, function(tag) {
+	// 	angular.forEach(db.tags, function(tag) {
 	// 		if (tag.deleted === false) {
 	// 			allTags.push(tag.text);
 	// 		}

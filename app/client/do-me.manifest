@@ -33,6 +33,7 @@ libs/humanized_time_span.js
 libs/message/themes/message_default.css
 libs/message/message.js
 application-cache.js
+db.js
 storage.js
 net.js
 search.js

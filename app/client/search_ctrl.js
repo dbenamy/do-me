@@ -1,4 +1,4 @@
-angular.module('do-me').controller('SearchCtrl', function($scope, search, storage) {
+angular.module('do-me').controller('SearchCtrl', function($scope, search) {
 	$scope.searchInput = '';
 	$scope.getResults = search.getResults;
 

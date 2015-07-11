@@ -1,8 +1,8 @@
-angular.module('do-me').service('search', function($rootScope, storage) {
+angular.module('do-me').service('search', function($rootScope, db) {
 	var TAG_REGEX = /(^|\s)[#@][^ ]+/g; // TODO DRY
 	
-	var _tasks = storage.tasks;
-	var _tasksVersion = storage.tasksVersion;
+	var _tasks = db.tasks;
+	var _tasksVersion = db.tasksVersion;
 	var _searchStr = {ref: ''};
 	var _results = [];
 

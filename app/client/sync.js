@@ -1,15 +1,20 @@
-angular.module('do-me').service('sync', function (storage) {
+// TODO I might want to merge this into the db service
+angular.module('do-me').service('sync', function (db) {
 
-	var mergeServerData = function(str) {
+	var mergeInJson = function(str) {
 		var serverData = {};
 		if (str !== '') { // First download before anything's been uploaded.
 			serverData = JSON.parse(str);
 		}
-		var tasks = serverData.tasks || [];
-		var tags = serverData.tags || [];
-		storage.normalizeTags(tags);
-		_mergeTasks(storage.tasks, tasks);
-		_mergeTags(storage.tags, tags);
+		mergeInData(serverData);
+	};
+
+	var mergeInData = function(newAppData) {
+		var tasks = newAppData.tasks || [];
+		var tags = newAppData.tags || [];
+		db.normalizeTags(tags);
+		_mergeTasks(db.tasks, tasks);
+		_mergeTags(db.tags, tags);
 	};
 
 	/**
@@ -66,7 +71,7 @@ angular.module('do-me').service('sync', function (storage) {
 		// _log('Merged. New tasks:');
 		// _log(clientTasks);
 		if (changedClient) {
-			storage.tasksVersion.ref++;
+			db.tasksVersion.ref++;
 		}
 	};
 
@@ -109,6 +114,7 @@ angular.module('do-me').service('sync', function (storage) {
 	};
 
 	return {
-		mergeServerData: mergeServerData
+		mergeInJson: mergeInJson,
+		mergeInData: mergeInData
 	};
 });

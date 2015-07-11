@@ -1,16 +1,16 @@
-angular.module('do-me').controller('MessageCtrl', function($scope, storage) {
-	$scope.tasksVersion = storage.tasksVersion;
-	_prevTasks = JSON.parse(JSON.stringify(storage.tasks));
+angular.module('do-me').controller('MessageCtrl', function($scope, db) {
+	$scope.tasksVersion = db.tasksVersion;
+	_prevTasks = JSON.parse(JSON.stringify(db.tasks));
 
 	var notifyIfTaskFinished = function() {
-		var newTasksById = tasksById(storage.tasks);
+		var newTasksById = tasksById(db.tasks);
 		angular.forEach(_prevTasks, function(oldTask) {
 			var newTask = newTasksById[oldTask.id];
 			if (!oldTask.done && newTask && newTask.done) {
 				dhtmlx.message("Finished: " + oldTask.text);
 			}
 		});
-		_prevTasks = JSON.parse(JSON.stringify(storage.tasks));
+		_prevTasks = JSON.parse(JSON.stringify(db.tasks));
 	};
 
 	$scope.$watch('tasksVersion', notifyIfTaskFinished, true);

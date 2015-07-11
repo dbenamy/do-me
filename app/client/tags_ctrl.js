@@ -1,5 +1,5 @@
-angular.module('do-me').controller('TagsCtrl', function($scope, search, storage) {
-	var _tags = storage.tags;
+angular.module('do-me').controller('TagsCtrl', function($scope, search, db) {
+	var _tags = db.tags;
 
 	$scope.searchFor = search.searchFor;
 

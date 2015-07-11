@@ -1,5 +1,4 @@
-angular.module('do-me').controller('SyncCtrl', function($scope, $timeout, storage, sync, net) {
-	$scope.tasksVersion = storage.tasksVersion; // watching storage.tasks directly doesn't work
+angular.module('do-me').controller('SyncCtrl', function($scope, $timeout, db, sync, net) {
 	$scope.downloadAsFile = net.downloadAsFile;
 
 	$scope.syncStatus = null;  // can be 'idle', 'syncing', 'error', or 'offline'
@@ -27,10 +26,10 @@ angular.module('do-me').controller('SyncCtrl', function($scope, $timeout, storag
 		$timeout.cancel(syncTimer);
 		$scope.syncStatus = 'syncing';
 		net.downloadData(function(str) {
-			sync.mergeServerData(str);
+			sync.mergeInJson(str);
 			var upload = {
-				tasks: storage.tasks,
-				tags: storage.tags
+				tasks: db.tasks,
+				tags: db.tags
 			};
 			net.uploadData(JSON.stringify(upload), function() {
 				$scope.syncStatus = 'idle';
@@ -40,7 +39,7 @@ angular.module('do-me').controller('SyncCtrl', function($scope, $timeout, storag
 		}, errorSyncing, offline);
 	};
 
-	$scope.$watch('tasksVersion', $scope.sync, true);
+	$scope.$watch(function() { return db.tasksVersion.ref; }, $scope.sync);
 
 	var updatePrettyLastSynced = function() {
 		if ($scope.syncStatus === 'error') {
@@ -63,7 +62,7 @@ angular.module('do-me').controller('SyncCtrl', function($scope, $timeout, storag
 
 	$scope.logTasks = function() {
 		console.log('tasks:');
-		console.log(storage.tasks);
+		console.log(db.tasks);
 	};
 
 	var _timeFormats = {

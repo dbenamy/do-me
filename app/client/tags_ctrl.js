@@ -28,7 +28,7 @@ angular.module('do-me').controller('TagsCtrl', function($scope, search, db) {
 		_tags.push({
 			text: $scope.newTag,
 			deleted: false,
-			lastUpdated: storage.utcTs()
+			lastUpdated: db.utcTs()
 		});
 		$scope.newTag = '';
 	};
@@ -37,6 +37,6 @@ angular.module('do-me').controller('TagsCtrl', function($scope, search, db) {
 		console.log("Deleting tag:");
 		console.log(tag);
 		tag.deleted = true;
-		tag.lastUpdated = storage.utcTs();
+		tag.lastUpdated = db.utcTs();
 	};
 });

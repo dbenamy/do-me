@@ -61,6 +61,6 @@ angular.module('do-me').service('storage', function($rootScope, $interval, $loca
 			console.log("Back up done.");
 		}).catch(_handleStorageErrors);
 	};
-	_backup();
+	_backup(); // TODO do first run after data is loaded
 	$interval(_backup, 1000 * 60 * 10); // 10 mins
 });

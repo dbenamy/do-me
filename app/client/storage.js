@@ -1,4 +1,4 @@
-angular.module('do-me').service('storage', function($rootScope, $timeout, $localForage, db, sync) {
+angular.module('do-me').service('storage', function($rootScope, $interval, $localForage, db, sync) {
 	var _didFirstLoad = false;
 
 	var _handleStorageErrors = function(error) {
@@ -60,7 +60,7 @@ angular.module('do-me').service('storage', function($rootScope, $timeout, $local
 		backupjs.backup({tasks: db.tasks, tags: db.tags}).then(function() {
 			console.log("Back up done.");
 		}).catch(_handleStorageErrors);
-		$timeout(_backup, 1000 * 60 * 10); // 10 mins
 	};
-	_backup(); // TODO do first run after data is loaded
+	_backup();
+	$interval(_backup, 1000 * 60 * 10); // 10 mins
 });

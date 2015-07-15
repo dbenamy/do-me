@@ -107,7 +107,7 @@
         </form>
     
         <div id="sync" ng-controller="SyncCtrl">
-          <a href="" class="syncit" ng-click="sync()" ng-hide="syncStatus == 'syncing'">
+          <a href="" class="syncit" ng-click="syncNow()" ng-hide="syncStatus == 'syncing'">
             Sync now
           </a>
           <span class="syncit" ng-show="syncStatus == 'syncing'">Syncing...</span>

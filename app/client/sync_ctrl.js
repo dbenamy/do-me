@@ -1,29 +1,26 @@
-angular.module('do-me').controller('SyncCtrl', function($scope, $timeout, db, sync, net) {
+angular.module('do-me').controller('SyncCtrl', function($scope, $interval, db, sync, net) {
 	$scope.downloadAsFile = net.downloadAsFile;
 
 	$scope.syncStatus = null;  // can be 'idle', 'syncing', 'error', or 'offline'
 	$scope.syncLastSuccess = null; // a Date
 	$scope.prettyLastSynced = '';
 	
-	var syncTimer = null;
-	var prettyLastSyncedTimer = null;
+	var syncPromise = null;
+	var lastSyncedPromise = null;
 
 	var errorSyncing = function() {
 		$scope.syncStatus = 'error';
-		syncTimer = $timeout($scope.sync, 30000);
 	};
 
 	var offline = function() {
 		$scope.syncStatus = 'offline';
-		syncTimer = $timeout($scope.sync, 30000);
 	};
 
-	$scope.sync = function() {
-		console.log("sync() called.");
+	var doSync = function() {
+		console.log("SyncCtrl.sync: Called.");
 		if ($scope.syncStatus === 'syncing') {
 			return;
 		}
-		$timeout.cancel(syncTimer);
 		$scope.syncStatus = 'syncing';
 		net.downloadData(function(str) {
 			sync.mergeInJson(str);
@@ -34,14 +31,19 @@ angular.module('do-me').controller('SyncCtrl', function($scope, $timeout, db, sy
 			net.uploadData(JSON.stringify(upload), function() {
 				$scope.syncStatus = 'idle';
 				$scope.syncLastSuccess = new Date();
-				syncTimer = $timeout($scope.sync, 30000);
 			}, errorSyncing, offline);
 		}, errorSyncing, offline);
 	};
 
-	$scope.$watch(function() { return db.tasksVersion.ref; }, $scope.sync);
+	$scope.syncNow = function() {
+		$interval.cancel(syncPromise);
+		syncPromise = $interval(doSync, 30 * 1000);
+		doSync();
+	};
 
-	var updatePrettyLastSynced = function() {
+	$scope.$watch(function() { return db.tasksVersion.ref; }, $scope.syncNow);
+
+	var updateLastSynced = function() {
 		if ($scope.syncStatus === 'error') {
 			$scope.prettyLastSynced = "Error!";
 		} else if ($scope.syncStatus === 'offline') {
@@ -53,12 +55,15 @@ angular.module('do-me').controller('SyncCtrl', function($scope, $timeout, db, sy
 		if ($scope.syncLastSuccess !== null) {
 			$scope.prettyLastSynced += " Last synced: " + humanized_time_span($scope.syncLastSuccess, new Date(), _timeFormats);
 		}
-		
-		$timeout.cancel(prettyLastSyncedTimer);
-		prettyLastSyncedTimer = $timeout(updatePrettyLastSynced, 10 * 1000);
 	};
 
-	$scope.$watch('syncLastSuccess', updatePrettyLastSynced);
+	var updateLastSyncedNow = function() {
+		$interval.cancel(lastSyncedPromise);
+		lastSyncedPromise = $interval(updateLastSynced, 10 * 1000);
+		updateLastSynced();
+	};
+
+	$scope.$watch('syncLastSuccess', updateLastSyncedNow);
 
 	$scope.logTasks = function() {
 		console.log('tasks:');
@@ -77,5 +82,4 @@ angular.module('do-me').controller('SyncCtrl', function($scope, $timeout, db, sy
 			{ ceiling: null, text: "ERROR: $hours:$minutes:$seconds" }
 		]
 	};
-
 });

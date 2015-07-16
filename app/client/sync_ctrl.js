@@ -1,4 +1,4 @@
-angular.module('do-me').controller('SyncCtrl', function($scope, $interval, db, sync, net) {
+angular.module('do-me').controller('SyncCtrl', function($scope, $interval, $location, db, sync, net) {
 	$scope.downloadAsFile = net.downloadAsFile;
 
 	$scope.syncStatus = null;  // can be 'idle', 'syncing', 'error', or 'offline'
@@ -38,7 +38,11 @@ angular.module('do-me').controller('SyncCtrl', function($scope, $interval, db, s
 	$scope.syncNow = function() {
 		$interval.cancel(syncPromise);
 		syncPromise = $interval(doSync, 30 * 1000);
-		doSync();
+		if ($location.search().sync === 'false') {
+			$scope.syncStatus = 'disabled';
+		} else {
+			doSync();
+		}
 	};
 
 	$scope.$watch(function() { return db.tasksVersion.ref; }, $scope.syncNow);
@@ -48,6 +52,8 @@ angular.module('do-me').controller('SyncCtrl', function($scope, $interval, db, s
 			$scope.prettyLastSynced = "Error!";
 		} else if ($scope.syncStatus === 'offline') {
 			$scope.prettyLastSynced = "Offline.";
+		} else if ($scope.syncStatus === 'disabled') {
+			$scope.prettyLastSynced = "Disabled.";
 		} else {
 			$scope.prettyLastSynced = "";
 		}

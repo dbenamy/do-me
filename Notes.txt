@@ -4,6 +4,11 @@ appcfg.py update --oauth2 .
 
 backup/backup.py
 
+npm install -g protractor
+webdriver-manager update
+webdriver-manager start
+protractor conf.js
+
 x = logged window.performance.timing;
 z = []; for (k in x) { t = x[k]; if (t > 0) { z.push([t - x.navigationStart, k]) }}; z.sort().map(function(pair) { return pair[1] + ": " + pair[0]})
 

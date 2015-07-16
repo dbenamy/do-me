@@ -56,8 +56,8 @@
           <strong ng-show="searchStr.text == ''">All Not Waiting</strong>
           <a ng-hide="searchStr.text == ''" href="" ng-click="searchFor('')">All Not Waiting</a>
 
-          <table class="">
-            <tr ng-repeat="tag in presentTags() track by $index | orderBy:'text'">
+          <table>
+            <tr ng-repeat="tag in presentTags() track by $index | orderBy:'text'" class="test-tag-list">
               <td>
                 <strong ng-show="searchStr.text == tag.text">{{tag.text}}</strong>
                 <a href="" ng-hide="searchStr.text == tag.text" ng-click="searchFor(tag.text)">{{tag.text}}</a>
@@ -74,8 +74,8 @@
           <a ng-hide="searchStr.text == 'waiting:only'" href="" ng-click="searchFor('waiting:only')">Waiting</a>
 
           <form ng-submit="addTag()">
-            <input ng-model="newTag" placeholder="Add tag" />
-            <button type="submit" class="fa fa-plus" value="Add" />
+            <input ng-model="newTag" placeholder="Add tag" class="test-new-tag" />
+            <button type="submit" class="fa fa-plus test-add-tag" value="Add" />
           </form>
         </div>
       </div>

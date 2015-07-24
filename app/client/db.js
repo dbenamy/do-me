@@ -1,8 +1,4 @@
 angular.module('do-me').service('db', function($rootScope) {
-	// Variables: TODO make them function variables instead of rootScope
-	// $rootScope.tasks = [];
-	// $rootScope.tags = [];
-	// $rootScope.tasksVersion = {ref: 0}; // used for cheap watching of task changes. has to be an object so users can copy reference and watch it.
 	var tasks = [];
 	var tags = [];
 	var tasksVersion = {ref: 0}; // used for cheap watching of task changes. has to be an object so users can copy reference and watch it.

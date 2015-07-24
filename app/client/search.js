@@ -41,7 +41,7 @@ angular.module('do-me').service('search', function($rootScope, db) {
 			if (criteria.done != 'include' && task.done) {
 				return;
 			}
-			var taskIsWaiting = task.text.toLowerCase().indexOf('(waiting') === 0;
+			var taskIsWaiting = !!task.waiting;
 			if (criteria.waiting === 'hide' && taskIsWaiting) {
 				return;
 			}
@@ -96,9 +96,7 @@ angular.module('do-me').service('search', function($rootScope, db) {
 	 **/
 	var extractSearchOption = function(toParse, option, defaultVal) {
 		var regexp = new RegExp('(^|\\W)' + escapeRegExp(option + ':') + '[^ ]+', 'i');
-		// console.log(regexp);
 		var match = toParse.match(regexp);
-		// console.log(match);
 		if (match === null) {
 			match = [option + ':' + defaultVal];
 		}

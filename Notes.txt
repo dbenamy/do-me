@@ -1,3 +1,4 @@
+# How To
 dev_appserver.py --host 0.0.0.0 .
  
 appcfg.py update --oauth2 .
@@ -12,8 +13,10 @@ protractor conf.js
 x = logged window.performance.timing;
 z = []; for (k in x) { t = x[k]; if (t > 0) { z.push([t - x.navigationStart, k]) }}; z.sort().map(function(pair) { return pair[1] + ": " + pair[0]})
 
-Bugs that I don't care that much about
---------------------------------------
-* Remote task completions trigger notifications.
-* Add jsonp and csrf protection- http://docs.angularjs.org/api/ng.$http
-* Awesome smashing animation when completing a task.
+# To Do
+- 
+
+# Bugs that I don't care that much about
+- Remote task completions trigger notifications.
+- Add jsonp and csrf protection- http://docs.angularjs.org/api/ng.$http
+- Awesome smashing animation when completing a task.

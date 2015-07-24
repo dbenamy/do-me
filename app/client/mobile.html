@@ -22,7 +22,7 @@
     <script src="libs/backup-0.2.js"></script>
 
     <script type="text/javascript">
-      window.do_me = {mobile: true};
+      window.doMe = {mobile: true};
 
       angular.module('do-me', ['ngTouch', 'mobile-angular-ui', 'LocalForageModule']);
 
@@ -131,6 +131,8 @@
                     <a ng-repeat="task in getResults() track by $index" href="#" class="list-group-item" ng-click="editTask($index); page.ref = 'edit-task'">
                       <span ng-bind-html="linkify(task.text)" style="white-space:normal;"></span>
                       <i class="fa fa-chevron-right pull-right"></i>
+                      <br ng-show="task.waiting">
+                      <small ng-show="task.waiting">Waiting for {{task.waiting}}</small>
                       <br>
                       <small ng-repeat="tag in task.tags">{{tag}} </small>
                     </a>
@@ -176,12 +178,20 @@
                       </div>
                       <div class="list-group-item">
                         <button ng-click="updateTask(); page.ref = 'show-tags'" class="btn btn-primary"> <!-- TODO this will go back even if new task wasn't saved. Hopefully I'll fix this when I try page routing. -->
-                          Save
+                          Update
                         </button>
                       </div>
                       <div class="list-group-item">
                         <button ng-click="finishTask(); page.ref = 'show-tags'" class="btn btn-primary" style="background: green; color: white;">
-                          Task Done
+                          Done
+                        </button>
+                      </div>
+                      <div class="list-group-item">
+                        <input type="text" placeholder="Waiting for what (optional)" ng-model="editing.waiting" class="form-control"></input>
+                      </div>
+                      <div class="list-group-item">
+                        <button ng-click="waitTask(); page.ref = 'show-tags'" class="btn btn-primary" style="background: red; color: white;">
+                          Waiting
                         </button>
                       </div>
                     </form>

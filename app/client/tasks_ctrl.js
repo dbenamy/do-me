@@ -1,13 +1,13 @@
-angular.module('do-me').controller('TasksCtrl', function($scope, search, db, storage, tasks) {
+angular.module('do-me').controller('TasksCtrl', function($sce, $scope, search, db, storage, tasks) {
 	// This doesn't actually use the storage service but something needs to load it.
 	
 	$scope.getResults = search.getResults; // Import into scope so tempate get use it.
-	$scope.linkify = tasks.linkify;
 
 	$scope.cursor = 0; // Index of cursor position with 0 being the top task in the results. Also used on mobile to store which task being edited.
 	// TODO try replacing this with a simple $scope.editTask = ''
 	$scope.editing = {
-		text: null // Tags & desc of task being edited, or null if not editing.
+		text: null, // Tags & desc of task being edited, or null if not editing.
+		waiting: null
 	};
 	$scope.newTask = {ref: ''};
 	$scope.selectedProject = {ref: ''}; // only used on mobile
@@ -29,23 +29,38 @@ angular.module('do-me').controller('TasksCtrl', function($scope, search, db, sto
 	};
 
 	$scope.editTask = function(index) {
-		if ($scope.editing.text !== null) { // TODO && desktop
+		if (!window.doMe.mobile && $scope.editing.text !== null) {
+			// Another task is already being edited.
 			return;
 		}
-		$scope.cursor = index; // have to overwrite cursor because a click can trigger this
+		$scope.cursor = index; // have to update cursor because a click can trigger this
 		var task = _getCurrentTask();
 		$scope.editing.text = task.tags.concat([task.text]).join(' ');
+		if (window.doMe.mobile) {
+			$scope.editing.waiting = task.waiting;
+		} else if (task.waiting) {
+			$scope.editing.text = "(waiting for " + task.waiting + ") " + $scope.editing.text;
+		}
 		// TODO wrap in "if desktop" and fix:
 		// document.querySelector('input.edit' + $scope.cursor).focus();
 	};
 
+	// On desktop, this handles text, tags, and waiting. On mobile, only text
+	// and tags (for now).
 	$scope.updateTask = function() {
+		var fields = tasks.parseTextTask($scope.editing.text);
+		if ($scope.editing.waiting) {
+			fields.waiting = $scope.editing.waiting;
+		}
 		var error = tasks.update({
 			task: _getCurrentTask(),
-			text: $scope.editing.text
+			text: fields.text,
+			tags: fields.tags,
+			waiting: fields.waiting
 		});
 		if (error === null) {
 			$scope.editing.text = null;
+			$scope.editing.waiting = null;
 		} else {
 			alert(error);
 		}
@@ -58,16 +73,52 @@ angular.module('do-me').controller('TasksCtrl', function($scope, search, db, sto
 		});
 		if (error === null) {
 			$scope.editing.text = null;
+			$scope.editing.waiting = null;
 		} else {
 			alert(error);
 		}
 	};
 
+	// Only used on mobile. Desktop wait is done by parsing the text field in updateTask.
+	$scope.waitTask = function() {
+		var error = tasks.update({
+			task: _getCurrentTask(),
+			waiting: $scope.editing.waiting || 'reply'
+		});
+		if (error === null) {
+			$scope.editing.text = null;
+			$scope.editing.waiting = null;
+		} else {
+			alert(error);
+		}
+	};
+
+	// TODO This should maybe go away
 	$scope.updatedTask = function(task) {
 		// Needed to update the timestamp
 		tasks.update({
 			task: task
 		});
+	};
+
+	$scope.linkify = function(text) {
+		var STOP_CLICK_PROPAGATION = 'onclick="var event = arguments[0] || window.event; event.stopPropagation();"';
+
+		var URL_REGEX = /(?:(http|https|ftp):\/\/)?(?:((?:[^\W\s]|\.|-|[:]{1})+)@{1})?((?:www.)?(?:[^\W\s]|\.|-)+[\.][^\W\s]{2,4}|localhost(?=\/)|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::(\d*))?([\/]?[^\s\?]*[\/]{1})*(?:\/?([^\s\n\?\[\]\{\}\#]*(?:(?=\.)){1}|[^\s\n\?\[\]\{\}\.\#]*)?([\.]{1}[^\s\?\#]*)?)?(?:\?{1}([^\s\n\#\[\]]*))?([\#][^\s\n]*)?/gi;
+		var urlLinked = text.replace(URL_REGEX, function(url, protocol, host, port, path, filename, ext, query, fragment) {
+			var urlWithProtocol = url;
+			if (typeof(protocol) === 'undefined') {
+				urlWithProtocol = 'http://' + url;
+			}
+			return '<a href="' + urlWithProtocol + '" ' + STOP_CLICK_PROPAGATION + '>' + url + '</a>';
+		});
+
+		var PHONE_REGEX = /(1[ -.])?\(?[0-9]{3}\)?[ -.]?[0-9]{3}[ -.]?[0-9]{4}/gi;
+		var phoneLinked = urlLinked.replace(PHONE_REGEX, function(number) {
+			return '<a href="tel:' + number + '" ' + STOP_CLICK_PROPAGATION + '>' + number + '</a>';
+		});
+
+		return $sce.trustAsHtml(phoneLinked);
 	};
 
 	var _getCurrentTask = function() {

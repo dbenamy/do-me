@@ -16,7 +16,7 @@
     <script src="libs/backup-0.2.js"></script>
 
     <script type="text/javascript">
-      window.do_me = {mobile: false};
+      window.doMe = {mobile: false};
 
       angular.module('do-me', ['LocalForageModule']);
     </script>
@@ -89,6 +89,7 @@
               <div ng-hide="editing.text && $index == cursor">
                 <i ng-show="$index == cursor" class="fa fa-chevron-right"></i>
                 <input type="checkbox" id="toggle" class="checkbox" ng-model="task.done" ng-change="updatedTask(task)" >
+                <span ng-click="editTask($index)" class="task" ng-show="task.waiting">(waiting for {{task.waiting}})</span>
                 <a href="" class="tag" ng-repeat="tag in task.tags" ng-click="searchHandler($event, tag)">{{tag}} </a>
                 <span ng-click="editTask($index)" class="task" ng-bind-html="linkify(task.text)"></span>
               </div>

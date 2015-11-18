@@ -195,9 +195,7 @@ angular.module('do-me').controller('TasksCtrl', function($sce, $scope, search, d
 	});
 
 	shortcut('c, f', function() {
-		var task = _getCurrentTask();
-		task.done = true;
-		task.updated_at = db.utcTs();
+		tasks.update({task: _getCurrentTask(), done: true});
 	});
 
 	shortcut('o, enter', function() {

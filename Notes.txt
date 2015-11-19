@@ -14,7 +14,10 @@ x = logged window.performance.timing;
 z = []; for (k in x) { t = x[k]; if (t > 0) { z.push([t - x.navigationStart, k]) }}; z.sort().map(function(pair) { return pair[1] + ": " + pair[0]})
 
 # To Do
-- 
+- Add virtual no project project
+- Give projects default context
+- Deactivating projects
+- Fix desktop "scrolling" by keyboard
 
 # Bugs that I don't care that much about
 - Remote task completions trigger notifications.

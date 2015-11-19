@@ -28,7 +28,7 @@
 
       angular.module('do-me').controller('PageCtrl', function($scope) {
         $scope.page = {};
-        $scope.page.ref = 'show-tags';
+        $scope.page.ref = 'show-tasks';
       });
     </script>
     <script src="db.js"></script>
@@ -162,7 +162,7 @@
                         </div>
                       </div>
                       <div class="list-group-item">
-                        <button ng-click="addTask(); page.ref = 'show-tags'" class="btn btn-primary"> <!-- TODO this will go back even if new task wasn't saved. Hopefully I'll fix this when I try page routing. -->
+                        <button ng-click="addTask(); page.ref = 'show-tasks'" class="btn btn-primary"> <!-- TODO this will go back even if new task wasn't saved. Hopefully I'll fix this when I try page routing. -->
                           Save
                         </button>
                       </div>
@@ -177,12 +177,12 @@
                         <textarea placeholder='Eg, "Hang shelves"' ng-model="editing.text" class="form-control"></textarea>
                       </div>
                       <div class="list-group-item">
-                        <button ng-click="updateTask(); page.ref = 'show-tags'" class="btn btn-primary"> <!-- TODO this will go back even if new task wasn't saved. Hopefully I'll fix this when I try page routing. -->
+                        <button ng-click="updateTask(); page.ref = 'show-tasks'" class="btn btn-primary"> <!-- TODO this will go back even if new task wasn't saved. Hopefully I'll fix this when I try page routing. -->
                           Update
                         </button>
                       </div>
                       <div class="list-group-item">
-                        <button ng-click="finishTask(); page.ref = 'show-tags'" class="btn btn-primary" style="background: green; color: white;">
+                        <button ng-click="finishTask(); page.ref = 'show-tasks'" class="btn btn-primary" style="background: green; color: white;">
                           Done
                         </button>
                       </div>
@@ -190,7 +190,7 @@
                         <input type="text" placeholder="Waiting for what (optional)" ng-model="editing.waiting" class="form-control"></input>
                       </div>
                       <div class="list-group-item">
-                        <button ng-click="waitTask(); page.ref = 'show-tags'" class="btn btn-primary" style="background: red; color: white;">
+                        <button ng-click="waitTask(); page.ref = 'show-tasks'" class="btn btn-primary" style="background: red; color: white;">
                           Waiting
                         </button>
                       </div>

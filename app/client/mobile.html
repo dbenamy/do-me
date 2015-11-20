@@ -8,6 +8,27 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <!-- <link rel="apple-touch-startup-image" href="startup.png" /> -->
     
+    <style type="text/css">
+      div#sync-status {
+        bottom: 0;
+        border-radius: 0 10px 0 0;
+        background-position: 8px 8px;
+        box-sizing: content-box;
+        display: block;
+        position: fixed;
+        border: 1px solid #666;
+        background-color: #ccc;
+        -webkit-box-shadow: 0 0 6px #444;
+        -moz-box-shadow: 0 0 6px #444;
+        box-shadow: 0 0 6px #444;
+        opacity: 0.4;
+        filter: alpha(opacity=40);
+        /*transition: all 0.2s ease-in-out 0s;*/
+        z-index: 100;
+        padding: 10px;
+      }
+    </style>
+
     <script src="libs/angular-1.2.16.min.js"></script>
     <script src="libs/angular-touch-1.2.16.min.js"></script>
     <link rel="stylesheet" type="text/css" href="libs/mobile-angular-ui-1.1.0-beta.22/mobile-angular-ui-base.min.css">
@@ -49,7 +70,9 @@
 
     <div ng-controller="MessageCtrl"></div> <!-- Just a place holder to load controller. Nothing shown here. -->
 
-    <div ng-controller="SyncCtrl"></div> <!-- Just a place holder to load controller. Nothing shown here. -->
+    <div ng-controller="SyncCtrl" id="sync-status">
+      {{prettyLastSynced}}
+    </div>
 
     <div class="sidebar sidebar-left" toggleable parent-active-class="sidebar-left-in" id="mainSidebar">
       <h1 class="app-name">Do Me</h1>

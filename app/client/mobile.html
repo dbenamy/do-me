@@ -49,7 +49,7 @@
 
       angular.module('do-me').controller('PageCtrl', function($scope) {
         $scope.page = {};
-        $scope.page.ref = 'show-tasks';
+        $scope.page.ref = 'show-tags';
       });
     </script>
     <script src="db.js"></script>
@@ -92,7 +92,7 @@
         <div class="navbar-brand navbar-brand-center" ng-controller="SearchCtrl">
           <span ng-show="page.ref == 'show-tags'">Lists</span>
           <span ng-show="page.ref == 'show-tasks' && searchInput == ''">All Not Waiting</span>
-          <span ng-show="page.ref == 'show-tasks' && searchInput != ''">{{searchStr.text}}</span>
+          <span ng-show="page.ref == 'show-tasks' && searchInput != ''">{{searchInput}}</span>
           <span ng-show="page.ref == 'add-task'">Add Task</span>
           <span ng-show="page.ref == 'edit-task'">Edit Task</span>
           <span ng-show="page.ref == 'edit-tags'">Edit Tags</span>

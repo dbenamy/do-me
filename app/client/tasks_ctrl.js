@@ -121,6 +121,11 @@ angular.module('do-me').controller('TasksCtrl', function($sce, $scope, search, d
 		return $sce.trustAsHtml(phoneLinked);
 	};
 
+	$scope.searchHandler = function(event, searchStr) {
+		search.searchFor(searchStr);
+		event.preventDefault(); // so "#" doesn't wind up in the url
+	};
+
 	var _getCurrentTask = function() {
 		return $scope.getResults()[$scope.cursor];
 	};

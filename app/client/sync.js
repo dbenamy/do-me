@@ -1,5 +1,5 @@
 // TODO I might want to merge this into the db service
-angular.module('do-me').service('sync', function (db) {
+angular.module('do-me').service('sync', ['db', function (db) {
 
 	var mergeInJson = function(str) {
 		var serverData = {};
@@ -117,4 +117,4 @@ angular.module('do-me').service('sync', function (db) {
 		mergeInJson: mergeInJson,
 		mergeInData: mergeInData
 	};
-});
+}]);

@@ -1,6 +1,6 @@
 // The net module works at the level of the storage api & http. It deals with things like logging in, storage errors,
 // lost connectivity, etc. It doesn't know anything about the data being stored.
-angular.module('do-me').service('net', function($http) {
+angular.module('do-me').service('net', ['$http', function($http) {
 	var HTTP_TIMEOUT_MS	= 5 * 1000;
 
 	var lastSavedVersion = null;
@@ -106,4 +106,4 @@ angular.module('do-me').service('net', function($http) {
 		uploadData: uploadData,
 		downloadAsFile: downloadAsFile
 	};
-});
+}]);

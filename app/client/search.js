@@ -1,4 +1,4 @@
-angular.module('do-me').service('search', function($rootScope, db) {
+angular.module('do-me').service('search', ['$rootScope', 'db', function($rootScope, db) {
 	var TAG_REGEX = /(^|\s)[#@][^ ]+/g; // TODO DRY
 	
 	var _tasks = db.tasks;
@@ -124,4 +124,4 @@ angular.module('do-me').service('search', function($rootScope, db) {
 		get: get,
 		getResults: getResults
 	};
-});
+}]);

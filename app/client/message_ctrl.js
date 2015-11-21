@@ -1,4 +1,4 @@
-angular.module('do-me').controller('MessageCtrl', function($scope, db) {
+angular.module('do-me').controller('MessageCtrl', ['$scope', 'db', function($scope, db) {
 	$scope.tasksVersion = db.tasksVersion;
 	_prevTasks = JSON.parse(JSON.stringify(db.tasks));
 
@@ -23,5 +23,4 @@ angular.module('do-me').controller('MessageCtrl', function($scope, db) {
 		});
 		return res;
 	};
-
-});
+}]);

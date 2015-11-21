@@ -1,4 +1,4 @@
-angular.module('do-me').controller('TasksCtrl', function($sce, $scope, search, db, storage, tasks) {
+angular.module('do-me').controller('TasksCtrl', ['$sce', '$scope', 'search', 'db', 'storage', 'tasks', function($sce, $scope, search, db, storage, tasks) {
 	// This doesn't actually use the storage service but something needs to load it.
 	
 	$scope.getResults = search.getResults; // Import into scope so tempate get use it.
@@ -246,4 +246,4 @@ angular.module('do-me').controller('TasksCtrl', function($sce, $scope, search, d
 	// 	// });
 	// };
 	// $scope.$watch('newTask', $scope.autocompleteTaskTags);
-});
+}]);

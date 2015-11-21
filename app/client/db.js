@@ -1,4 +1,4 @@
-angular.module('do-me').service('db', function($rootScope) {
+angular.module('do-me').service('db', ['$rootScope', function($rootScope) {
 	var tasks = [];
 	var tags = [];
 	var tasksVersion = {ref: 0}; // used for cheap watching of task changes. has to be an object so users can copy reference and watch it.
@@ -20,8 +20,7 @@ angular.module('do-me').service('db', function($rootScope) {
 		return sprintf('%s-%s-%s', Date.now(), _nextId++, Math.round(Math.random() * 1000));
 	};
 
-	// var migrate = function(appData) {
-	// 	// TODO how do i figure out if we want demo data? maybe need special case first-run path at the app level.
+	// 	// TODO Add demo data on first run. Maybe need special case first-run path at the app level.
 	// 	// if (!appData.tasks) {
 	// 	// 	appData.tasks = [
 	// 	// 		{
@@ -81,4 +80,4 @@ angular.module('do-me').service('db', function($rootScope) {
 		generateId: generateId,
 		normalizeTags: normalizeTags
 	};
-});
+}]);

@@ -1,4 +1,4 @@
-angular.module('do-me').service('tasks', function(db) {
+angular.module('do-me').service('tasks', ['db', function(db) {
 	var TAG_REGEX = /(^|\s)[#@][^ ]+/g; // TODO DRY in search- move to common service or something
 	var WAITING_REGEX = /^\(waiting for ([^\)]+)\)/gi;
 
@@ -79,4 +79,4 @@ angular.module('do-me').service('tasks', function(db) {
 	};
 
 	return exports;
-});
+}]);

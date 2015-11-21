@@ -1,4 +1,4 @@
-angular.module('do-me').controller('SyncCtrl', function($scope, $interval, $location, db, sync, net) {
+angular.module('do-me').controller('SyncCtrl', ['$scope', '$interval', '$location', 'db', 'sync', 'net', function($scope, $interval, $location, db, sync, net) {
 	$scope.downloadAsFile = net.downloadAsFile;
 
 	$scope.syncStatus = null;  // can be 'idle', 'syncing', 'error', or 'offline'
@@ -17,7 +17,6 @@ angular.module('do-me').controller('SyncCtrl', function($scope, $interval, $loca
 	};
 
 	var doSync = function() {
-		console.log("SyncCtrl.sync: Called.");
 		if ($scope.syncStatus === 'syncing') {
 			return;
 		}
@@ -88,4 +87,4 @@ angular.module('do-me').controller('SyncCtrl', function($scope, $interval, $loca
 			{ ceiling: null, text: "ERROR: $hours:$minutes:$seconds" }
 		]
 	};
-});
+}]);

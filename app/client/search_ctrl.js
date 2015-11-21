@@ -1,4 +1,4 @@
-angular.module('do-me').controller('SearchCtrl', function($scope, search) {
+angular.module('do-me').controller('SearchCtrl', ['$scope', 'search', function($scope, search) {
 	$scope.searchInput = '';
 	$scope.getResults = search.getResults;
 
@@ -12,4 +12,4 @@ angular.module('do-me').controller('SearchCtrl', function($scope, search) {
 		event.preventDefault(); // so "#" doesn't wind up in the url
 		document.querySelector('.search').blur();
 	};
-});
+}]);

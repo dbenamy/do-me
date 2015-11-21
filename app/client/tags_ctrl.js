@@ -1,4 +1,4 @@
-angular.module('do-me').controller('TagsCtrl', function($scope, search, db) {
+angular.module('do-me').controller('TagsCtrl', ['$scope', 'search', 'db', function($scope, search, db) {
 	var _tags = db.tags;
 
 	$scope.searchFor = search.searchFor;
@@ -39,4 +39,4 @@ angular.module('do-me').controller('TagsCtrl', function($scope, search, db) {
 		tag.deleted = true;
 		tag.lastUpdated = db.utcTs();
 	};
-});
+}]);

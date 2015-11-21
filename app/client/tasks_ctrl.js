@@ -144,69 +144,69 @@ angular.module('do-me').controller('TasksCtrl', ['$sce', '$scope', 'search', 'db
 
 	// Keyboard Shortcuts
 	// They don't (all) quite belong in this controller but it's a convinient place to put them.
-
-	// Allow keymaster to process escape while in inputs
-	key.filter = function(event) {
-		var tagName = (event.target || event.srcElement).tagName;
-		if (tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA') {
-			if (event.which == 27) { // esc
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return true;
-		}
-	};
-
-	var shortcut = function(keys, func) {
-		key(keys, function() {
-			var ret;
-			$scope.$apply(function() {
-				if (!$scope.editing.text) {
-					ret = func();
+	if (!window.doMe.mobile) {
+		// Allow keymaster to process escape while in inputs
+		key.filter = function(event) {
+			var tagName = (event.target || event.srcElement).tagName;
+			if (tagName == 'INPUT' || tagName == 'SELECT' || tagName == 'TEXTAREA') {
+				if (event.which == 27) { // esc
+					return true;
+				} else {
+					return false;
 				}
+			} else {
+				return true;
+			}
+		};
+
+		var shortcut = function(keys, func) {
+			key(keys, function() {
+				var ret;
+				$scope.$apply(function() {
+					if (!$scope.editing.text) {
+						ret = func();
+					}
+				});
+				return ret;
 			});
-			return ret;
+		};
+
+		shortcut('/', function() {
+			var elem = document.querySelector('input.search');
+			elem.focus();
+			elem.select();
+			return false; // stop the event so the character doesn't go into text box
 		});
-	};
 
-	shortcut('/', function() {
-		var elem = document.querySelector('input.search');
-		elem.focus();
-		elem.select();
-		return false; // stop the event so the character doesn't go into text box
-	});
-
-	shortcut('a, n, t', function() {
-		var elem = document.querySelector('input.new-task');
-		elem.focus();
-		elem.select();
-		return false; // stop the event so the character doesn't go into text box
-	});
-
-	shortcut('escape', function() {
-		angular.forEach(document.querySelectorAll('input'), function(elem) {
-			elem.blur();
+		shortcut('a, n, t', function() {
+			var elem = document.querySelector('input.new-task');
+			elem.focus();
+			elem.select();
+			return false; // stop the event so the character doesn't go into text box
 		});
-	});
 
-	shortcut('j', function() {
-		$scope.cursor += 1;
-	});
+		shortcut('escape', function() {
+			angular.forEach(document.querySelectorAll('input'), function(elem) {
+				elem.blur();
+			});
+		});
 
-	shortcut('k', function() {
-		$scope.cursor -= 1;
-	});
+		shortcut('j', function() {
+			$scope.cursor += 1;
+		});
 
-	shortcut('c, f', function() {
-		tasks.update({task: _getCurrentTask(), done: true});
-	});
+		shortcut('k', function() {
+			$scope.cursor -= 1;
+		});
 
-	shortcut('o, enter', function() {
-		$scope.editTask($scope.cursor);
-	});
+		shortcut('c, f', function() {
+			tasks.update({task: _getCurrentTask(), done: true});
+		});
 
+		shortcut('o, enter', function() {
+			$scope.editTask($scope.cursor);
+		});
+	}
 	
 	// Old code playing with autocompleting tags:
 

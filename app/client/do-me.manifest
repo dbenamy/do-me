@@ -1,17 +1,13 @@
 CACHE MANIFEST
 
 # Change the version to make browsers check for new versions of all the files listed here:
-# version 82
+# version 83
 
 CACHE:
 index.html
 desktop.html
 mobile.html
 css/main.css
-libs/angular-1.2.16.min.js
-libs/angular-localforage-1.2.2.min.js
-libs/angular-touch-1.2.16.min.js
-libs/backup-0.2.js
 # TODO Reuse font aweseom from mobile angular ui on desktop so I don't need 2 copies.
 libs/font-awesome-4.0.3/css/font-awesome.min.css
 libs/font-awesome-4.0.3/fonts/FontAwesome.otf
@@ -19,31 +15,15 @@ libs/font-awesome-4.0.3/fonts/fontawesome-webfont.eot
 libs/font-awesome-4.0.3/fonts/fontawesome-webfont.svg?v=4.0.3
 libs/font-awesome-4.0.3/fonts/fontawesome-webfont.ttf?v=4.0.3
 libs/font-awesome-4.0.3/fonts/fontawesome-webfont.woff?v=4.0.3
-libs/keymaster.min.js
-libs/localforage-1.2.3.min.js
 libs/mobile-angular-ui-1.1.0-beta.22/FontAwesome.otf
 libs/mobile-angular-ui-1.1.0-beta.22/fontawesome-webfont.eot
 libs/mobile-angular-ui-1.1.0-beta.22/fontawesome-webfont.svg?v=4.0.3
 libs/mobile-angular-ui-1.1.0-beta.22/fontawesome-webfont.ttf?v=4.0.3
 libs/mobile-angular-ui-1.1.0-beta.22/fontawesome-webfont.woff?v=4.0.3
 libs/mobile-angular-ui-1.1.0-beta.22/mobile-angular-ui-base.min.css
-libs/mobile-angular-ui-1.1.0-beta.22/mobile-angular-ui.min.js
-libs/sprintf-0.5.js
-libs/humanized_time_span.js
 libs/message/themes/message_default.css
-libs/message/message.js
-application-cache.js
-db.js
-storage.js
-net.js
-search.js
-sync.js
-tasks.js
-message_ctrl.js
-search_ctrl.js
-sync_ctrl.js
-tags_ctrl.js
-tasks_ctrl.js
+compiled-desktop.js
+compiled-mobile.js
 
 NETWORK:
 /api/log

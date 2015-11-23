@@ -1,0 +1,9 @@
+oauth - http://googleappsdeveloper.blogspot.com/2010/03/oauth-authentication-for-google-mail.html
+gmail xoauth - http://code.google.com/p/google-mail-xoauth-tools/wiki/XoauthDotPyRunThrough
+gmail xoauth - http://blog.yjl.im/2010/08/unread-count-and-list-of-gmail-inbox.html
+gmail xoauth - http://code.google.com/p/yjl/source/browse/Python/snippet/gmail-xoauth.py
+
+label manip over imap - http://www.shawnhogan.com/2006/09/google-gmail-api.html
+libgmail - https://sourceforge.net/projects/libgmail/ - not working
+pygmail - https://github.com/vinod85/pygmail/blob/master/pygmail.py
+mobile gmail api? - http://codeplusplus.blogspot.com/2007/07/mobile-gmail-api.html
